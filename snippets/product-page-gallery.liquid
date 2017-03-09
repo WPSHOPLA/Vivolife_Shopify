@@ -1,0 +1,41 @@
+{% if type == "default" %}
+  {% if settings.productpage_zoomenable %}
+    <div class="product-main-image">
+      <div class="product-main-image__item">
+        <img class="product-zoom" id="bigImg" src='{{ main_url_image.src | product_img_url: 'large' }}' zoom-image="{{ main_url_image | product_img_url: 'large' }}" alt="{{ main_url_image.alt | escape }}" />
+      </div>
+      <div class="product-main-image__zoom"></div>
+    </div>
+    {% if product.images.size > 1 %}
+    <div class="product-images-carousel">
+      <ul id="smallGallery">
+        {% for image in product.images %}
+        <li>
+          <a href="#" data-image="{{ image.src | product_img_url: '1024x1024' }}" data-zoom-image="{{ image.src | product_img_url: '2048x2048' }}">
+            <img src="{{ image.src | product_img_url: 'small' }}" alt="{{ image.alt }}">
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  	{% endif %}
+  {% else %}
+    <div class="product-main-image slider-no-zoom">
+      <div class="slider-for slider-product-large">
+        {% for image in product.images %}<div><img id="bigImg" src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt }}"></div>{% endfor %}
+      </div>
+      <div class="slider-nav slider-product-small">
+        {% for image in product.images %}<div><img src="{{ image.src | product_img_url: 'medium' }}" alt="{{ image.alt }}"></div>{% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% else %}
+  <div class="clearfix"></div>
+  <ul id="mobileGallery">
+    {% for image in product.images %}<li><a href="#" data-image="{{ image.src | product_img_url: 'large' }}" data-zoom-image="{{ image.src | product_img_url: '1024x1024' }}"><img src="{{ image.src | product_img_url: '1024x1024' }}" alt="" /></a></li>{% endfor %}
+  </ul>
+{% endif %}
+
+{% if product.description contains "[video]" %}
+<a href="{% include "get-content-with-key" content: product.content key: "[video]" %}" class="video-link"><span class="icon icon-videocam"></span>Video</a>
+{% endif %}

@@ -1,0 +1,103 @@
+<!-- HEADER section -->
+<header id="header" class="header-layout-07">
+  <div class="container">
+    <div class="row"> 					
+      <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        <!-- logo start --> 
+        <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+        <!-- logo end --> 
+      </div>					
+      <div class="col-sm-8 col-md-8 col-lg-6 col-xl-5 text-right visible-mobile-menu-on">
+        <!-- slogan start -->
+        <div class="slogan">{{ settings.header_slogan }}</div>
+        <!-- slogan end --> 						
+        <div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" showTitle: false %}
+          {% include "header-language" align: 'text-right' showTitle: false %}
+        </div>
+      </div>
+      <div class="col-lg-6 col-lg-offset-0 col-xl-6 col-md-4 col-md-offset-1 text-center">
+        <div class="search-outer visible-mobile-menu-off">
+          <form id="search__form" action="/search" method="get">
+            <div class="input-outer">
+              <input type="hidden" name="type" value="product" />
+              <input type="text" name="q" id="search" value="" maxlength="128" placeholder="{{ 'general.search.place_holder' | t }}">
+              <button type="submit" title="" class="icon icon-search"></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="pull-right col-md-3  col-lg-2 col-xl-2 alignment-extra">
+        <div class="text-right">
+          {% include "menu-search" search_class: "visible-mobile-menu-on" %}
+          {% include "menu-customer" customer_class: "visible-mobile-menu-on" %}
+          <!-- icon toggle menu -->
+          <div class="link-inline toggle-menu {% if settings.show_multiple_currencies == false and settings.show_menu_language == false %}toggle-menu2{% endif %}{% if settings.show_multiple_currencies and settings.show_menu_language %} toggle-menu3{% endif %} visible-mobile-menu-off">
+            <span class="icon icon-reorder"></span>									
+            <ul class="dropdown-menu " role="menu">
+              <li class='li-col-full'>
+                <span class="close icon-clear pull-right" data-dismiss="modal"></span>
+                <em class="color main-font">{{ settings.header_slogan }}</em>
+              </li>
+              <li class='li-col list-user-menu'>									 
+                <h4 class="megamenu__subtitle"><span>{{ 'general.menu.toggle_account' | t }}</span></h4>		
+                <ul>
+                  {% if shop.customer_accounts_enabled %}<li><a href="/account">{{ "layout.customer.account" | t }}</a></li>{% endif %}
+                  {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li><a href="/pages/wishlist">{{ "layout.customer.wishlist" | t }}</a></li>{% endif %}{% endif %}
+                  <li><a href="/checkout">{{ "layout.customer.checkout" | t }}</a></li>
+                  {% if shop.customer_accounts_enabled %}
+                  {% if customer %}<li><a href="/account/logout">{{ "layout.customer.log_out" | t }}</a></li>
+                  {% else %}<li><a href="/account/login">{{ "layout.customer.sign_in" | t }}</a></li>
+                  {% if shop.customer_accounts_optional %}<li><a href="/account/register">{{ "layout.customer.register" | t }}</a></li>{% endif %}
+                  {% endif %}
+                  {% endif %}
+                </ul>
+              </li>
+              {% if settings.show_menu_language %}
+              <li class='li-col languages languages--flag'>									 
+                <h4 class="megamenu__subtitle"><span>{{ 'general.menu.toggle_language' | t }}</span></h4>		
+                <ul>
+                    <li class="languages__item active"><a href="#">{{ settings.default_language }}</a></li>
+                    {% for link in linklists[settings.linklist_language].links %}
+                    <li class="languages__item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {% endfor %}
+                </ul>
+              </li>
+              {% endif %}
+              <li class='li-col currency'{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+                <h4 class="megamenu__subtitle"><span>{{ 'general.menu.toggle_currency' | t }}</span></h4>									  
+                <ul>
+                  {% assign currency = settings.supported_currencies | split: '|' %}
+                  {% for value in currency %}
+                    {% assign array = value | split: ',' %}
+                    {% assign iso_4217 = array[0] | upcase | strip %}
+                    {% assign name = array[1] | strip %}
+                    <li data-currency="{{ iso_4217 }}" class="currency__item"><a style="cursor: pointer">{{ name }}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <!-- /icon toggle menu -->
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fill-bg stuck-nav">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-stuck-menu">
+          <!-- navigation start -->
+          {% include "main-menu" %}
+          <!-- navigation end -->
+        </div>
+        <div class="pull-right col-stuck-cart text-right">
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+<!-- End HEADER section -->

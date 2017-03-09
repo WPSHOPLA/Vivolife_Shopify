@@ -1,0 +1,16 @@
+{% capture _class %}{% unless disable_align_right %} text-right{% endunless %}{% endcapture %}
+<!-- currency start -->
+<div class="currency dropdown{{ _class }}">
+  <a class="dropdown-toggle" data-toggle="dropdown"><span class="current-currency">USD</span><span class="caret"></span></a>
+  {% assign currency = settings.supported_currencies | split: '|' %}
+  <ul class="currency-ul dropdown-menu dropdown-menu--xs-full">
+    {% for value in currency %}
+      {% assign array = value | split: ',' %}
+      {% assign iso_4217 = array[0] | upcase | strip %}
+      {% assign name = array[1] | strip %}
+      <li data-currency="{{ iso_4217 }}" class="currency__item"><a style="cursor: pointer">{{ name }}</a></li>
+    {% endfor %}
+  
+  </ul>
+</div>
+<!-- currency end -->

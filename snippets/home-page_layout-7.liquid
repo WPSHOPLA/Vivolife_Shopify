@@ -1,0 +1,198 @@
+{% assign name_collection = settings.layout7_prodcoll %}
+{% assign length = settings.layout7_prodcoll_length | plus: 0 %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}
+<!-- Slider section --> 
+<section class="content offset-top-0" id="slider">
+  <div class="container">
+    <!--
+#################################
+- THEMEPUNCH BANNER -
+#################################
+--> 
+    <!-- START REVOLUTION SLIDER 3.1 rev5 fullwidth mode -->
+    <h2 class="hidden">Slider Section</h2>
+    <div class="tp-banner-container">
+      <div class="tp-banner">
+        <ul>
+          {% for product in selected_collection limit: length %}
+          {% assign variant = product.selected_or_first_available_variant %}
+          {% assign sale_on = false %}{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}{% assign sale_on = true %}{% endif %}
+          {% if product.available %}{% if product.variants.size > 1 %}{% assign func = "" %}{% else %}{% assign func = "Shopify.addItem(" | append: variant.id | append: ", 1)" %}{% endif %}{% endif %}
+          <!-- SLIDE -1 -->
+          <li data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-saveperformance="off"  data-title="Slide" class="{{ variant.id }}">
+            <!-- MAIN IMAGE --> 
+            <img src="{{ 'slide17.png' | asset_url }}"  alt="slide1"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" > 
+            <!-- LAYERS -->
+
+            <!-- IMAGE -->
+            <!-- IMAGE NR. 01 -->
+            <div class="tp-caption  lft ltb" 
+                 data-x="199" 
+                 data-y="34" 
+                 data-speed="900"
+                 data-start="1000"
+                 data-easing="Power4.easeOut"
+                 style="z-index: 5;">
+              <img src="{{ product.images[0] | product_img_url: 'grande' }}" alt="Image01">
+            </div>
+            <!-- IMAGE NR. 02 -->
+            <div class="tp-caption  lfb ltt" 
+                 data-x="639" 
+                 data-y="170"  
+                 data-speed="900"
+                 data-start="1000"
+                 data-easing="Power4.easeOut"
+                 style="z-index: 5;">
+              <img src="{{ product.images[1] | product_img_url: 'grande' }}" alt="Image02">
+            </div>
+            <!-- TEXT -->
+            <div class="tp-caption lfr str" 
+                 data-x="1300"         
+                 data-y="center"    
+                 data-voffset="60" 
+                 data-speed="600" 
+                 data-start="900" 
+                 data-easing="Power4.easeOut" 
+                 data-endeasing="Power4.easeIn" 
+                 style="z-index: 7;">
+              <div class="tp-caption--product-1">
+                <h6 class="title text-uppercase"><a href="{{ product.url | within: collection }}" class="product_title">{{ product.title }}</a></h6>
+                {% if sale_on %}
+                <div class="price">{{ product.selected_or_first_available_variant.price | money }}<span class="price-box__old">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></div>
+                {% else %}
+                <div class="price">{{ product.selected_or_first_available_variant.price | money }}</div>
+                {% endif %}
+                <div class="text">
+                  {% if product.content contains "[smallDescription]" %}{% include "get-content-with-key" content: product.content key: "[smallDescription]" %}{% endif %}
+                </div>
+                {% if settings.product_item_show_cart %}<a {% if func == "" %}href="javascript:void(0);" onclick="quiqview('{{ product.handle | handleize }}')"{% else %}href="javascript:void(0);" onclick="{{ func }}; return false;"{% endif %} class="btn btn--ys btn--lg btn-top">{{ 'products.product.add_to_cart_html' | t }}</a>{% endif %}
+              </div>								
+            </div>
+          </li>
+          <!-- /SLIDE -1 -->
+          
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% if settings.layout7_show_block1 %}{{ settings.layout7_html_1 }}{% endif %}
+
+{% assign tabs = settings.layout7_tabs | split: ',' %}
+<!--=== tab-carusel ===-->
+<section class="container content">
+  <div class="row">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-tabs--ys-center text-center" role="tablist">
+      {% for t in tabs %}
+      <li{% if forloop.first %} class="active"{% endif %}><a href="#Tab{{ forloop.index }}"  role="tab" data-toggle="tab" class="text-uppercase">{{ t | strip }}</a></li>
+      {% endfor %}
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content tab-content--ys-center">
+      {% for t in tabs %}
+      {% assign settings_key = "layout7_tabs_namecollection" | append: forloop.index %}
+      {% assign name_collection = settings[settings_key] %}
+      {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}{% assign _lenght = settings.layout7_tabs_length | plus: 0 %}
+      
+      <div role="tabpanel" class="tab-pane{% if forloop.first %} active{% endif %}" id="Tab{{ forloop.index }}">
+      </div>
+      
+      <div id="Tab{{ forloop.index }}-clone" style="display:none">
+        <div class="carousel-products carouselTab slick-arrow-top row">
+          {% for product in selected_collection limit: _lenght %}
+            <div class="col-lg-3">
+              {% include "product-grid-item" %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if settings.layout7_show_block2 %}{{ settings.layout7_html_2 }}{% endif %}
+
+{% if settings.layout7_show_infohtml %}
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4">
+		<h2 class="text-left text-uppercase title-under">{{ settings.layout7_blogtitle1 }}</h2>
+        {% assign name_collection = settings.layout7_blogslider1 %}
+        {% assign length = settings.layout7_blogsliderlength1 %}
+        {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+        {% for f_article in selected_blog.articles limit: length %}{% if f_article.excerpt contains "blogslidersmall" %}{% capture _article %}{% include "get-content-with-key" content: f_article.excerpt key: "[blogslidersmall]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture author %}{% include "get-content-with-key" content: _article key: "[author]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = f_article.title %}{% endif %}{% if author == '' %}{% assign author = f_article.author %}{% endif %}
+        {% if f_article.comments.size > 0 %}{% assign comment_url = f_article.url | append: '#comments' %}{% else %}{% assign comment_url = f_article.url | append: '#addcomment' %}{% endif %}
+        <div class="recent-post-box recent-post-col row">
+          <div class="col-xs-6 col-sm-12 col-md-6">
+            <a href="{{ f_article.url }}">
+              <span class="figure">
+                <img src="{{ f_article.image.src | img_url: '1024x1024' }}" alt="">
+                <span class="figcaption label-top-left">
+                  <span>
+                    <b>{{ f_article.published_at | date: "%d" }}</b><em>{{ f_article.published_at | date: "%b" }}</em>
+                  </span>
+                </span>
+              </span>									
+            </a>
+          </div>
+          <div class="col-xs-6 col-sm-12 col-md-6">
+            <div class="recent-post-box__text">
+              <h4><a href="{{ f_article.url }}">{{ _title }}</a></h4>
+              <div class="author">{{ "blogs.general.author_by_html" | t: author: author }}</div>
+              <p>{{ content }}</p>
+            </div>
+          </div>
+        </div>
+        {% unless forloop.last %}<div class="divider divider--sm"></div>{% endunless %}
+        {% endif %}{% endfor %}
+        <a href="{{ selected_blog.url }}" class="btn btn-top btn--ys btn--xl">{{ 'layout.button.see_all' | t }}</a>
+      </div>
+      <div class="divider divider--lg visible-xs"></div>
+      <div class="col-xs-12 col-sm-6 col-lg-6 col-xl-4">
+        {{ settings.layout7_infohtml }}
+      </div>
+      <div class="col-xl-4 visible-xl">
+        <h2 class="text-left text-uppercase title-under">{{ settings.layout7_blogtitle2 }}</h2>
+        <div class="slider-blog-layout1 no-slick">
+          {% assign name_collection = settings.layout7_blogslider2 %}
+          {% assign length = settings.layout7_blogsliderlength2 %}
+          {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+          {% assign custom_count = 0 %}
+          {% for article in selected_blog.articles %}
+          {% if article.excerpt contains "blogsliderbig" %}
+          {% if custom_count == length %}{% break %}{% endif %}
+          {% assign custom_count = custom_count | plus: 1 %}
+          {% capture _article %}{% include "get-content-with-key" content: article.excerpt key: "[blogsliderbig]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = article.title %}{% endif %}{% if author == '' %}{% assign author = article.author %}{% endif %}
+          <a href="{{ article.url }}" class="link-hover-block">
+            <div class="slider-blog__item">									
+              <div class="box-foto">
+                {{ image }}
+              </div>
+              <div class="box-data">
+                <p>{{ content }}</p>
+				<p>{{ _title }}</p>
+              </div>									
+            </div>
+          </a>
+          {% unless forloop.last %}<div class="divider divider--sm"></div>{% endunless %}
+          {% endif %}{% endfor %}
+        </div>
+        <a href="{{ selected_blog.url }}" class="btn btn-top btn--ys btn--xl">{{ 'layout.button.see_all' | t }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+                          
+                          
+
+{% if settings.layout7_show_block3 %}{{ settings.layout7_html_3 }}{% endif %}

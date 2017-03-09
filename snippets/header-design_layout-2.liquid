@@ -1,0 +1,72 @@
+<!-- HEADER section -->
+<header id="header" class="header-layout-02">
+  <div class="container">
+    <div class="row">					
+      <!-- col-left -->
+      <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">						
+        <div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" disable_align_right: true showTitle:false %}
+          {% include "header-language" align: 'text-left' showTitle: false %}
+        </div>
+      </div>
+      <!-- /col-left -->
+      <!-- col-right -->
+      <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 text-right">						
+        {% include "menu-search" search_class: "pull-right mobile-menu-off" %}
+        {% include "menu-customer" customer_class: "hidden mobile-menu-on" %}
+        <!-- account menu start -->
+        <div class="account-row-list pull-right mobile-menu-off">
+          <ul>
+            {% if shop.customer_accounts_enabled %}<li><a href="/account"><span class="icon icon-person"></span>{{ "layout.customer.account" | t }}</a></li>{% endif %}
+            {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li><a href="/pages/wishlist"><span class="icon icon-favorite_border"></span>{{ "layout.customer.wishlist" | t }}</a></li>{% endif %}{% endif %}
+            <li><a href="/checkout"><span class="icon icon-done_all"></span>{{ "layout.customer.checkout" | t }}</a></li>
+            {% if shop.customer_accounts_enabled %}
+            {% if customer %}<li><a href="/account/logout"><span class="icon icon-lock"></span>{{ "layout.customer.log_out" | t }}</a></li>
+            {% else %}<li><a href="/account/login"><span class="icon icon-lock"></span>{{ "layout.customer.sign_in" | t }}</a></li>
+            {% if shop.customer_accounts_optional %}<li><a href="/account/register"><span class="icon icon-person_add"></span>{{ "layout.customer.register" | t }}</a></li>{% endif %}
+            {% endif %}
+            {% endif %}
+          </ul>
+        </div>
+        <!-- /account menu end -->
+
+      </div>
+    </div>
+    <hr class="mobile-menu-off">
+  </div>
+  <div class="container offset-top-5">
+    <div class="row">
+      <!-- col-left -->
+      <div class="col-xs-12 col-md-3 col-lg-3 col-xl-3 col-sm-3">
+        <!-- logo start --> 
+        <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a>
+        <!-- logo end --> 
+      </div>
+      <!-- /col-left -->						
+      <!-- col-right -->										
+      <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 pull-right text-right">
+        <div class="row-functional-link">								
+          {% include "menu-cart-design2" %}
+          <!-- address -->
+          <div class="h-address pull-right hidden-md hidden-sm hidden-xs">{{ settings.header_slogan }}</div>
+          <!-- /address -->										
+        </div>
+      </div>					
+      <!-- /col-right -->
+    </div>
+  </div>
+  <div class="stuck-nav ">
+    <div class="container">
+      <div class="row">
+        <div class="pull-left col-sm-10 col-md-10 col-lg-10 col-xl-11">
+          {% include "main-menu" %}
+        </div>
+        <div class="pull-right col-sm-2 col-md-2 col-lg-2 col-xl-1 text-right">
+          {% include "menu-search" %}
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>			
+  </div>
+</header>
+<!-- End HEADER section -->

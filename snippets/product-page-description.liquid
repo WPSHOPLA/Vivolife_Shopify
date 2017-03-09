@@ -1,0 +1,209 @@
+{% assign inv_man = product.selected_or_first_available_variant.inventory_management %}{% assign inv_qua = product.selected_or_first_available_variant.inventory_quantity %}
+{% comment %}{% if settings.show_product_sku or settings.show_product_quantity %}
+<div class="wrapper hidden-xs">
+  {% if settings.show_product_sku %}
+  <div class="product-info__sku pull-left" {% if product.selected_or_first_available_variant.sku == '' %}style="display:none;"{% endif %}>{{ 'products.product.sku' | t }} <strong class="sku">{{ product.selected_or_first_available_variant.sku }}</strong></div>
+  {% endif %}
+  {% if settings.show_product_quantity %}
+  <div class="product-info__availability {% if settings.show_product_sku and product.selected_or_first_available_variant.sku != "" %}pull-right{% else %}pull-right pull-left{% endif %}">{{ 'products.product.availability' | t }} <strong class="color {% if inv_man %}{% if inv_qua == 0 %}color-red{% endif %}{% endif %}">{% if inv_man %}{% if inv_qua > 0 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ "products.product.sold_out" | t }}{% endif %}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}</strong></div>
+  {% endif %}
+</div>
+{% endif %}{% endcomment %}
+<div class="product-info__title">
+  <h2>{{ product.title }}</h2>
+  <h2 class="vendor-name">{{ product.vendor }}</h2>
+</div>
+<div class="rating"><div class="yotpo bottomLine"
+data-appkey="mQu5w3HllCSUSLQRxmQnKItNB4sCGJvS5D242O20"
+data-domain="{{ shop.permanent_domain | escape }}"
+data-product-id="{{ product.id }}"
+data-product-models="{{ product.id }}"
+data-name="{{ product.title | escape }}"
+data-url="{{ shop.url }}{{ product.url }}"
+data-image-url="{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26'}}"
+data-description="{{ product.description | escape }}"
+data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}">
+</div>  </div>
+
+
+<div class="visible-xs">
+  {% include "product-page-gallery" type: "mobile" %}
+</div>
+
+<div class="price-box product-info__price">
+  {% if sale_on %}
+  <span class="price-box__new">{{ product.price_min | money }}</span> <span class="price-box__old">{{ product.compare_at_price_min | money }}</span>
+  {% else %}
+  <span>{{ product.price_min | money }}</span><span class="price-box__old"></span>
+  {% endif %}
+</div>
+{% if settings.show_product_sku or settings.show_product_quantity %}
+<div class="product_meta">
+  <ul>
+  {% if settings.show_product_sku %}
+  <li>{{ 'products.product.sku' | t }} <span class="sku">{{ product.selected_or_first_available_variant.sku }}</span></li>
+  {% endif %}
+  {% if settings.show_product_quantity %}
+  <li>{{ 'products.product.availability' | t }} <span class="color">{% if inv_man %}{% if inv_qua > 0 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ "products.product.sold_out" | t }}{% endif %}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}</span></li>
+  {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="pro-des">
+  {% if product.metafields.custom_fields.product_short_description != blank %}
+<div class="custom-field custom-field__product_short_description">
+<div class="custom-field--value">{{ product.metafields.custom_fields.product_short_description }}</div>
+</div>
+{% endif %}
+ {% if product.metafields.custom_fields.bullet_item != blank %}
+<div class="custom-field custom-field__bullet_item">
+<div class="custom-field--value">{{ product.metafields.custom_fields.bullet_item }}</div>
+</div>
+{% endif %}
+</div>
+{% capture display %}{% if sale_on and inv_man %}{% if inv_qua == 0 %}style="display:none"{% endif %}{% else %}style="display:none"{% endif %}{% endcapture %}
+{% if settings.show_product_alarm_message and display == "" or product.description contains '[countdown]' and product.available %}<div class="divider divider--xs product-info__divider"></div>{% endif %}
+<div class="product_message_alarm" {{ display }}>
+  {% if settings.show_product_alarm_message and display == "" %}<span class="color-red"><span class="font35 font-lighter"><span class="percent">{{ product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | money_without_currency | replace: ',', '.' | times: 100 | remove: '.0'}}</span>% {{ "products.product_stock_message.off" | t }}.</span> {{ "products.product_stock_message.message_html" | t: quantity: inv_qua }}</span>
+  {% unless product.description contains '[countdown]' and product.available %}<br><br>{% endunless %}{% endif %}
+</div>
+  <!-- countdown_box -->
+      {% if product.description contains '[countdown]' and product.available %}
+        {% assign countdown = product.content | split: '[/countdown]' | first %}
+        {% assign countdown = countdown | split: '[countdown]' | last %}
+        {% assign date = countdown | split: ' ' | first | split: '/' %}
+        {% assign time = countdown | split: ' ' | last | split: ':' %}
+        <div class="countdown-product" style="padding-bottom: 10px;">
+          <div id="{{ product.id }}{{ productCount }}"></div>
+        </div>
+        <script>
+          jQuery(function ($) {
+              // countdown ini
+              var yyyy = {{ date[0] }};
+              var mm = {{ date[1] | minus:1 }};
+              var dd = {{ date[2] }};
+              var hour = {{ time[0] }};
+              var min = {{ time[1] }};
+              var sec = {{ time[2] }};
+
+              var sH = {{'now' | date: "%H" }};//s = shopify
+              var sD = {{'now' | date: "%-d" }};
+              var sM = {{'now' | date: "%m" }};
+              var sY = {{'now' | date: "%Y" }};
+
+              var qH = new Date();
+              var qD = qH.getDate();//q = jQuery
+              var qM = qH.getMonth() + 1;
+              var qY = qH.getFullYear();
+              var qH = qH.getHours();
+
+              if(qD > sD) {
+                qH += 24;
+              }
+              else {
+                if(qD < sD) {
+                  if(qM > sM) {
+                    qH += 24;
+                  }
+                  else {
+                    if(qY > sY) {
+                      qH += 24;
+                    }
+                    else {
+                      sH += 24;
+                    }
+                  }
+                }
+              }
+
+              var fH = sH - qH;
+
+              if ($("#{{ product.id }}{{ productCount }}").length > 0){$('#{{ product.id }}{{ productCount }}').countdown({until: new Date(yyyy, mm, dd, hour, min, sec), timezone: fH});}
+          });
+        </script>
+      {% endif %}
+
+
+<form id="add-item-form" action="/cart/add" method="post">
+  {% if product.available %}
+  <select name="id" id="productSelect" class="product-single__variants thisslct">
+    {% for variant in product.variants %}
+    <option {% unless variant.available %} disabled="disabled" {% endunless %} {% if variant == current_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}" data-price="{{ variant.price | money_without_currency | remove: ',' }}">{{ variant.title }} - {% if variant.available %}{{ variant.price | money_with_currency }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</option>
+    {% endfor %}
+  </select>
+
+  <div class="wrapper">
+   
+      <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
+      <input name="email" type="hidden" value="{{ customer.email }}" > 
+      <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
+      <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
+      <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
+      <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
+      <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
+      <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
+      <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
+      <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
+      <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+      <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
+      {% include 'bold-ro' with product %}
+    
+    <div class="pull-left"><span class="qty-label this">{{ 'products.product.quantity' | t }}</span></div>    
+    <div class="pull-left"><input type="text" name="quantity" class="input--ys qty-input pull-left" value="1"></div>
+    <div class="pull-left atcShadow">     
+      <button type="submit" class="btn btn--ys btn--xxl addtocart">Add To Basket</button>
+    </div>
+  </div>
+  <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
+  {% else %}
+  <br>
+  <div class="pull-left"><button disabled class="btn btn--ys btn--xxl">{{ 'products.product.unavailable' | t }}</button></div>
+  <br>
+  <br>
+  <br>
+  {% endif %}
+</form>
+ 
+{% if product.metafields.custom_fields.product_icons != blank %}
+<div class="custom-field custom-field__product_icons">
+
+<div class="custom-field--value">{{ product.metafields.custom_fields.product_icons }}</div>
+</div>
+{% endif %}
+{% comment %}<ul class="product-link">
+  {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li class="text-right">{% include "wishlist-product" %}</li>{% endif %}{% endif %}
+</ul> {% endcomment %}
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+  var selectCallback = function(variant, selector) {
+    timber.productPage({
+      money_format: "{{ shop.money_format }}",
+      variant: variant,
+      selector: selector,
+      translations: {
+        add_to_cart : "{{ 'products.product.add_to_cart' | t }}",
+        sold_out : "{{ 'products.product.sold_out' | t }}",
+        unavailable : "{{ 'products.product.unavailable' | t }}"
+      }
+    });
+  };
+
+  jQuery(function($) {
+    new Shopify.OptionSelectors('productSelect', {
+      product: {{ product | json }},
+      onVariantSelected: selectCallback,
+      enableHistoryState: true
+    });
+
+    // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+    {% if product.options.size == 1 and product.options.first != 'Title' %}
+      $('.selector-wrapper:eq(0)').prepend('<label for="productSelect-option-0">{{ product.options.first | escape }}</label>');
+    {% endif %}
+
+    // Hide selectors if we only have 1 variant and its title contains 'Default'.
+    {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+    	$('.selector-wrapper').addClass("hidethis");
+    {% endif %}
+  });
+</script>

@@ -1,0 +1,15 @@
+<div class="recent-post-box">
+  <div class="col-lg-6 col-xl-6">
+    <a href="{{ f_article.url }}"><span class="figure">
+      <img src="{{ f_article.image.src | img_url: '1024x1024' }}" alt="">
+      <span class="figcaption label-top-left"><span><b>{{ f_article.published_at | date: "%d" }}</b><em>{{ f_article.published_at | date: "%b" }}</em></span></span></span>
+    </a>
+  </div>
+  <div class="col-lg-6 col-xl-6">
+    <div class="recent-post-box__text">
+      <h4><a href="{{ f_article.url }}">{{ f_article.title }}</a></h4>
+      <div class="author">By <b>{{ f_article.author }}</b></div>
+      <p>{{ f_article.content | strip_html |  truncatewords: 20 }}</p>
+       </div>
+  </div>
+</div>

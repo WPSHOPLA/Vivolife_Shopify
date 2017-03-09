@@ -1,0 +1,48 @@
+{% assign blogs_name = settings.sidebar_blogs | split: ',' %}
+{% if blogs_name.size > 0 and settings.sidebar_show_blogs %}
+<h4 class="text-uppercase title-aside">{{ settings.sidebar_blogs_title }}</h4>
+<div class="block-underline">
+  <ul class="categories-list">
+    {% for str in blogs_name %}{% assign word = str | strip | downcase %}{% unless blog.handle == word %}
+    <li><a href="{{ blogs[word].url }}">{{ blogs[word].title }} ({{ blogs[word].articles_count }})</a></li>
+    {% endunless %}{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+
+{% if blog.all_tags.size > 0 and settings.sidebar_show_tags %}
+<h4 class="text-uppercase title-aside">{{ settings.sidebar_tags_title }}</h4>
+<div class="block-underline">
+  <ul class="categories-list">
+  {% for tag in blog.all_tags %}
+    {% assign blog_tags = settings.blog_tags %}
+    {% assign string = tag %}
+    {% if blog_tags != '' %}
+      {% assign _tag = '||' | append: tag | strip | downcase | append: '__' %}
+      {% assign blog_tags = blog_tags | split: ',' %}
+      {% for bt in blog_tags %}
+    	  {% assign _bt = bt | strip | downcase %}
+          {% assign _bt = '||' | append: _bt %}
+          {% if _bt contains _tag %}
+              {% assign string = bt | split: '__' | last %}
+              {% break %}
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    <li>{{ string | capitalize | replace: '-', ' ' | link_to_tag: tag }}</li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if settings.sidebar_show_recent_blog %}
+<h4 class="text-uppercase  title-aside">{{ settings.sidebar_recent_blog_title }}</h4>				
+<div class="block-underline">
+   {% for article in blogs.news.articles limit:5 %}
+  <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ article.title }} </a></h2>
+ {% endfor %}
+</div>
+{% endif %}
+

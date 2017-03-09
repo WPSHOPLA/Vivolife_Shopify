@@ -1,0 +1,13 @@
+{% if settings.mailchimp_form_action != "" %}
+<h4 class="mobile-collapse__title">{{ "newsletter.general.title" | t }}</h4>
+<div class="mobile-collapse__content">
+  <form action="{{ settings.mailchimp_form_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank" class="form-inline">
+    <input type="text" name="EMAIL" class="subscribe-form__input">
+    <button type="submit" class="btn btn--ys btn--xl">{{ "newsletter.general.button" | t }}</button>
+  </form>
+</div>
+{% else %}
+<strong><u>Add newsletter redirect link in Newsletter / MailChimp form action URL</u></strong>
+{% endif %}
+
+    

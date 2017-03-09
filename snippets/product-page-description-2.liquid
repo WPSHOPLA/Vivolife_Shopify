@@ -1,0 +1,96 @@
+{% assign inv_man = product.selected_or_first_available_variant.inventory_management %}{% assign inv_qua = product.selected_or_first_available_variant.inventory_quantity %}
+<div class="wrapper">
+  {% if product.description contains "[video]" %}
+  <div class="product-info-left"><a href="{% include "get-content-with-key" content: product.content key: "[video]" %}" class="video-link"><span class="icon icon-videocam"></span>Video</a></div>
+  {% endif %}
+
+  <div class="product-info-right">							
+    <div class="divider divider--xs visible-xs"></div>
+  </div>
+
+  {% if settings.show_product_sku or settings.show_product_quantity %}
+  {% if settings.show_product_sku %}
+  <div class="product-info__sku" {% if product.selected_or_first_available_variant.sku == '' %}style="display:none;"{% endif %}>{{ 'products.product.sku' | t }} <strong class="sku">{{ product.selected_or_first_available_variant.sku }}</strong></div>
+  {% endif %}
+  {% if settings.show_product_quantity %}
+  <div class="product-info__availability">{{ 'products.product.availability' | t }} <strong class="color {% if inv_man %}{% if inv_qua == 0 %}color-red{% endif %}{% endif %}">{% if inv_man %}{% if inv_qua > 0 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ "products.product.sold_out" | t }}{% endif %}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}</strong></div>
+  {% endif %}{% endif %}
+  
+</div>
+<div class="product-info__title">
+  <h2>{{ product.title }}</h2>
+</div>						
+<div class="price-box product-info__price">
+  {% if sale_on %}
+  <span class="price-box__new">{{ product.price_min | money }}</span> <span class="price-box__old">{{ product.compare_at_price_min | money }}</span>
+  {% else %}
+  <span>{{ product.price_min | money }}</span><span class="price-box__old"></span>
+  {% endif %}
+</div>
+
+<form id="add-item-form" action="/cart/add" method="post">
+  {% if product.available %}
+
+  {% if product.variants.size > 1 %}
+    
+      {% if product.options.size == 1 %}{% endif %}
+    <div class="wrapper text-center fields" {% unless settings.variant_combobox %}style="display:none;"{% endunless %}>
+      <select id="product-select" name="id">
+        {% for variant in product.variants %}
+        {% if variant.available %}
+        <option value="{{ variant.id }}"{% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-price="{{ variant.price | money_without_currency | remove: ',' }}">{{ variant.title }} - {{ variant.price | money }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+     </div>
+	  {% if settings.variant_combobox == false and product.options.size < 3 %}{% for option in product.options %}{% include 'swatch' with option productdesingcenter: true %}{% endfor %}{% endif %}
+  {% else %}
+  	<input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+  {% endif %}
+  
+  <div class="wrapper btn-holder">
+    <span class="qty-label">{{ 'products.product.quantity' | t }}</span>
+    <input type="text" name="quantity" class="input--ys qty-input" value="1">
+    <div class="divider divider--xs visible-xs"></div>
+    
+    <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
+    <input name="email" type="hidden" value="{{ customer.email }}" > 
+    <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
+    <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
+    <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
+    <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
+    <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
+    <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
+    <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
+    <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
+    <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+    <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
+    {% include 'bold-ro' with product %}
+    
+    <button type="submit" class="btn btn--ys btn--xxl addtocart">Add TO Basket</button>
+    <div class="divider divider--xs visible-xs"></div>
+  </div>
+  <!-- bold-ro-liquid --> <div class="bold_add_to_orders" style="display: inline-block;"> </div> <!-- bold-ro-liquid -->
+  
+  <script>
+    jQuery('.addtocart').click(function(e) {
+      e.preventDefault();
+      Shopify.addItemFromFormStart('add-item-form', {{ product.id }});
+                                   });
+  </script>  
+  {% else %}
+  <br>
+  <div class="wrapper"><button disabled class="btn btn--ys btn--xxl">{{ 'products.product.unavailable' | t }}</button></div>
+  <br>
+  <br>
+  <br>
+  {% endif %}
+</form>
+
+<ul class="product-link">
+  {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li class="text-right">{% include "wishlist-product" %}</li>{% endif %}{% endif %}
+</ul>
+
+{% if settings.show_product_rating %}<div class="product-info__review">
+  <div class="rating"><span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span></div>
+</div>{% else %}<br>{% endif %}

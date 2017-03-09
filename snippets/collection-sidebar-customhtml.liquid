@@ -1,0 +1,6 @@
+{% assign open = '' %}{% if opentabs contains index %}{% assign open = 'open' %}{% endif %}
+<!-- featured block -->
+<div class="collapse-block {{ open }}">
+  <h4 class="collapse-block__title">{{ 'collections.sidebar.custom_html' | t }}</h4>
+  <div class="collapse-block__content">{{ settings.sidebar_customhtml }}</div>
+</div>

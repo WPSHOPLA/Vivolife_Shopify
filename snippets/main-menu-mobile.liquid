@@ -1,0 +1,190 @@
+{% assign array_key = "|$big_array$|" | downcase %}
+{% assign menu_data = settings.submenu_type_and_list_1 | downcase | handle %}
+{% assign value = settings.submenu_type_and_list_2 | downcase | handle %}
+{% assign menu_data = menu_data | append: array_key | append: value %}
+{% assign value = settings.submenu_type_and_list_3 | downcase | handle %}
+{% assign menu_data = menu_data | append: array_key | append: value %}
+{% assign value = settings.submenu_type_and_list_4 | downcase | handle %}
+{% assign menu_data = menu_data | append: array_key | append: value %}
+{% assign value = settings.submenu_type_and_list_5 | downcase | handle %}
+{% assign menu_data = menu_data | append: array_key | append: value %}
+
+{% assign sub_type3 = settings.submenu_type3 | downcase %}
+
+{% if settings.menu_icon_hot != '' %}{% assign hotArray = settings.menu_icon_hot | split: ',' %}{% assign newa = '' %}{% for a in hotArray %}{% assign a1 = a | strip | downcase %}{% assign newa = newa | append: '__' | append: a1 | append: ',' %}{% endfor %}{% assign hotArray = newa %}{% else %}{% assign hotArray = '' %}{% endif %}
+{% if settings.menu_icon_new != '' %}{% assign newArray = settings.menu_icon_new | split: ',' %}{% assign newa = '' %}{% for a in newArray %}{% assign a1 = a | strip | downcase %}{% assign newa = newa | append: '__' | append: a1 | append: ',' %}{% endfor %}{% assign newArray = newa %}{% else %}{% assign newArray = '' %}{% endif %}
+
+<!-- mobile menu -->
+<div class="hidden">
+  <nav id="off-canvas-menu">
+    <ul class="expander-list">
+
+      {% for link in linklists.main-menu.links %}
+
+  		{% assign submenu_type = "" %}
+        {% assign page_handle = "" %}
+      
+        {% capture return %}{% include "get_linklist_dropdown", customlink: link %}{% endcapture %}
+        {% assign return = return | split: "%%" %}
+        {% assign has_drop_down = return | first | strip %}
+        {% assign child_list_handle = return | last | strip %}
+  
+		{% comment %} Check submenu type {% endcomment %}
+  		{% assign title = child_list_handle %}
+  		{% if menu_data contains title %}
+			{% assign current_menu_data = menu_data | split: array_key %}
+  			{% for data in current_menu_data %}
+  				{% if data == title %}
+                    {% assign current_menu_data = title %}
+      				{% assign submenu_type = "type2" %}
+      				{% assign count_type2 = forloop.index %}
+                    {% break %}
+  				{% endif %}
+  			{% endfor %}
+    	{% else %}
+      		{% assign check = 'item' | append: forloop.index %}
+      		{% capture cur_item %}{% if sub_type3 contains check %}{{ check }}{% else %}{{ link.title | downcase }}{% endif %}{% endcapture %}
+    		{% if sub_type3 contains cur_item %}
+    			{% assign current_menu_data = sub_type3 | split: ";" %}
+                {% for data in current_menu_data %}
+                    {% if data contains cur_item %}
+                        {% assign temp = data | split: ',' %}
+                        {% assign page_handle = temp[1] | strip %}
+                        {% assign temp = temp[0] | strip %}
+                        {% if temp == cur_item %}
+                            {% assign submenu_type = "type3" %}
+                            {% break %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+    		{% endif %}
+  		{% endif %}
+      
+		{% comment %} Main Menu {% endcomment %}
+    	{% assign level_2 = linklists[child_list_handle] %}
+      
+      <li>
+        <span class="name">
+          {% unless level_2.empty? %}{% if submenu_type != "type3" %}<span class="expander">-</span>{% endif %}{% endunless %}
+          {% if submenu_type == "type3" and page_handle != '' %}<span class="expander">-</span>{% endif %}
+          <a href="{{ link.url }}"><span class="act-underline">{{ link.title }}
+          {% assign check_title = link.title | strip | downcase %}
+          {% assign check_title = '__' | append: check_title %}
+          {% if newArray contains check_title %}<span class="badge badge--menu">{{ "general.menu_icons.new" | t }}</span>{% endif %}
+          {% if hotArray contains check_title %}<span class="badge badge--menu badge--color">{{ "general.menu_icons.sale" | t }}</span>{% endif %}
+          </span>
+          </a>
+        </span>
+        
+ 		{% if submenu_type != "type2" and submenu_type != "type3" %}
+          {% unless level_2.empty? %}
+            <ul class="multicolumn">
+              {% capture start %}{% if level_2.links[0].handle contains "two_column" or level_2.links[0].handle contains "three_column" %}1{% else %}0{% endif %}{% endcapture %}
+              {% for child_level_2 in level_2.links offset: start %}
+                <li>
+                  {% assign level_3 = linklists[child_level_2.handle] %}
+                  <span class="name">
+                    {% unless level_3.empty? %}<span class="expander">-</span>{% endunless %}
+                    <a href="{{ child_level_2.url | downcase }}">{{ child_level_2.title }}</a>
+                  </span>
+                  {% unless level_3.empty? %}
+                  <ul class="image-links-level-3 megamenu__submenu">
+                    {% for child_level_3 in level_3.links %}
+                     <li class="level3">
+                      {% assign level_4 = linklists[child_level_3.handle] %}
+                      <span class="name">
+                        {% unless level_4.empty? %}<span class="expander">-</span>{% endunless %}
+                        <a href="{{ child_level_3.url | downcase }}">{{ child_level_3.title }}</a>
+                      </span>
+                      {% unless level_4.empty? %}
+                        <ul class="image-links-level-4 megamenu__submenu">
+                          {% for child_level_4 in level_4.links %}
+                          <li class="level4">
+                            <a href="{{ child_level_4.url | downcase }}">{{ child_level_4.title }}</a>
+                          </li>
+                    	  {% endfor %}
+                        </ul>
+                      {% endunless %}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  {% endunless %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endunless %}
+  		{% endif %}
+        
+        {% if submenu_type == "type2" %}{% unless level_2.empty? %}{% if has_drop_down == "true" %}
+        <ul class="multicolumn-level">
+          {% for child_level_2 in level_2.links %}
+          <li>
+            {% capture return %}{% include "get_linklist_dropdown", link: child_level_2 %}{% endcapture %}
+            {% assign return = return | split: "%%" %}
+            {% assign has_drop_down2 = return | first | strip %}
+            {% assign child_list_handle2 = return | last | strip %}
+			{% assign level_3 = linklists[child_list_handle2] %}
+                       
+            <span class="name">
+              {% unless level_3.empty? %}<span class="expander">-</span>{% endunless %}
+              <a href="{{ child_level_2.url | downcase }}"><span class="act-underline">{{ child_level_2.title }}</span></a>
+            </span>
+            {% unless level_3.empty? %}
+
+              <ul class="image-links-level-3 megamenu__submenu">
+                {% for child_level_3 in level_3.links %}
+                <li class="level3">
+                  {% capture return %}{% include "get_linklist_dropdown", link: child_level_3 %}{% endcapture %}
+                  {% assign return = return | split: "%%" %}
+                  {% assign has_drop_down3 = return | first | strip %}
+                  {% assign child_list_handle3 = return | last | strip %}
+                  {% assign level_4 = linklists[child_list_handle3] %}
+                  <span class="name">
+                    {% unless level_4.empty? %}<span class="expander">-</span>{% endunless %}
+                    <a href="{{ child_level_3.url | downcase }}"><span class="act-underline">{{ child_level_3.title }}</span></a>
+                  </span>
+                  {% unless level_4.empty? %}
+                  <ul class="image-links-level-4 megamenu__submenu">
+                  {% for child_level_4 in level_4.links %}
+                    <li class="level4">
+                      {% capture return %}{% include "get_linklist_dropdown", link: child_level_4 %}{% endcapture %}
+                      {% assign return = return | split: "%%" %}
+                      {% assign has_drop_down4 = return | first | strip %}
+                      {% assign child_list_handle4 = return | last | strip %}
+                      {% assign level_5 = linklists[child_list_handle4] %}
+                      <span class="name">
+                      {% unless level_5.empty? %}<span class="expander">-</span>{% endunless %}
+                      <a href="{{ child_level_4.url | downcase }}">{{ child_level_4.title }}</a>
+                      </span>
+                      {% unless level_5.empty? %}
+                      <ul class="image-links-level-5 megamenu__submenu">
+                        {% for child_level_5 in level_5.links %}
+                        <li class="level5"><span class="name"><a href="{{ child_level_5.url | downcase }}">{{ child_level_5.title }}</a></span></li>
+                        {% endfor %}
+                      </ul>
+                      {% endunless %}
+                    </li>
+                  {% endfor %}
+                  </ul>
+                  {% endunless %}
+                </li>
+                {% endfor %}
+              </ul>
+            {% endunless %}
+          </li>
+          {% endfor %}
+        </ul>
+  		{% endif %}{% endunless %}{% endif %}
+        
+        {% if submenu_type == "type3" %}
+          <ul class="dropdown-menu megamenu image-links-layout" role="menu">
+            {% include "get-page-content" name: page_handle access: "true" %}
+          </ul>
+  		{% endif %}
+
+      </li>
+
+      {% endfor %}
+    </ul>
+  </nav>
+</div>

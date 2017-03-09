@@ -1,0 +1,28 @@
+{% if settings.showfooterlogo %}
+<div class="footer-logo hidden-xs">
+  <!--  Logo  --> 
+  <a class="logo" href="{{ shop.url }}"> <img src="{{ "footerlogo.png" | asset_url }}" alt="{{ shop.name }}"> </a> 
+  <!-- /Logo --> 
+</div>
+{% endif %}
+
+{% if settings.showfootercontenttext %}
+<div class="box-about">
+  <div class="mobile-collapse">
+    <h4 class="mobile-collapse__title visible-xs">{{ settings.footercontenttexttitle }}</h4>
+    <div class="mobile-collapse__content">
+      {{ settings.footercontenttext }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if settings.showfooternewsletter %}
+<!-- subscribe-box -->
+<div class="subscribe-box offset-top-20">
+  <div class="mobile-collapse">
+	{% include "newsletter_widget" %}
+  </div>
+</div>
+<!-- /subscribe-box -->
+{% endif %}

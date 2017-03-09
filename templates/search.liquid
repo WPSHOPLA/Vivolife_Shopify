@@ -1,0 +1,43 @@
+<div id="pageContent">
+  <div class="container">
+    {% if search.performed %}
+      {% if search.results_count == 0 %}
+        <!-- title -->
+        <div class="title-box">
+          <h1 class="text-center text-uppercase title-under">{{ 'general.search.results_title' | t }} "{{ search.terms }}"</h1>
+        </div>
+        <!-- /title -->
+        <div class="text-center"> 
+          <div class="divider divider--lg"></div>
+          <h4 class="color">{{ 'general.search.no_results_html' | t: search: search.terms }}</h4>
+        </div>
+      {% else %}
+        <!-- title -->
+        <div class="title-box">
+          <h1 class="text-center text-uppercase title-under">{{ 'general.search.results_title' | t }} "{{ search.terms }}"</h1>
+        </div>
+        <!-- /title -->
+        <aside class="col-md-12 col-lg-12 col-xl-12" id="centerColumn">
+          {% paginate search.results by 24 %}
+          <!-- /filters row -->
+          <div id="centerCol"><div class="product-listing row">{% for item in search.results %}{% assign product = item %}<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-one-nine">{% include "product-grid-item" hoverzoom: "true" %}</div>{% endfor %}</div></div>
+          {% if paginate.pages > 1 %}<div class="text-center">{% include 'pagination_buttons' %}</div><br>{% endif %}
+          {% endpaginate %}
+        </aside>
+
+      {% endif %}
+    
+    {% else %}
+  
+    <!-- title -->
+    <div class="title-box">
+      <h1 class="text-center text-uppercase title-under">{{ 'general.search.title' | t }}</h1>
+    </div>
+    <!-- /title -->	
+    <div class="text-center"> 
+      <div class="divider divider--lg"></div>
+      <h4 class="color">{{ 'general.search.no_results_title' | t }}</h4>
+    </div>
+    {% endif %}
+  </div>
+</div>

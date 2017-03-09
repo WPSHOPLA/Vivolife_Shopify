@@ -1,0 +1,58 @@
+{% assign value = page.content %}
+
+{% capture grid %}{% include 'get_property' data:value name:'[settings' property:'grid' default:'3' %}{% endcapture %}
+{% capture title %}{% include 'get_property' data:value name:'[settings' property:'title' default:'Title' %}{% endcapture %}
+{% capture categories %}{% include 'get_property' data:value name:'[settings' property:'categories' default:'' %}{% endcapture %}
+
+{% capture _grid %}{% case grid %}{% when '5' %}col-item-5{% when '4' %}col-sm-6 col-md-4  col-lg-3 col-xl-3{% when '3' %}col-sm-6  col-md-4 col-lg-4{% else %}col-sm-6{% endcase %}{% endcapture %}
+
+<!-- CONTENT section -->
+<div class="container-fill">
+  <h1 class="text-center text-uppercase title-under">{{ title }}</h1>
+  <!-- gallery -->
+  <div id="page-wrap" class="gallery">	
+
+    {% if categories != '' and categories contains ',' %}
+    {% assign categories = categories | split: ',' %}
+    <div class="filter-nav">
+    {% for cat in categories %}
+      <a rel="{% if forloop.first %}all{% else %}{{ cat | handle }}{% endif %}"{% if forloop.first %} class="current"{% endif %}>{{ cat | strip }}</a>
+    {% endfor %}
+    </div>
+  	{% endif %}
+
+    <div id="filter-content" class="gallery-content row{% if grid == '4' %} gallery-layout-3{% elsif grid == '5' %} gallery-layout-4{% endif %}">
+    {% assign images = value | split: '[images]' | last %}
+    {% assign images = images | replace: '[image', '[[[image' %}
+    {% assign images = images | split: '[[' %}
+    {% for content in images offset: 1 %}
+      {% capture src %}{% include 'get_property' data:content name:'[image' property:'src' default:'' %}{% endcapture %}
+      {% capture href %}{% include 'get_property' data:content name:'[image' property:'href' default:'' %}{% endcapture %}
+      {% capture cat %}{% include 'get_property' data:content name:'[image' property:'categorie' default:'' %}{% endcapture %}
+      {% capture titl %}{% include 'get_property' data:content name:'[image' property:'title' default:'' %}{% endcapture %}
+      {% capture cont %}{% include 'get_property' data:content name:'[image' property:'content' default:'' %}{% endcapture %}
+      <div class="filter-content-item all {{ cat | handle }} {{ _grid }}">
+        <figure>
+          <img src="{{ src }}" alt="" />
+          <figcaption class="content-center">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% if titl != '' %}<h6 class="title text-uppercase">{% if href != '' %}<a href="{{ href }}">{{ titl }}</a>{% else %}{{ titl }}{% endif %}</h6>{% endif %}
+                {% if cat != '' %}<em class="color-custom font18">{{ cat }}</em>{% endif %}
+                {% if cont != '' %}<div class="divider divider--sm"></div>
+                <p class="font-lighter">
+                  {{ cont }}
+                </p>{% endif %}
+                <div class="button-box">
+                  <a href="{{ src }}" class="zomm-gallery"  title="{{ titl }}"></a>
+                  {% if href != '' %}<a href="{{ href }}" class="link-gallery"></a>{% endif %}
+                </div>
+              </div>
+            </div>
+          </figcaption>
+        </figure>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>

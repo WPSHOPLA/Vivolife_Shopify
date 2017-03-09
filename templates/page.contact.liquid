@@ -1,0 +1,65 @@
+{% capture text %}{% include "get-content-with-key" content: page.content key: "[content]" %}{% endcapture %}
+{% capture map %}{% include "get-content-with-key" content: page.content key: "[map]" %}{% endcapture %}
+
+<!-- map -->
+{% if map != "" %}<section class="content-bottom"><div id="map"></div></section>{% endif %}
+<!-- /map -->
+<section class="container">				
+  <div class="row">
+    {% if text != "" %}<div class="col-md-3 col-sm-12">{{ text }}</div>{% endif %}
+    <div class="{% if text != "" %}col-md-9{% else %}col-sm-6 col-md-offset-3{% endif %}">
+      <div class="divider divider--lg visible-xs"></div>
+      <h2 class="text-uppercase title-bottom">{{ 'contact.form.title' | t }}</h2>
+      {{ page.content }}
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+        <div class="successForm feedback">
+          <p>{{ 'contact.form.post_success' | t }}</p>
+        </div>
+        {% endif %}
+
+        {% if form.errors %}
+        <div class="errorForm feedback">
+          <p>{{ 'contact.form.post_error' | t }}</p>
+          {% for field in form.errors %}
+          <p>{{ 'contact.form.post_field_error_html' | t: field: field, error: form.errors.messages[field] }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <!-- input -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputName">{{ 'contact.form.name_html' | t }}</label>
+              <input name="contact[name]" type="text" class="form-control" id="inputName">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputEmail">{{ 'contact.form.email_html' | t }}</label>
+              <input name="contact[email]" type="email" class="form-control" id="inputEmail">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputPhone">{{ 'contact.form.phone_html' | t }}</label>
+              <input name="contact[phone]" type="tel" class="form-control" id="inputPhone">
+            </div>
+          </div>
+        </div>
+        <!-- /input -->
+        <!-- textarea -->
+        <div class="form-group">
+          <label for="textareaMessage">{{ 'contact.form.message_html' | t }}</label>
+          <textarea name="contact[body]" class="form-control" rows="12"  id="textareaMessage"></textarea>
+        </div>
+        <!-- /textarea -->
+        <!-- button -->
+        <div class="pull-right note">{{ 'contact.form.required_fields' | t }}</div>
+        <button class="btn-contact" type="submit">{{ 'contact.form.send' | t }}</button>
+        <!-- /button -->						   
+      {% endform %}
+    </div>
+    <div class="gap"></div>
+  </div>					
+</section>

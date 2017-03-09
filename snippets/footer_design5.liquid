@@ -1,0 +1,52 @@
+<!-- FOOTER section -->
+<footer class="layout-5">
+  <!-- footer-data -->
+  <div class="container">									
+    <div class="row" >
+      <div class="col-sm-12 text-center">
+        {% if settings.contentBlockAll_design5 %}
+        <!-- telephone -->
+        <div class="telephone-box offset-top-20">
+          <div class="mobile-collapse">{{ settings.footercontenttext_design5 }}</div>
+        </div>
+        {% endif %}
+        <!-- /telephone -->
+        {% if settings.showfooternewsletter %}
+        <!-- subscribe-box -->
+        <div class="subscribe-box subscribe-box-row offset-top-20">
+          <div class="mobile-collapse">
+            {% if settings.mailchimp_form_action != "" %}
+            <h4 class="mobile-collapse__title text-left">{{ "newsletter.general.title" | t }}</h4>
+            <div class="mobile-collapse__content">
+              <form action="{{ settings.mailchimp_form_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank" class="form-inline">
+                <input type="text" name="EMAIL" class="subscribe-form__input" placeholder="Your E-mail">
+                <button type="submit" class="btn btn--ys btn--xl">{{ "newsletter.general.button" | t }}</button>
+              </form>
+            </div>
+            {% else %}
+            <strong><u>Add newsletter redirect link in Newsletter / MailChimp form action URL</u></strong>
+            {% endif %}
+          </div>
+        </div>
+        <!-- /subscribe-box -->
+        {% endif %}
+        {% if settings.show_footer_soc_but %}
+        <div class="divider divider--md"></div>
+        <!-- social-icon -->
+        <div class="social-links social-links--large social-links-layout-02">
+          <ul>{{ settings.footer_soc_but }}</ul>
+        </div>
+        <!-- /social-icon -->
+        {% endif %}	
+      </div>				
+    </div>
+  </div>
+  <!-- /footer-data --> 
+
+  <!-- footer-copyright -->
+  <div class="container footer-copyright">
+    <div class="row text-center">{{ settings.footer_address }}</div>
+  </div>
+  <!-- /footer-copyright --> 
+  <a href="#" class="btn btn--ys btn--full visible-xs" id="backToTop">Back to top <span class="icon icon-expand_less"></span></a> 
+</footer>

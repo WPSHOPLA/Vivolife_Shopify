@@ -1,0 +1,137 @@
+{% assign tags = settings.shopby_vendor_filter | split: ',' %}{% assign array = '' %}{% assign tag_lang = '' %}{% for tag in tags %}{% if tag contains '__' %}{% assign value = tag | split: '__' | first %}{% assign array = array | append: ',' | append: value %}{% assign value = tag | split: '__' | last | strip %}{% assign tag_lang = tag_lang | append: ',' | append: value %}{% else %}{% assign array = array | append: ',' | append: tag %}{% assign tag_lang = tag_lang | append: ',' | append: '_empty_' %}{% endif %}{% endfor %}{% assign tags = array | split: ',' %}{% assign tag_lang = tag_lang | split: ',' %}
+
+{% assign open = '' %}{% if opentabs contains index %}{% assign open = 'open' %}{% endif %}
+<div class="collapse-block {{ open }} vendor-filter-block">
+  <h4 class="collapse-block__title ">{{ 'collections.sidebar.filter_vendor_title' | t }}</h4>
+  <div class="collapse-block__content">
+    <ul class="simple-list vendor-filter">
+        
+        {% assign tag_size = 0 %}
+        {% for t in tags %}
+          {% assign tag = t | strip | downcase %}
+          {% assign all_tags = collection.all_tags | downcase %}
+          {% assign checktag = '"' | append: tag | append: '"' %}
+          {% if all_tags contains checktag %}
+            {% assign size = 0 %}
+            {% for product in _collectionMax %}
+              {% assign prod_tags = product.tags | downcase %}
+              {% if prod_tags contains checktag %}
+      			  {% if prod_tags contains type_active_tag or type_active_tag == "" %}
+      			  {% if prod_tags contains price_active_tag or price_active_tag == "" %}
+      			  {% if prod_tags contains size_active_tag or size_active_tag == "" %}
+      			  {% if prod_tags contains color_active_tag or color_active_tag == "" %}
+      			  {% if prod_tags contains tags_active_tag or tags_active_tag == "" %}
+                  {% assign size = size | plus: 1 %}
+      			  {% endif %}{% endif %}{% endif %}{% endif %}{% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if size > 0 %}
+              {% assign tag_size = tag_size | plus: 1 %}
+              {% assign cur_tags = current_tags | downcase %}
+              {% capture class %}{% if cur_tags contains checktag %}active{% endif %}{% endcapture %}
+              <li class="{{ class }}">
+                {% capture string %}{% if tag_lang[forloop.index0] != '_empty_' %}{{ tag_lang[forloop.index0] }}{% else %}{{ t | strip }}{% endif %}{% endcapture %}
+                {% if class != '' %}
+                {{ string }}<a href="{{ tag | handle }}" class="clear-tag icon icon-clear icon-to-right"></a>
+				{% else %}
+                	<a href="{{ tag | handle }}">{{ string}}</a>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+          <script class='vendor-filter-js-2'>
+            jQuery(function ($) {
+              if($( ".vendor-filter-block .active" ).length > 0) {
+                $(".vendor-filter-block").addClass('open');
+                $(".vendor-filter-block").find(".collapse-block__content").show();
+              }
+              $('.vendor-filter-js-2').remove();
+            });
+          </script>
+        {% if tag_size == 0 %}
+          <script class='vendor-filter-js'>
+            jQuery(function ($) {
+              $('.vendor-filter-block').hide();
+              $('.vendor-filter-js').remove();
+            });
+          </script>
+        {% else %}
+          <script class='vendor-filter-js'>
+            jQuery(function ($) {
+              $('.vendor-filter-block').show();
+              $('.vendor-filter-js').remove();
+            });
+          </script>
+        {% endif %}
+    </ul>
+  </div>
+</div>
+
+{% comment %}
+{% assign open = '' %}{% if opentabs contains index %}{% assign open = 'open' %}{% endif %}
+<div class="collapse-block {{ open }} vendor-filter-block">
+  <h4 class="collapse-block__title ">{{ collection.title }}</h4>
+  <div class="collapse-block__content">
+    <ul class="filter-list vendor-filter">
+        {% assign tags = settings.shopby_type_filter | split: ',' %}
+        {% assign tag_size = 0 %}
+        {% for t in tags %}
+          {% assign tag = t | strip | downcase %}
+          {% assign all_tags = collection.all_tags | downcase %}
+          {% assign checktag = '"' | append: tag | append: '"' %}
+          {% if all_tags contains checktag %}
+            {% assign size = 0 %}
+            {% for product in collection.products %}
+              {% assign prod_tags = product.tags | downcase %}
+              {% if prod_tags contains checktag %}
+                  {% assign size = size | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+            {% if size > 0 %}
+              {% assign tag_size = tag_size | plus: 1 %}
+              {% assign cur_tags = current_tags | downcase %}
+              {% capture class %}{% if cur_tags contains checktag %}active{% endif %}{% endcapture %}
+              <li class="{{ class }}">
+                {% if class != '' %}
+                {{ tag | capitalize }}<a href="{{ tag | handle }}" class="clear-tag icon icon-clear icon-to-right"></a>
+				{% else %}
+                	<a href="{{ tag | handle }}">{{ tag | capitalize }}</a>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if class != "" %}
+          <script class='vendor-filter-js-2'>
+            jQuery(function ($) {
+              /*if($(".vendor-filter .active").length) {
+              	$(".vendor-filter .active").hide();
+              }*/
+
+              if($( ".vendor-filter-block .active" ).length > 0) {
+                $(".vendor-filter-block").addClass('open');
+              }
+              $('.vendor-filter-js-2').remove();
+            });
+          </script>
+        {% endif %}
+        {% if tag_size == 0 %}
+          <script class='vendor-filter-js'>
+            jQuery(function ($) {
+              $('.vendor-filter-block').hide();
+              $('.vendor-filter-js').remove();
+            });
+          </script>
+        {% else %}
+          <script class='vendor-filter-js'>
+            jQuery(function ($) {
+              $('.vendor-filter-block').show();
+              $('.vendor-filter-js').remove();
+            });
+          </script>
+        {% endif %}
+    </ul>
+  </div>
+</div>
+{% endcomment %}

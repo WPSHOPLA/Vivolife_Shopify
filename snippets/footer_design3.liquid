@@ -1,0 +1,72 @@
+<!-- FOOTER section -->
+<footer class="layout-3">
+  <!-- footer-data -->
+  <div class="container inset-bottom-60">
+    {% if settings.showfooterlogo_design3 or settings.showfooternewsletter %}
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        {% if settings.showfooterlogo_design3 %}
+        <div class="footer-logo hidden-xs">
+          <!--  Logo  --> 
+          <a class="logo" href="{{ shop.url }}"> <img src="{{ "footerlogo.png" | asset_url }}" alt="{{ shop.name }}"> </a> 
+          <!-- /Logo --> 
+        </div>
+        {% endif %}
+        {% if settings.showfooternewsletter %}
+        <div class="divider divider-md"></div>
+        <div class="divider divider-lg visible-xs"></div>
+        <!-- subscribe-box -->
+        <div class="subscribe-box subscribe-box-row offset-top-20">
+          <div class="mobile-collapse">
+            {% if settings.mailchimp_form_action != "" %}
+            <h4 class="mobile-collapse__title text-left">{{ "newsletter.general.title" | t }}</h4>
+            <div class="mobile-collapse__content">
+              <form action="{{ settings.mailchimp_form_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank" class="form-inline">
+                <input type="text" name="EMAIL" class="subscribe-form__input" placeholder="Your E-mail">
+                <button type="submit" class="btn btn--ys btn--xl">{{ "newsletter.general.button" | t }}</button>
+              </form>
+            </div>
+            {% else %}
+            <strong><u>Add newsletter redirect link in Newsletter / MailChimp form action URL</u></strong>
+            {% endif %}
+          </div>
+        </div>
+        <!-- /subscribe-box -->
+        {% endif %}
+      </div>
+    </div>
+    <div class="divider divider-md hidden-xs"></div>
+    {% endif %}
+
+    {% if settings.contentBlockAll_design3 %}<div class="row">					
+      {% if settings.tabBlockAll %}{% assign all = false %}{% assign grid = 0 %}{% for i in (1..3) %}{% assign access = 'tabBlock' | append: forloop.index %}{% if settings[access] %}{% assign grid = grid | plus: 1 %}{% endif %}{% endfor %}{% if grid > 0 %}{% if grid == 3 %}{% assign all = true %}{% endif %}{% assign gridsm = 12 | divided_by: grid %}{% assign gridmd = 9 | divided_by: grid %}{% endif %}{% if grid > 0 %}{% for i in (1..3) %}{% assign access = 'tabBlock' | append: forloop.index %}{% if settings[access] %}{% assign title = 'blockName' | append: forloop.index %}{% assign footerLinks = 'footer-links-' | append: forloop.index %}<div class="col-sm-{{ gridsm }} col-md-{{ gridmd }}">{% include "footer-links" %}</div>{% endif %}{% endfor %}{% endif %}
+      <div class="clearfix visible-sm divider divider-lg "></div>{% endif %}
+      <div class="{% if settings.tabBlockAll %}col-sm-9 col-md-3{% else %}col-sm-12 col-md-12{% endif %}">
+        <div class="mobile-collapse">
+          <h4 class="text-left  title-under  mobile-collapse__title text-uppercase visible-xs visible-sm">{{ settings.footercontenttexttitle_design3 }}</h4>
+          <div class=" mobile-collapse__content">
+            
+            {% if settings.showfootercontenttext_design3 %}{{ settings.footercontenttext_design3 }}{% endif %}
+            
+            {% if settings.show_footer_soc_but %}<div class="social-links social-links--large social-links-layout-02">
+              <ul>{{ settings.footer_soc_but }}</ul>
+            </div>{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>{% else %}
+    {% if settings.tabBlockAll %}<div class="row">
+    {% include "footer-column-links" %}
+    </div>{% endif %}
+    {% endif %}
+  </div>
+  <!-- /footer-data --> 
+  <div class="divider divider-md visible-sm"></div>
+
+  <!-- footer-copyright -->
+  <div class="container footer-copyright">
+    <div class="row">{{ settings.footer_address }}</div>
+  </div>
+  <!-- /footer-copyright --> 
+  <a href="#" class="btn btn--ys btn--full visible-xs" id="backToTop">Back to top <span class="icon icon-expand_less"></span></a> 
+</footer>

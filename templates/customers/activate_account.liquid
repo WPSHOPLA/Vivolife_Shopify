@@ -1,0 +1,31 @@
+<div class="container">				
+  <!-- title -->
+  <div class="title-box">
+    <h1 class="text-center text-uppercase title-under">{{ 'customer.activate_account.title_main' | t }}</h1>
+  </div>
+  <!-- /title -->		
+  <div class="row">
+    <section class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+      <div class="login-form-box">
+        <div id="login">
+          <h3 class="color small">{{ 'customer.activate_account.title_form' | t }}</h3>
+          <p>{{ 'customer.activate_account.subtext' | t }}</p>
+          {% form 'activate_customer_password' %}{{ form.errors | default_errors }}
+          <div class="form-group">
+            <label for="password">{{ 'customer.activate_account.password' | t }}</label>
+            <input type="password" name="customer[password]" class="form-control" id="password">
+          </div>
+          <div class="form-group">
+            <label for="password_confirmation">{{ 'customer.activate_account.password_confirm' | t }}</label>
+            <input type="password" name="customer[password_confirmation]" class="form-control" id="password_confirmation">
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button type="submit" class="btn btn--ys btn-top btn--xl">{{ 'customer.activate_account.submit' | t }}</button>
+            </div>
+          </div>{% endform %}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="mobile-collapse">
+  <h4 class="text-left  title-under  mobile-collapse__title">{{ settings[title] }}</h4>
+  <div class="v-links-list mobile-collapse__content">
+    <ul>
+      {% for link in linklists[footerLinks].links %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

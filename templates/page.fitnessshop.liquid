@@ -1,0 +1,102 @@
+<div class="overview-page health">
+		<section class="container-full">
+			<div class="container">
+				<div class="container-inner">
+											<h1>{{ page_title }}</h1>
+                        <div class="starthere-upcontent">
+					{{ pages.fitness-shop.content }}	
+                        </div>
+									</div>
+</div>
+		</section>
+
+		<section class="container-full shop-by-category">
+
+			<div class="container">
+				<div class="container-inner">
+					<h2>SPORT</h2>
+
+					<div class="dotted-line"></div>
+
+					<p>Whatever your sport, we’re here to help you reach the very top of your game. Browse our range of carefully selected products to compliment your unique training programme.</p>
+				</div>
+													<ul>
+               {% for link in linklists.sport.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+							
+					</ul>
+				
+			</div>
+
+										<img alt="" class="image-left" src="//cdn.shopify.com/s/files/1/1374/7199/files/Yoga-sweatybetty-Vivo-Life21.png">
+			
+										<img alt="" class="image-right" src="//cdn.shopify.com/s/files/1/1374/7199/files/boxing-vivolife7.png">
+			
+		</section>
+		<!-- .shop-by-category -->
+
+		<section class="container-full shop-by-goal">
+			<div class="container">
+				<div class="container-inner">
+					<h2>GOAL</h2>
+
+					<div class="dotted-line"></div>
+
+					<p>Find the right products to keep you on track towards your athletic goals</p>
+
+				</div>
+
+													<ul>
+               {% for link in linklists.fitness-goal.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+							
+					</ul>
+							</div>
+			<!-- container -->
+										<img alt="" class="image-left" src="//cdn.shopify.com/s/files/1/1374/7199/files/musclebuilding-left-vivolife1.png">
+			
+								</section>
+		<!-- .shop-by-goal -->
+
+		<section class="container-full sport-specific">
+			<div class="container">
+				<div class="container-inner">
+					<h2>Top Brands</h2>
+
+					<div class="dotted-line"></div>
+
+					<p>We have carefully sourced over 50 premium brands from all over the world, here is some of our top fitness brands</p>
+				</div>
+										<ul>
+               {% for link in linklists.top-brands.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+							
+					</ul>
+							</div>
+						
+									<!-- container -->
+		</section>
+		<!-- .sport-specific -->
+
+		<section class="container-full top-picks fitness">
+			<div class="container">
+				<div class="container-inner">
+					<h2>Diet and Lifestyle</h2>
+
+					<div class="dotted-line"></div>
+	</div>
+				<div class="picks-container">
+				<ul>
+                   {% for link in linklists.top-picks.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</section>
+		<!-- .top-picks -->
+
+	</div>

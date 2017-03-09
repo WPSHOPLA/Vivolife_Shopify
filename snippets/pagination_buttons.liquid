@@ -1,0 +1,62 @@
+{% if paginate.pages > 1 %}
+  {% if paginate.current_page > 1 %}
+	{% assign url = paginate.previous.url %}
+  {% else %}
+	{% assign url = paginate.next.url %}
+  {% endif %}
+
+{% assign _url = url %}
+{% assign checkSearch = url | split: '&' | first %}
+{% assign checkSearch = url | split: checkSearch | last %}
+{% assign url = url | split: '?page' | first %}
+{% assign checkSearchLast = '' %}
+
+{% if _url contains '&' %}
+{% assign _split = _url | split: '?page' | last %}
+{% assign _split = _split | split: '&' | first %}
+{% assign _split = '?page' | append: _split %}
+{% assign checkSearchLast = _url | split: _split | last %}
+{% endif %}
+
+  <ul class="pagination">
+    {% if paginate.previous.is_link and paginate.pages > 4 %}
+    	<li><a href="{{ paginate.previous.url }}"><span class="icon icon-chevron_left"></span></a></li>
+    {% endif %}
+
+    {% if paginate.pages > 4 %}
+      {% assign max = paginate.pages | minus: paginate.current_page %}
+      {% if max > 4 %}
+        {% for part in (paginate.current_page..paginate.pages) limit: 4 %}
+        <li {% if paginate.current_page == part %}class="active"{% endif %}>
+          <a {% unless paginate.current_page == part %}href="{{ url }}?page={{ part }}{{ checkSearchLast }}"{% endunless %}>{{ part }}</a>
+        <li>
+        {% endfor %}
+      {% else %}
+        {% assign min = paginate.pages | minus: 4 %}
+        {% for part in (min..paginate.pages) limit: 4 %}
+        <li {% if paginate.current_page == part %}class="active"{% endif %}>
+          <a {% unless paginate.current_page == part %}href="{{ url }}?page={{ part }}{{ checkSearchLast }}"{% endunless %}>{{ part }}</a>
+        <li>
+        {% endfor %}
+        {% if paginate.pages == paginate.current_page %}<li class="active"><a>{{ paginate.current_page }}</a></li>{% endif %}
+      {% endif %}
+    
+    {% else %}
+      {% for part in paginate.parts %}
+          {% if part.is_link %}
+    		<li>{{ part.title | link_to: part.url}}</li>
+    	  {% else %}
+    		<li class="active"><a>{{ part.title }}</a></li>
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if paginate.next.is_link and paginate.pages > 4 %}
+    	<li><a href="{{ url }}?page={{ paginate.pages }}{{ checkSearchLast }}">{{ paginate.pages }}</a></li>
+    {% endif %}
+    
+    {% if paginate.next.is_link and paginate.pages > 4 %}
+    	<li><a href="{{ paginate.next.url }}"><span class="icon icon-chevron_right"></span></a></li>
+    {% endif %}
+  </ul>
+{% endif %}

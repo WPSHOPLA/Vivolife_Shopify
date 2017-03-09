@@ -1,0 +1,59 @@
+{% if settings.show_product_switcer and template == "product" %}
+  {% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+
+    {% assign found_a_collection = false %}
+    {% for c in product.collections %}
+      {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+        {% assign found_a_collection = true %}
+        {% assign collection = c %}
+      {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if collection and collection.products_count > 1 %}
+    {% for product in collection.products %}
+        {% if product.handle == current_product.handle %}
+
+            {% assign index = forloop.index0 %}
+            {% assign col_size = collection.products | size | minus: 1 %}
+            {% if index > 0 %}
+                {% if index < col_size %}
+                    {% assign prev = index | minus: 1 %}
+                    {% assign next = index | plus: 1 %}
+                {% else %}
+                    {% assign prev = index | minus: 1 %}
+                    {% assign next = 0 %}
+                {% endif %}
+            {% else %}
+                {% assign prev = col_size %}
+                {% assign next = index | plus: 1 %}
+            {% endif %}
+
+            {% assign prev = collection.products[prev] %}
+            {% assign next = collection.products[next] %}
+            {% assign prevtitle = prev.title %}
+            {% assign nexttitle = next.title %}
+            {% capture prevurl %}/collections/{{ collection.handle }}{{ prev.url }}{% endcapture %}
+            {% capture nexturl %}/collections/{{ collection.handle }}{{ next.url }}{% endcapture %}
+            {% assign prev = prev.selected_or_first_available_variant.featured_image | default: prev.featured_image %}
+            {% assign next = next.selected_or_first_available_variant.featured_image | default: next.featured_image %}
+
+            <div id="productPrevNext" class="hidden-xs hidden-sm">
+              <a href="{{ prevurl }}" class="product-prev">
+                <img src="{{ prev | product_img_url: 'small' }}" alt="{{ prev.alt | escape  }}" />
+              </a>
+              <a href="{{ nexturl }}" class="product-next">
+                <img src="{{ next | product_img_url: 'small' }}" alt="{{ next.alt | escape  }}" />
+              </a>
+            </div>
+
+            {% break %}
+        {% endif %}
+    {% endfor %}
+
+  {% endif %}
+{% endif %}
+
+
+  
+  

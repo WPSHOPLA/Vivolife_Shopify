@@ -1,0 +1,157 @@
+<div class="container">
+		<div class="row">
+	 <div class="col-xs-12 col-md-12 col-sm-12"> 
+       <h2>{{ page.title }}</h2>
+      {{ page.content }}
+        {% comment %}   
+<ul>
+  {% for product_vendor in shop.vendors %}
+  <li>{{ product_vendor | link_to_vendor }}
+  {% assign coll_handle = product.vendor | handleize %}
+<a href="{{ collections[coll_handle].url }}">
+{{ collections[coll_handle].image | collection_img_url: 'small' | img_tag }}
+</a>
+  </li>
+  
+  {% endfor %}
+  </ul> 
+
+       
+       
+       
+       
+<ul id="filters" class="clearfix">
+			<li><span class="filter active" data-filter=".app, .card">All</span></li>
+			<li><span class="filter" data-filter=".app">Health Brands Only</span></li>
+			<li><span class="filter" data-filter=".card">Beauty Brands Only</span></li>
+			
+		</ul>
+  
+<div id="portfoliolist">
+			{% for link in linklists.brands-collection.links %}
+     {% assign collection = link.object %}
+			<div class="portfolio app" data-cat="app">
+				<div class="portfolio-wrapper">				
+					{% if collection.image %}
+  <img src="{{ collection | img_url: 'small' }}"  alt="{{ collection.title | escape }}" />
+{% endif %}
+                  <span class="brand-overlay">
+								<span class="more-info">More Info</span>
+								<span class="view-products">View Products</span>
+							</span>
+					<div class="label">
+						<div class="label-text">
+							<a class="text-title">   {{ link.title | link_to: link.url }}</a>
+							
+						</div>
+						<div class="label-bg"></div>
+					</div>
+				</div>
+			</div>
+ 
+{% endfor %}
+							
+  </div> {% endcomment %}  
+     <div class="tab-brands">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="beaty-ta"><a href="#Beauty" aria-controls="Beauty" role="tab" data-toggle="tab">Beauty Brands Only</a></li>
+    <li role="presentation" class="health-ta"><a href="#Health" aria-controls="Health" role="tab" data-toggle="tab">Health Brands Only</a></li>
+    <li role="presentation" class="active all-ta"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">All Brands</a></li>
+    
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="all">{% for link in linklists.brands-collection.links %}
+     {% assign collection = link.object %}
+			<div class="col-xs-6 col-sm-3 col-md-6 col-lg-3 col-xl-one-fifth" data-cat="app" id="brands-display">
+			<div class="prod-image-wrap-tab">			
+					{% if collection.image %}
+              <a href="{{ collection.url }}"> <img src="{{ collection | img_url: 'small' }}"  alt="{{ collection.title | escape }}" />
+              <span class="brand-overlay">
+								<span class="more-info">More Info</span>
+								<span class="view-products">View Products</span>
+							</span>
+              </a>
+{% endif %}
+              </div>
+              
+             <div class="brandBox">
+
+						 {{ link.title | link_to: link.url }}		
+							{% if collection.description contains '<!-- split -->' %}
+{{ collection.description | split: '<!-- split -->' | first }}
+{% endif %}
+						</div>
+				
+				</div>
+			
+{% endfor %}
+					</div>
+    <div role="tabpanel" class="tab-pane" id="Health">
+     {% for link in linklists.health-brands.links %}
+     {% assign collection = link.object %}
+			<div class="col-xs-6 col-sm-3 col-md-6 col-lg-3 col-xl-one-fifth" data-cat="app" id="brands-display">
+			<div class="prod-image-wrap-tab">			
+					{% if collection.image %}
+              <a href="{{ collection.url }}"> <img src="{{ collection | img_url: 'small' }}"  alt="{{ collection.title | escape }}" />
+              <span class="brand-overlay">
+								<span class="more-info">More Info</span>
+								<span class="view-products">View Products</span>
+							</span>
+              </a>
+{% endif %}
+              </div>
+					
+						<div class="label-text">
+							<div class="text-title">   {{ link.title | link_to: link.url }}</div>
+							
+						</div>
+						<div class="label-bg"></div>
+					
+				</div>
+			
+ 
+{% endfor %}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="Beauty">
+    {% for link in linklists.beauty-brands.links %}
+     {% assign collection = link.object %}
+			<div class="col-xs-6 col-sm-3 col-md-6 col-lg-3 col-xl-one-fifth" data-cat="app" id="brands-display">
+			<div class="prod-image-wrap-tab">			
+					{% if collection.image %}
+              <a href="{{ collection.url }}"> <img src="{{ collection | img_url: 'small' }}"  alt="{{ collection.title | escape }}" />
+              <span class="brand-overlay">
+								<span class="more-info">More Info</span>
+								<span class="view-products">View Products</span>
+							</span>
+              </a>
+{% endif %}
+              </div>
+					
+						<div class="label-text">
+							<div class="text-title">   {{ link.title | link_to: link.url }}</div>
+							
+						</div>
+						<div class="label-bg"></div>
+					
+				</div>
+			
+ 
+{% endfor %}
+    
+    </div>
+   
+  </div>
+
+</div>  
+       
+       
+       
+       
+          </div>
+  </div>
+</div>
+

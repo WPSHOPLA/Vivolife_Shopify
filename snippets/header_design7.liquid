@@ -1,0 +1,40 @@
+<header id="header" class="header-layout-09">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 col-md-4 col-lg-4 col-xl-5">
+        <!-- logo start --> 
+        <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+        <!-- logo end --> 
+      </div>
+      <div class="col-sm-8 col-md-8 col-lg-8 col-xl-7 text-right">
+        <!-- slogan start -->
+        <div class="slogan">{{ settings.header_slogan }}</div>
+        <!-- slogan end --> 						
+        <div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" showTitle: true %}
+          {% include "header-language" align: 'text-right' showTitle: true %}
+        </div>
+        <div class="pull-right">
+          <div class="text-right">
+            {% include "menu-search" %}
+            {% include "menu-customer" %}
+            {% include "menu-cart" %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stuck-nav">
+    <div class="container offset-top-5">
+      <div class="row">
+        <div class="col-sm-12  col-stuck-menu">
+          {% include "main-menu" %}
+        </div>
+        <div class="pull-right col-stuck-cart text-right">
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

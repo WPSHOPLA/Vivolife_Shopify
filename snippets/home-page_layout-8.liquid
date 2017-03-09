@@ -1,0 +1,91 @@
+{% if settings.layout8_show_block1 %}
+
+{% assign name_collection = settings.layout8_block1_namecollection %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}{% assign _lenght = settings.layout8_block1_length | plus: 0 %}
+<section class="content offset-top-0 ">
+  <div class="container-fluid">					
+    <!-- carousel -->
+    <div class="row"  id="carouselHeader">
+      {% for product in selected_collection limit: _lenght %}
+      
+      {% comment %} Price to show. {% endcomment %}
+      {% assign sale_on = false %}{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}{% assign sale_on = true %}{% endif %}
+
+      {% assign variant = product.selected_or_first_available_variant %}
+      {% if product.available %}{% if product.variants.size > 1 %}{% assign func = "" %}{% else %}{% assign func = "Shopify.addItem(" | append: variant.id | append: ", 1)" %}{% endif %}{% endif %}
+
+      <!-- item -->
+      <div>
+        <div class="carousel-product-popup {{ variant.id }}">
+          <!-- product image -->
+          <div class="product__inside__image{% unless product.available %} sold-out{% endunless %}">
+            <a href="{{ product.url | within: collection }}"><img src="{{ product.featured_image | product_img_url: 'grande' }}" alt=""></a>
+            
+            {% unless product.available %}
+            <div class="product__label--sold-out"><span>{{ "products.product.sold_out" | t }}</span></div>
+            {% endunless %}
+          </div>
+          <!-- /product image --> 
+          <!-- product hover-popup -->
+          <div class="product-hover-popup">
+            <!-- product name -->
+            <div class="product__inside__name product_title">
+              <h2><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h2>
+            </div>
+            <!-- /product name --> 
+            <!-- product price -->
+            {% if sale_on %}<div class="product__inside__price price-box">{{ product.selected_or_first_available_variant.price | money }}<span class="price-box__old">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></div>
+            {% else %}<div class="product__inside__price price-box">{{ product.selected_or_first_available_variant.price | money }}</div>
+            {% endif %}
+            <!-- /product price -->
+            <!-- product button -->
+            {% if product.available %}
+            {% if settings.product_item_show_cart %}<a {% if func == "" %}href="javascript:void(0);" onclick="quiqview('{{ product.handle | handleize }}')"{% else %}href="javascript:void(0);" onclick="{{ func }}; return false;"{% endif %} class="btn btn--ys btn--xl">{{ 'products.product.add_to_cart_html' | t }}</a>{% endif %}
+            {% endif %}
+            <!-- /product button -->
+          </div>
+          <!-- /product hover-popup -->			
+        </div>							
+      </div>
+      <!-- /item -->
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% assign tabs = settings.layout8_tabs | split: ',' %}
+<!--=== tab-carusel ===-->
+<section class="container content">
+  <div class="row">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-tabs--ys-center text-center" role="tablist">
+      {% for t in tabs %}
+      <li{% if forloop.first %} class="active"{% endif %}><a href="#Tab{{ forloop.index }}"  role="tab" data-toggle="tab" class="text-uppercase">{{ t | strip }}</a></li>
+      {% endfor %}
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content tab-content--ys-center">
+      {% for t in tabs %}
+      {% assign settings_key = "layout8_tabs_namecollection" | append: forloop.index %}
+      {% assign name_collection = settings[settings_key] %}
+      {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}{% assign _lenght = settings.layout8_tabs_length | plus: 0 %}
+      
+      <div role="tabpanel" class="tab-pane{% if forloop.first %} active{% endif %}" id="Tab{{ forloop.index }}">
+      </div>
+      
+      <div id="Tab{{ forloop.index }}-clone" style="display:none">
+        <div class="carousel-products carouselTab slick-arrow-top row">
+          {% for product in selected_collection limit: _lenght %}
+            <div class="col-lg-3">
+              {% include "product-grid-item" %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+{% if settings.layout10_show_block1 and settings.layout10_block1 != '' %}{{ settings.layout10_block1 }}{% endif %}
+{% if settings.layout10_show_block2 and settings.layout10_block2 != '' %}{{ settings.layout10_block2 }}{% endif %}
+{% if settings.layout10_show_block3 and settings.layout10_block3 != '' %}{{ settings.layout10_block3 }}{% endif %}
+
+{% if settings.layout10_productsliderblock0 %}
+<section class="content">
+  <div class="container fead-prod">
+    {% include "home-small-slider" title: settings.layout10_slidertitle0 name_collection: settings.layout10_slider0 length: settings.layout10_sliderlength0 access: true center_title: true %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.show_defaulthome10_blogslider1 %}
+{% assign title = settings.defaulthome10_blogslidertitle1 %}
+{% assign name_collection = settings.defaulthome10_blogslider1 %}
+{% assign length = settings.defaulthome10_blogsliderlength1 %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+<section class="content carusel--parallax layout10"  data-image="{{ "homedefault10_blogparralax.jpg" | asset_url }}">
+  <div class="container">					
+    <div class="row">
+      <div class="col-lg-12">
+        <!-- title -->
+        <div class="title-with-button">
+          <div class="carousel-products__button pull-right">
+            <span class="btn-prev"></span>
+            <span class="btn-next"></span>        
+          </div>
+          <h2 class="text-center text-uppercase title-under">{{ title }}</h2>
+        </div>
+        <!-- /title -->
+        <!-- carousel-new -->
+        <div class="carousel-products row" id="postsCarousel10">
+          {% for f_article in selected_blog.articles limit: length %}{% if f_article.excerpt contains "blogslidersmall" %}{% capture _article %}{% include "get-content-with-key" content: f_article.excerpt key: "[blogslidersmall]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture author %}{% include "get-content-with-key" content: _article key: "[author]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = f_article.title %}{% endif %}{% if author == '' %}{% assign author = f_article.author %}{% endif %}
+			  {% if f_article.comments.size > 0 %}{% assign comment_url = f_article.url | append: '#comments' %}{% else %}{% assign comment_url = f_article.url | append: '#addcomment' %}{% endif %}
+          <!-- slide-->
+          <div class="col-sm-3 col-xl-6">
+            {% include "blog-slider-item" %}
+          </div>
+          <!-- /slide -->
+          {% endif %}{% endfor %}
+        </div>
+        <!-- /carousel-new -->
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if settings.layout10_show_block4 and settings.layout10_block4 != '' %}{{ settings.layout10_block4 }}{% endif %}
+{% if settings.show_defaulthome_instagram_10 %}{% include "home-instagram" %}{% endif %}

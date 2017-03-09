@@ -1,0 +1,44 @@
+{% if shop.metafields.bold_loyalties.active == 1 and shop.metafields.bold_loyalties.points_can_be_earned  == 1 and shop.metafields.bold_loyalties.points_can_be_redeemed == 1 %}
+
+<div class="boldapps-rewards-points-customer-section">
+	<div class="bold-row bold-no-margin">
+		<div class="bold-col">
+			<h1>{{ shop.metafields.bold_loyalties.name }}</h1>
+		    <p class="description">
+		      {{ shop.metafields.bold_loyalties.description }}
+		    </p>
+	    </div>
+    </div>
+  
+  <div id="boldapps-reward-points-container">
+    <div class="bold-col"><img src="//loy.boldapps.net/assets/ajax-loader.gif"></div>
+  </div>
+</div>
+
+
+<style>
+  @import url('//loy.boldapps.net/app_assets/css/client/bold-grid.css');
+</style>
+
+  <script>
+    var BoldApps = BoldApps||{};
+    BoldApps.Loyalties =BoldApps.Loyalties ||{};
+    BoldApps.Loyalties.customer = null;
+    {% if shop.customer_accounts_enabled %}
+      {% if customer %}
+        BoldApps.Loyalties.customer ={
+          email:'{{ customer.email}}',
+          id:{{ customer.id}},
+          uuid: '{{ customer.metafields.bold_loyalties.uuid }}'
+    } ;
+    {% endif %}
+    {% endif %}
+    BoldApps.Loyalties.shop = {
+      domain:'{{ shop.domain}}',
+      permanent_domain: '{{shop.permanent_domain}}',
+      url:'{{shop.url}}',
+      metafields: {{ shop.metafields.bold_loyalties | json }}
+    };
+  </script>
+  <script src="//loy.boldapps.net/front_end/customer_account_js"></script>
+  {% endif %}

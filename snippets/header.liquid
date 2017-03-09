@@ -1,0 +1,146 @@
+<!-- HEADER section -->
+<header id="header" class="{% if class == "header-layout-04" %}class{% else %}header-layout-05{% endif %}">
+  <!-- top-header -->
+
+      <!-- col-left -->
+      <div class="text-left header-top" id="topHead">
+        <!-- slogan start -->
+		<div class="container">
+		<div class="row">
+           <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="slogan">
+			<ul class="social">
+					<li><a href="https://twitter.com/vivolifeuk" target="_blank" class="twitter-blue-hover">
+							<i class="fa fa-twitter"></i></a>
+					</li>
+					<li><a href="https://www.facebook.com/vivolifeuk" target="_blank" class="facebook-blue-hover">
+							<i class="fa fa-facebook"></i></a>
+					</li>
+					<li><a href="https://uk.pinterest.com/vivolifeuk" target="_blank" class="pinterest-red-hover">
+							<i class="fa fa-pinterest"></i></a>
+					</li>
+					<li><a href="http://instagram.com/vivolifeuk" target="_blank" class="instagram-blue-hover">
+							<i class="fa fa-instagram"></i></a>
+					</li>
+					
+					<li class="contactTel">
+                      <a href="tel:+448455191942">Tel: 0845 519 1942</a>
+					</li>
+				</ul>
+         {% if page.handle == "landing-page" %}
+         
+          {% else %}
+			<ul class="topNav">
+            
+{% for link in linklists.top-nav.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+<li><a href="/account" class="tn-my-account">My Account</a></li>
+            </ul>
+          {% endif %}
+		</div>
+          </div>
+		</div>
+  </div>
+        <!-- slogan end --> 	
+      </div>
+      <!-- /top-header -->
+  
+  <!-- nav --><div class="text-left header-middle" id="topHead">
+         {% if class != "header-layout-04" %}<div class="stuck-nav">{% endif %}
+    <div class="container">
+	 <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12">
+          {% if page.handle == "landing-page" %}
+         
+          {% else %}
+			  <div class="col-sm-5 text-left">
+			  <div class="col-stuck-menu">
+				<div class="row text-center">
+				  {% include "main-menu" %}
+				</div>
+			  </div>
+			 {% comment %} <div class="pull-right col-stuck-cart text-right">
+				{% include "menu-cart" %}
+		 </div>{% endcomment %}
+			</div>
+         {% endif %}
+	<!---<div class="container">-->
+         {% if page.handle == "landing-page" %}
+         <div class="text-center">
+		<div class="row text-center">
+		  <!--  -->
+		  
+		  <!-- / -->
+		  <!-- logo start -->
+		  <a href="/"><img class="logo img-responsive1" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+		  <!-- logo end --> 
+		</div>
+	</div>
+          {% else %}
+	<div class="col-sm-2 text-center">
+		<div class="row text-center">
+		  <!--  -->
+		  
+		  <!-- / -->
+		  <!-- logo start -->
+		  <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+		  <!-- logo end --> 
+		</div>
+      	{% include "menus-for-mobile" %}
+	</div>
+         {% endif %}
+          {% if page.handle == "landing-page" %}
+         
+          {% else %}
+	<div class="col-sm-5 text-right">
+	
+	<div class="text-right">
+	<div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" showTitle: true %}
+          {% include "header-language" align: 'text-right' showTitle: true %}
+        </div>
+			<div class="cart-total">
+              <span style="color:#fff;">Total</span> <span style="color: #e4de38;">{{ cart.total_price | money }} </span>
+            </div>
+      		<div class="cart-area">
+              <a href="/cart">Cart</a>
+      </div>
+      <div class="checkout-area">
+              <a href="/checkout">Checkout</a>
+      </div>
+			
+      		{% include "menu-search" %}
+		  </div>
+		
+	</div>
+         {% endif %}
+	</div>
+      </div>
+      
+  </div>
+ </div>
+
+    <!-- /nav --></div>
+</header>
+<!-- End HEADER section -->
+    {% if page.handle == "landing-page" %}
+  {% else %}
+<div id="subNav">
+		<div class="container">
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+			<ul><li class="callUs col-xs-12 col-sm-12 col-md-3"><a href="/clear-nutrition">	TRUSTED<span>Transparent and tested</span></a>
+				</li>
+				<li class="deliveryBg col-xs-12 col-sm-12 col-md-3"><a href="/pages/delivery">Free Delivery<span>For orders over £50</span></a>
+				</li>
+				<li class="advice col-xs-12 col-sm-12 col-md-3"><a href="/pages/vivo-club">Vivo Club<span>Earn 5% on every purchase</span></a>
+				</li>
+				<li class="suppliers col-xs-12 col-sm-12 col-md-3"><a href="/clear-nutrition/">30 Day<span>money-back guarantee</span></a>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div> <!-- #container -->
+        </div></div>
+	</div>
+ {% endif %}

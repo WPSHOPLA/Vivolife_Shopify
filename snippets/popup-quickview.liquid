@@ -1,0 +1,367 @@
+{% if settings.product_item_showqv %}
+<div class="modal  modal--bg fade"  id="quickViewModal">
+  <div class="modal-dialog white-modal">
+    <div class="modal-content container">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
+      </div>
+      <!--  -->
+      <div class="product-popup">
+        <div class="product-popup-content">
+          <div class="container-fluid">
+            <div class="row product-info-outer">
+              <div class="col-xs-12 col-sm-5 col-md-6 col-lg-6">
+                <div class="product-main-image">
+                  <div class="product-main-image__item">
+                    <div class="img_box_1"></div>
+                    <div class="img_box_2"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="product-info col-xs-12 col-sm-7 col-md-6 col-lg-6">
+                {% if settings.quickview_sku or settings.quickview_availability %}<div class="wrapper qwt">
+                  {% if settings.quickview_sku %}<div class="product-info__sku pull-left">{{ 'popup_quick_view.general.sku' | t }} <strong class='product-sku'>text</strong></div>{% endif %}
+                  {% if settings.quickview_availability %}<div class="product-info__availabilitu{% if settings.quickview_sku %} pull-right{% endif %}">{{ 'popup_quick_view.general.availability' | t }} <strong class='product-availability'>text</strong></div>{% endif %}
+                </div>{% endif %}
+                <div class="product-info__title">
+                  <h2 class="product_title">FROM_JS</h2>
+                </div>
+                <div class="price-box product-info__price price-part">
+                  <span class="price-box__new">jsprice</span>
+                  <span class="main">jsprice</span>
+                </div>
+                
+                {% if settings.quickview_showrating %}
+                <div class="product-info__review">
+                  <div class="rating"><span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span></div>
+                </div>
+                {% endif %}
+                
+                <div class="product-desc-holder">
+                  <div class="divider divider--xs product-info__divider"></div>
+                  <div class="product-info__description product-desc">FROM_JS</div>
+                </div>
+
+                <div class="divider divider--xs product-info__divider"></div>
+                <div class="product-available">
+                  <form id="add-item-qv" action="/cart/add" method="post">
+                    
+                    <div class="variants"></div>
+
+                    <div class="divider divider--sm"></div>
+                    <div class="wrapper">
+                      <div class="pull-left control-console"><span class="qty-label">{{ 'products.product.quantity' | t }}</span></div>
+                      <div class="pull-left control-console"><input type="text" name="quantity" class="input--ys qty-input pull-left" value="1"></div>
+                      <div class="pull-left"><button type="submit" class="btn btn--ys btn--xxl addtocartqv">{{ 'popup_quick_view.general.add_to_cart_html' | t }}</button></div>
+                    </div>
+                    <script>
+                      jQuery('.addtocartqv').click(function(e) {
+                        e.preventDefault();
+                        Shopify.addItemFromFormStart('add-item-qv', jQuery(this).attr('id'));
+                      });
+                    </script>  
+                  </form>
+                </div>
+                <div class="product-disable">
+                  <button disabled class="btn btn--ys btn--xxl">{{ 'products.product.unavailable' | t }}</button>
+                </div>
+                <div class="divider divider--sm"></div>
+                <a href="" class="viewfullinfo">{{ 'popup_quick_view.general.view_full_info' | t }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / -->
+    </div>
+  </div>
+</div>
+<div class="quickViewModal_info" style="display: none;">
+  <div class="button">{{ 'popup_quick_view.general.add_to_cart_html' | t }}</div>
+  <div class="button_added">{{ 'popup_quick_view.general.added_html' | t }}</div>
+  <div class="button_error">{{ 'popup_quick_view.general.error_html' | t }}</div>
+  <div class="button_wait">{{ 'popup_quick_view.general.wait_html' | t }}</div>
+</div>
+
+<script>
+  var mainImage = '';
+  jQuery(function ($) {
+
+    quiqview = function(product_handle) {
+      Shopify.getProduct(product_handle);
+    }
+    Shopify.onProduct = function(product) {
+      $('.viewfullinfo').attr('href', product.url);
+      
+      var _parent = '#quickViewModal';
+      $(_parent+' .product_title').text(product.title);
+      
+      $(_parent+' .rating').empty();
+      $(_parent+' .rating').append("<span class=\"shopify-product-reviews-badge\" data-id=\""+product.id+"\"></span>");
+      
+      
+      //check variants
+      var variant = '';
+      
+      for (i = 0; i < product.variants.length; i++) {
+        if(product.variants[i].inventory_quantity > 0) {
+		  variant = product.variants[i];
+          break;
+        }
+      }
+      
+      if(variant == '') {
+        for (i = 0; i < product.variants.length; i++) {
+          if(product.variants[i].inventory_policy == "continue") {
+            variant = product.variants[i];
+            break;
+          }
+        }
+        if(variant == '') {
+        	variant = product.variants[0];
+        }
+      }
+      
+      mainImage = product.featured_image;
+      var shopifyimgurl = variant.featured_image ? variant.featured_image.src : product.featured_image;
+      var imgurl = "<img class=\"full-width\" alt=\"\" src = \""+shopifyimgurl+"\" >";
+      jQuery(_parent+' .product-main-image__item .img_box_1').empty();
+      jQuery(_parent+' .product-main-image__item .img_box_1').append(imgurl);
+      jQuery(_parent+' .product-main-image__item .img_box_2').empty();
+      jQuery(_parent+' .product-main-image__item .img_box_2').append(imgurl);
+      
+      var desc = product.description;
+      if (desc.indexOf("[smallDescription]") >= 0) {
+        desc = desc.split("[smallDescription]");
+        desc = desc[1].split("[/smallDescription]");
+        $(_parent+' .product-desc').show();
+        $(_parent+' .product-desc').html(desc[0]);
+      }
+      else {
+        $(_parent+' .product-desc-holder').hide();
+      }
+      
+      //set variants property
+      var inv_qua = variant.inventory_quantity;
+      //price
+      if(variant.price < variant.compare_at_price) {
+        $('.price-part .main').addClass('price-box__old');
+        $('.price-part .price-box__new').show();
+        changePriceValue('.price-part .main', variant.compare_at_price);
+        changePriceValue('.price-part .price-box__new', variant.price);
+      }
+      else {
+        $('.price-part .price-box__new').hide();
+        $('.price-part .main').removeClass('price-box__old');
+        changePriceValue('.price-part .main', variant.price);
+      }
+      
+      // Variants select
+      if(product.variants.length > 1) {
+        var variants_margin = product.options.length == 2 ? 'variants_margin' : '';
+                
+        var select = '<select id="product-select-qv" name="id">';
+        var selected = 'selected';
+        for (i = 0; i < product.variants.length; i++) {
+          var _var = product.variants[i];
+          if(_var.available) {
+          	select += '<option value="' + _var.id + '"' + selected +'>' + _var.title + ' - ' + Shopify.formatMoney(_var.price, "{{ shop.money_format }}") + '</option>'
+			selected = '';
+		  }
+        }
+        select += '</select>';
+  		
+        var variant_select = '<div class="variants_selects ' + variants_margin + '">';
+        variant_select += select;
+  		variant_select += '</div><div class="divider divider--sm"></div>';
+		select = variant_select;
+      }
+      else {
+		var select = '<input type="hidden" name="id" value="' + product.variants[0].id + '" />';
+      }
+	  $('.variants').empty();
+      $('.variants').html(select);
+      
+      //parametres
+      setParametresText(_parent+' .product-sku', variant.sku);
+            if(jQuery(_parent + ' .product-sku').length) {
+              var $ava = jQuery(_parent + " .product-info__availabilitu");
+              if(variant.sku != "") {
+                if($ava.hasClass('pull-left')){ $ava.removeClass('pull-left') }
+              } else {
+                if(!$ava.hasClass('pull-left')){ $ava.addClass('pull-left') }
+              }
+            }
+
+      //quantity
+      var out_of_stock = false;
+      if(variant.inventory_management) {
+        if(inv_qua > 0) {
+      		$(_parent+' .product-availability').text(inv_qua + " {{ 'popup_quick_view.general.in_stock' | t }}");
+        }
+        else {
+          	out_of_stock = true;
+      		$(_parent+' .product-availability').text("{{ 'popup_quick_view.general.out_of_stock' | t }}");
+        }
+      }
+      else {
+        $(_parent+' .product-availability').text("{{ 'popup_quick_view.general.many_in_stock' | t }}");
+      }
+      
+	  // button
+      if(!out_of_stock || variant.inventory_policy == "continue") {        
+        $('.product-available').show();
+        $('.product-disable').hide();
+        $('.addtocartqv').attr('id', product.id );
+      }
+      else {
+        $('.product-available').hide();
+        $('.product-disable').show();
+      }
+
+      if (product.available && product.variants.length > 1) {
+        new Shopify.OptionSelectors("product-select-qv", { product: product, onVariantSelected: selectCallbackQv, enableHistoryState: true });
+        
+        if($('#quickViewModal .variants_selects .selector-wrapper').length > 0) {
+          $.each( jQuery('#quickViewModal .variants_selects .selector-wrapper'), function(index) {
+            $(this).find('label').text(product.options[index].name);
+          });
+        }
+      }
+      else {
+        jQuery('.currency .active').trigger('click');
+      }
+      
+      if($(".spr-badge").length > 0) {
+		$.getScript(window.location.protocol + "//productreviews.shopifycdn.com/assets/v4/spr.js");
+      }
+          
+      if($(".selector-wrapper label").length) {
+         $(".selector-wrapper label").each(function( index ) {
+           $(this).text(jQuery(this).text() + ":");
+         });
+      }
+
+      $(_parent).modal('show');
+
+      if( !( 'ontouchstart' in window ) &&
+      	!navigator.msMaxTouchPoints &&
+      	!navigator.userAgent.toLowerCase().match( /windows phone os 7/i ) ) return false;
+
+      $j('body').css("top", -$j('body').scrollTop());
+      $j('body').addClass("no-scroll");
+      $j('.close').click(function(){
+          var top = parseInt($j('body').css("top").replace("px", ""))*-1;
+          $j('body').removeAttr("style");
+          $j('body').removeClass("no-scroll");
+          $j('body').scrollTop(top);
+      });
+    }
+
+    function setParametresText(obj, value) {
+      if(value != '') {
+        $(obj).parent().show();
+        $(obj).text(value);
+      }
+      else {
+        $(obj).parent().hide();
+      }
+    }
+        
+    function changePriceValue (cell, value) {
+		$(cell).html(Shopify.formatMoney(value, "{{ shop.money_format }}"));
+    };
+    
+  });
+
+
+  
+	var selectCallbackQv = function(variant, selector) {
+
+      var _parent = '#quickViewModal';
+      var _parentprice = _parent + ' .price-part';
+      if (!variant) {
+        jQuery(_parent + " .price-box").hide();
+        jQuery(_parent + " .qwt").hide();
+        jQuery(_parent + " .control-console").hide();
+        jQuery(_parent + ' .addtocartqv').attr('disabled','disabled');
+        jQuery(_parent + ' .addtocartqv').text('{{ 'products.product.unavailable' | t }}');
+        return false;
+      }
+                                               
+      jQuery(_parent + " .price-box").show();
+      jQuery(_parent + " .qwt").show();
+      jQuery(_parent + " .control-console").show();
+
+      if(variant.price < variant.compare_at_price){
+        jQuery(_parentprice + ' .main').addClass('price-box__old');
+        jQuery(_parentprice + ' .price-box__new').show();
+        changePriceValue(_parentprice + ' .main', variant.compare_at_price);
+        changePriceValue(_parentprice + ' .price-box__new', variant.price);
+      } else {
+        jQuery(_parentprice + ' .price-box__new').hide();
+        jQuery(_parentprice + ' .main').removeClass('price-box__old');
+        changePriceValue(_parentprice + ' .main', variant.price);
+      }
+
+      newVariantTextDataQv(_parent + ' .product-sku', variant.sku);
+
+      if(jQuery(_parent + ' .product-sku').length) {
+        var $ava = jQuery(_parent + " .product-info__availabilitu");
+        if(variant.sku != "") {
+          if($ava.hasClass('pull-left')){ $ava.removeClass('pull-left') }
+        } else {
+          if(!$ava.hasClass('pull-left')){ $ava.addClass('pull-left') }
+        }
+      }
+          
+      if (variant.available) {
+        if (variant.inventory_management == null) {
+          jQuery(_parent + " .product-availability").text("{{ 'products.product.many_in_stock' | t }}");
+        } else {
+          jQuery(_parent + " .product-availability").text(variant.inventory_quantity + " {{ 'products.product.in_stock' | t }}");
+        }
+      } else {
+        jQuery(_parent + " .product-availability").text("{{ 'products.product.sold_out' | t }}");
+      }
+      
+	  var shopifyimgurl = variant.featured_image ? variant.featured_image.src : mainImage;
+      var imgurl = "<img class=\"full-width\" alt=\"\" src = \""+shopifyimgurl+"\" >";
+	  if(jQuery(_parent+' .product-main-image__item .img_box_1').children().length > 0) {
+		var detach = jQuery(_parent+' .product-main-image__item .img_box_1 img').detach();
+		jQuery(_parent+' .product-main-image__item .img_box_2').empty();
+        jQuery(_parent+' .product-main-image__item .img_box_2').append(detach);
+      }
+      jQuery(_parent+' .product-main-image__item .img_box_1').empty();
+      jQuery(_parent+' .product-main-image__item .img_box_1').append(imgurl);
+          
+      if (variant && variant.available) {
+        jQuery(_parent + ' .addtocartqv').removeAttr('disabled');
+        jQuery(_parent + ' .addtocartqv').html('{{ 'products.product.add_to_cart_html' | t }}');
+        jQuery(_parent + " .control-console").show();
+      } else {
+      	jQuery(_parent + ' .addtocartqv').attr('disabled','disabled');
+        jQuery(_parent + ' .addtocartqv').text('{{ 'products.product.unavailable' | t }}');
+        jQuery(_parent + " .control-console").hide();
+      }
+          
+	  jQuery('.currency .active').trigger('click');
+  	};
+  
+    function changePriceValue (cell, value) {
+		jQuery(cell).html(Shopify.formatMoney(value, "{{ shop.money_format }}"));
+    };
+  
+    function newVariantTextDataQv (obj, value) {
+      if(value != '') {
+        jQuery(obj).parent().show();
+        jQuery(obj).text(value);
+      }
+      else {
+        jQuery(obj).parent().hide();
+      }
+    };
+        
+</script>
+{% endif %}
+

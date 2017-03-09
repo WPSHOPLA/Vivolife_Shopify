@@ -1,0 +1,164 @@
+{% if template contains 'article' and blog.metafields.blogfeeder.use_canonical == 'yes' %}{% assign canonical_url = article.metafields.blogfeeder.canonical %}{% endif %}
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js ie6 oldie" lang="en"><![endif]-->
+<!--[if IE 7]><html class="no-js ie7 oldie" lang="en"><![endif]-->
+<!--[if IE 8]><html class="no-js ie8 oldie" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+<head><script id=gw_script>(function() {    var xy   = document.createElement('script');    xy.src = "https://static.giftwizard.co/scriptloader.js?shop=vivo-life.myshopify.com";    xy.async = true;    document.head.appendChild(xy)})()</script>
+  <script type="text/javascript">
+(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/JzroT1Gy1jkgj2ysaNWZcwUxRcI85wmo0IecFvEm/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+</script>
+  <!-- v1.4.3 -->
+  <meta charset="utf-8">
+  <!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="{{ "general.meta.keywords" | t }}" />
+  <meta name="author" content="{{ "general.meta.author" | t }}">
+  {{ 'novafont.css.liquid'  | asset_url | stylesheet_tag }}
+  <!-- Social meta ================================================== -->
+  {% include 'social-meta-tags' %}
+
+  <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}" />{% endif %}
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  {{ 'jquery.colorbox.js' | asset_url | script_tag }}
+  
+  {% if settings.use_favicon %}<link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/x-icon" />{% endif %}
+  
+  {% if settings.enable_custom_fonts %}
+  	{{ 'fonts.js' | asset_url | script_tag }}
+  {% else %}
+  	{% include "header-fonts" %}
+  {% endif %}
+  
+  {% include 'header-css' %}
+
+  {{ 'responsive.css' | asset_url | stylesheet_tag }}
+
+  {{ 'modernizr.js' | asset_url | script_tag }}
+  
+  {{ 'novafont.css.liquid' | asset_url | stylesheet_tag }}
+  <!-- jQuery 1.10.1-->
+  {{ 'jquery-2.1.4.min.js' | asset_url | script_tag }}
+  {{ 'jquery.cookie.js' | asset_url | script_tag }}
+  {% if template contains 'customers' %}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+  
+  {{ content_for_header }}
+
+  {% capture l9 %}{% if template == "index" and settings.home_page_layout == 'home-page_layout-9' %} id="layout-9"{% elsif template == "page.home-page_layout-9" %} id="layout-9"{% endif %}{% endcapture %}
+  
+
+
+
+  <style>
+    /*Footer*/
+    {% if settings.color_body != settings.color_footer and settings.color_footer != 'rgba(0,0,0,0)' %}
+    footer {
+      padding-top: 60px;
+    }
+    @media (max-width: 767px) {
+      footer {
+        padding-top: 0;
+      }
+    }
+    body:not(.index) #pageContent > .container {
+      border: none;
+      padding-bottom: 0;
+    }
+    footer .subscribe-box input {
+      border: none !important;
+    }
+    {% else %}
+    body.index .layout-4 .container:first-child,
+    body.index .layout-0 .container:first-child {
+      border-top: 1px solid {{ settings.color_footerlines }};
+      padding-top: 60px;
+    }
+    footer .subscribe-box input {
+      border: 1px solid {{ settings.color_footerlines }};
+    }
+    {% endif %}
+  </style>
+  <link href='https://fonts.googleapis.com/css?family=Carrois+Gothic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
+  <link href="//db.onlinewebfonts.com/c/efd2c83c0903c21ebe65d4fc8c2ef5bb?family=populairemedium" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/mQu5w3HllCSUSLQRxmQnKItNB4sCGJvS5D242O20/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+</script>
+<!-- This site is converting	 visitors into subscribers and customers with OptinMonster - http://optinmonster.com --><script>var om577693087769d,om577693087769d_poll=function(){var r=0;return function(n,l){clearInterval(r),r=setInterval(n,l)}}();!function(e,t,n){if(e.getElementById(n)){om577693087769d_poll(function(){if(window['om_loaded']){if(!om577693087769d){om577693087769d=new OptinMonsterApp();return om577693087769d.init({"s":"20497.577693087769d","staging":0,"dev":0,"beta":0});}}},25);return;}var d=false,o=e.createElement(t);o.id=n,o.src="//a.optnmnstr.com/app/js/api.min.js",o.onload=o.onreadystatechange=function(){if(!d){if(!this.readyState||this.readyState==="loaded"||this.readyState==="complete"){try{d=om_loaded=true;om577693087769d=new OptinMonsterApp();om577693087769d.init({"s":"20497.577693087769d","staging":0,"dev":0,"beta":0});o.onload=o.onreadystatechange=null;}catch(t){}}}};(document.getElementsByTagName("head")[0]||document.documentElement).appendChild(o)}(document,"script","omapi-script");</script><!-- / OptinMonster -->
+  
+</head>
+
+<body{% if template == "index" or template contains "page.home-page_layout" %} class="index"{% endif %}{{ l9 }} id="{{ page_title | handle }}">
+
+  {% include 'preloader-main' %}
+
+  <!-- Back to top -->
+  <div class="back-to-top"><span class="icon-keyboard_arrow_up"></span></div>
+  <!-- /Back to top -->
+  {% include "main-menu-mobile" %}
+  <div class="header-wrapper">{% include "header" %}</div>
+  {% if template == "index" and settings.home_page_layout == 'home-page_layout-2' %}
+  	{% include "home-page_layout-2" %}
+  {% elsif template == "page.home-page_layout-2" %}
+  	{{ content_for_layout }}
+  
+  {% elsif template == "index" and settings.home_page_layout == 'home-page_layout-4' %}
+  	{% include "home-page_layout-4" %}
+  {% elsif template == "page.home-page_layout-4" %}
+  	{{ content_for_layout }}
+  
+  {% else %}
+  
+
+    {% if template != "index" %}{% unless template contains "page.home-page_layout" %}{% include "breadcrumb" %}{% endunless %}{% endif %}
+
+    <div id="pageContent">
+      {{ content_for_layout }}
+      {% if template == "index" %}{% include settings.home_page_layout %}{% endif %}
+    </div>
+
+    {% include settings.footer_design %}
+  
+    {% include 'popup_cart' %}
+    {% include 'popup_wishlist' %}
+    {% include 'popup-newsletter' %}
+    {% if template != "page.wishlist" %}{% include 'popup-quickview' %}{% endif %}
+
+    {% include 'preloader-ajax' %}
+  
+  {% endif %}
+  
+  <div class="cart_messages" style="display:none">
+    <div class="edit">{{ 'cart.header.button_edit' | t }}</div>
+    <div class="delete">{{ 'cart.header.button_delete' | t }}</div>
+    <div class="price">{{ 'cart.header.price' | t }}</div>
+    <div class="qty">{{ 'cart.header.quantity' | t }}</div>
+  </div>
+  <div class="button_massage" style="display:none">{{ 'products.product.add_to_cart_html' | t }}</div>
+
+  {% include 'header-js' %}
+  {% include 'currencies' %}
+  {% include 'sweettooth-initializer' %}
+
+  {% include 'sweettooth-tab-widget' %}
+
+  <div style='display:none'>
+			<div id='vedio-here' style='padding:10px; background:#fff;'>
+			<video width="100%" height="365" controls>
+							  <source src="http://www.webfuturetech.com/clients/wp/Vivo.mp4" type="video/mp4">
+						</video>
+			</div>
+		</div>
+  
+
+<!-- BEEKETINGSCRIPT CODE START -->{% include 'bk-tracking' %}<!-- BEEKETINGSCRIPT CODE END -->
+  
+{% include 'smartmarketer' %}{% include 'upsellapp-theme' %}</body>
+</html>

@@ -1,0 +1,37 @@
+{% if settings.layout5_show_block1 and settings.layout5_block1 != '' %}{{ settings.layout5_block1 }}{% endif %}
+{% if settings.layout5_show_block2 and settings.layout5_block2 != '' %}{{ settings.layout5_block2 }}{% endif %}
+
+{% if settings.layout5_productsliderblock0 %}
+<section class="content">
+  <div class="container fead-prod">
+    {% include "home-small-slider" title: settings.layout5_slidertitle0 name_collection: settings.layout5_slider0 length: settings.layout5_sliderlength0 access: true center_title: true %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.layout5_show_block3 and settings.layout5_block3 != '' %}{{ settings.layout5_block3 }}{% endif %}
+
+{% if settings.layout5_productsliderblock %}{% if settings.show_layout5_slider1 or settings.show_layout5_slider2 %}
+<!-- news & sale products -->
+<section class="content">
+  <div class="container">
+    <div class="row newsale-js">
+      {% if settings.show_layout5_slider1 %}
+      <div class="col-sm-12 {% if settings.show_layout5_slider2 %}col-md-6 col-xl-6{% else %}col-md-12 col-xl-12{%endif%}">
+        {% include "home-small-slider" title: settings.layout5_slidertitle1 name_collection: settings.layout5_slider1 length: settings.layout5_sliderlength1 access: settings.show_layout5_slider1 center_title: true %}
+      </div>
+      {% endif %}
+      
+      {% if settings.show_layout5_slider2 %}
+      <div class="col-sm-12 {% if settings.show_layout5_slider1 %}col-md-6 col-xl-6{% else %}col-md-12 col-xl-12{%endif%}">
+        {% include "home-small-slider" title: settings.layout5_slidertitle2 name_collection: settings.layout5_slider2 length: settings.layout5_sliderlength2 access: settings.show_layout5_slider2 center_title: true %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endif %}
+
+{% if settings.layout5_show_block4 and settings.layout5_block4 != '' %}{{ settings.layout5_block4 }}{% endif %}
+{% if settings.layout5_show_block5 and settings.layout5_block5 != '' %}{{ settings.layout5_block5 }}{% endif %}
+{% if settings.layout5_show_block6 and settings.layout5_block6 != '' %}{{ settings.layout5_block6 }}{% endif %}

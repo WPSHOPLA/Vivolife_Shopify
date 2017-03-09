@@ -1,0 +1,25 @@
+{% if access %}
+
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}
+{% assign _lenght = length | plus: 0 %}
+
+<!-- title -->
+
+<div class="title-with-button">
+  <div class="carousel-products__button pull-right"> <span class="btn-prev"></span> <span class="btn-next"></span> </div>
+  {% if disable_title_underline %}<h2 class="text-left text-uppercase title-default pull-left">{{ title }}</h2>
+  {% else %}<h2 class="{% if center_title %}text-center{% else %}text-left{% endif %} text-uppercase title-under {% unless center_title %}pull-left{% endunless %}">{{ title }}</h2>
+  {% endif %}
+</div>
+<!-- /title --> 
+<!-- carousel -->
+<div class="carousel-products row carousel-small">
+  {% for product in selected_collection limit: _lenght %}
+  <div class="col-lg-3">
+    {% include "product-grid-item" %}
+  </div>
+  {% endfor %}
+</div>
+<!-- /carousel -->
+
+{% endif %}

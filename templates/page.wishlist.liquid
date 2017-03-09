@@ -1,0 +1,238 @@
+{% comment %}
+https://github.com/zakhardage/Shopify-Wish-List
+https://github.com/jimlakey/Shopify-Wish-List
+{% endcomment %}
+{% assign wishlistIsEmpty = true %}
+
+<div class="container wishlist-page">
+  <!-- title -->
+  <div class="title-box">
+    <h1 class="text-center text-uppercase title-under">{% if customer or settings.product_item_show_wishlist_temporary == false %}{{ 'wishlist.general.title' | t }}{% else %}{{ 'wishlist.general.temporary_title' | t }}{% endif %}</h1>
+  </div>
+  <!-- /title -->
+  
+  {% if customer or settings.product_item_show_wishlist_temporary == false %}
+  {% if customer %}
+  
+  <table class="table-wishlist-1 wishlist-table">
+    <thead>
+      <tr>
+        <th>{{ 'wishlist.products_table.name' | t }}</th>
+        <th>{{ 'wishlist.products_table.price' | t }}</th>
+        <th>{{ 'wishlist.products_table.remove' | t }}</th>
+        <th>{{ 'wishlist.products_table.add_to_cart' | t }}</th>
+      </tr>
+    </thead>
+          <tbody>
+            {% for tag in customer.tags %}
+                {% assign the_test = '' %}
+                {% capture tagID %}{{ tag }}{% endcapture %}
+                {% for tag in customer.tags %}
+                    {% capture curTag %}{{ tag }}{% endcapture %}
+                    {% if curTag contains tagID %}
+                        {% assign tagidsize = tagID.size | minus:curTag.size %}
+                        {% if tagidsize == 0 %}
+                            {% assign the_test = tagID %}
+                        {% else %}
+                            {% assign the_test = '' %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}	
+
+                {% for collection in collections %}
+                    {% paginate collection.products by collection.all_products_count %}
+                        {% for product in collection.products %}
+                            {% capture productID %}{{ product.id }}{% endcapture %}
+                            {% unless used contains productID %}
+                                {% assign check = tag.size | minus:productID.size | modulo:2 %}
+                                {% if check == 0 %}{% assign display_product = true %}{% else %}{% assign display_product = false %}{% endif %}
+                                {% if display_product and the_test contains productID %}
+                                    {% assign wishlistIsEmpty = false %}
+                                    {% assign main_url_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+            						<tr>
+                                      <td>
+                                        <!-- img -->
+                                        <div class="pull-left">
+                                          <div class="table-wishlist-1__product-image">
+                                            <a href="{{ product.url | within: collection }}">
+                                              <img class="img-responsive" src="{{ main_url_image | product_img_url: 'medium' }}" alt="{{ product.featured_image.alt | escape }}">
+                                            </a>
+                                          </div>									
+                                        </div>
+                                        <!-- /img -->
+                                        <!-- content -->
+                                        <div class="pull-right">
+                                          <div class="visible-sm visible-xs visible-icon">
+                                            <a class="product-remove color-red icon icon-clear" href="#" id="x{{ tagID }}"></a>
+                                            <a href="{{ product.url | within: collection }}" class="color-green icon icon-done"></a>
+                                          </div>
+                                          <!-- title -->
+                                          <h5 class="table-wishlist-1__product-name text-uppercase color"><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h5>
+                                          <!-- /title -->
+                                          <div class="visible-sm visible-xs">
+                                            <p>
+                                              <span class="table-wishlist-1__product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+                                            </p>																													
+                                          </div>	
+                                        </div>
+                                        <!-- /content -->
+                                      </td>
+                                      <td>
+                                        <span class="table-wishlist-1__product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+                                      </td>
+                                      <td>
+                                        <div><div class="product-remove"><a class="color-red icon icon-clear" href="#" id="x{{ tagID }}"></a></div></div>
+                                      </td>
+                                      <td>
+                                        <a class="color-green icon icon-done" href="{{ product.url | within: collection }}"></a>
+                                      </td>
+                                    </tr>
+                                    {% capture used %}{{ productID }} {{ used }}{% endcapture %}
+                                {% endif %}
+                            {% endunless %}
+                        {% endfor %}
+                    {% endpaginate %}
+                {% endfor %}
+            {% endfor %}
+          </tbody>
+        <div id="wishlist-remove">
+          {% form 'customer' %}	
+            <input type='hidden' name='contact[email]' value='{{ customer.email }}'/>
+            <input type='hidden' name='contact[tags]' id='remove-value' value='' />
+          {% endform %}
+        </div>
+  </table>
+  
+  {% if wishlistIsEmpty %}
+  <script>
+    jQuery('.wishlist-table').remove();
+  </script>
+  <div class="text-center"> 
+    <div class="divider divider--lg"></div>
+    <h4>{{ 'wishlist.general.empty' | t }}</h4>
+  </div>
+  {% endif %}
+  
+  {% else %}
+  <div class="text-center"> 
+    <div class="divider divider--lg"></div>
+    <h4>{{ 'wishlist.general.message' | t }} <a href='/account/login' class="color">{{ 'wishlist.general.sign_in' | t }}</a> {{ 'wishlist.general.or' | t }} <a href='/account/register'  class="color">{{ 'wishlist.general.register' | t }}</a>.</h4>
+  </div>
+  {% endif %}
+  
+{% else %}
+  <table class="table-wishlist-1 wishlist-table">
+    <thead>
+      <tr>
+        <th>{{ 'wishlist.products_table.name' | t }}</th>
+        <th>{{ 'wishlist.products_table.price' | t }}</th>
+        <th>{{ 'wishlist.products_table.remove' | t }}</th>
+        <th>{{ 'wishlist.products_table.add_to_cart' | t }}</th>
+      </tr>
+    </thead>
+    <tbody class="wishlist-box">
+
+
+      
+      
+    </tbody>
+  </table>
+  
+  <script>
+    var $j = jQuery.noConflict();
+    var cookieName = "wishlistList";
+    
+    try
+    {
+      if($j.cookie(cookieName) != null && $j.cookie(cookieName) != '__' && $j.cookie(cookieName) != '') {
+        var str = String($j.cookie(cookieName)).split("__");
+        for(var i=0; i<str.length; i++) {
+          if(str[i] != ''){Shopify.getProduct(str[i]);}
+        }
+        $j('.currency .active').trigger('click');
+      } else {
+        emptyWishlist();
+      }
+    }
+    catch (err) {} // ignore errors reading cookies
+
+    function emptyWishlist(){
+      $j(".wishlist-table").remove();
+      $j(".wishlist-page").append('<div class="text-center"><div class="divider divider--lg"></div><h4>{{ 'wishlist.general.empty' | t }}</h4></div>');
+    }
+    Shopify.onProduct = function(product) {
+      var formatMoney = "<span class='money'>${"+"{amount}}</span>";
+      var $cloneitem = $j(".wishlist-item").clone();
+      $cloneitem.find(".product_title").text(product.title);
+      $cloneitem.find(".product_link").attr("href", product.url);
+      $cloneitem.find(".img-responsive").attr("src", product.featured_image);
+      $cloneitem.find(".table-wishlist-1__product-price").html(Shopify.formatMoney(product.price, formatMoney));
+      
+      var $cloneitemprice = $j(".wishlist-item-price").clone();
+	  $cloneitemprice.find(".table-wishlist-1__product-price").html(Shopify.formatMoney(product.price, formatMoney));
+      var $cloneitemclear = $j(".wishlist-item-clear").clone();
+      var $cloneitemcontinue = $j(".wishlist-item-continue").clone();
+      $cloneitemcontinue.find(".product_link").attr("href", product.url);
+    
+      $j('.wishlist-box').append("<tr class='"+product.handle+"'>"+"<td>"+$cloneitem.html()+"</td>"+"<td>"+$cloneitemprice.html()+"</td>"+"<td>"+$cloneitemclear.html()+"</td>"+"<td>"+$cloneitemcontinue.html()+"</td>"+"</tr>")
+      $j('.wishlist-box').find("."+product.handle).find('.product-remove-js').click(function(event) {
+        event.preventDefault();
+        $j(this).unbind();
+        var item = $j(this).parent().parent().parent().parent();
+        var str = $j.cookie(cookieName);
+        str = str.replace(item.attr("class"), '');
+        str = str.replace('____', '__');
+        $j.cookie(cookieName, str, {expires:7, path:'/'});
+
+        item.fadeOut(500);
+        setTimeout(removeItem, 500, item);
+      });
+    }
+    function removeItem(item) {
+      item.remove();
+      
+      if($j.cookie(cookieName) == '__' || $j.cookie(cookieName) == ''){
+        emptyWishlist();
+      }
+    }
+  </script>
+  
+  <div class="wishlist-item" style="display:none">
+    <!-- img -->
+    <div class="pull-left">
+      <div class="table-wishlist-1__product-image">
+        <a href="#" class="product_link">
+          <img class="img-responsive" src="#" alt="">
+        </a>
+      </div>									
+    </div>
+    <!-- /img -->
+    <!-- content -->
+    <div class="pull-right">
+      <div class="visible-sm visible-xs visible-icon">
+        <a class="product-remove-js color-red icon icon-clear" href="#"></a>
+        <a href="#" class="color-green icon icon-done product_link"></a>
+      </div>
+      <!-- title -->
+      <h5 class="table-wishlist-1__product-name text-uppercase color"><a href="#" class="product_title product_link">Title</a></h5>
+      <!-- /title -->
+      <div class="visible-sm visible-xs">
+        <p>
+          <span class="table-wishlist-1__product-price">#</span>
+        </p>																													
+      </div>	
+    </div>
+    <!-- /content -->
+  </div>
+  <div class="wishlist-item-price" style="display:none">
+    <span class="table-wishlist-1__product-price">#</span>
+  </div>
+  <div class="wishlist-item-clear" style="display:none">
+    <div><div><a class="color-red icon icon-clear product-remove-js" href="#"></a></div></div>
+  </div>
+  <div class="wishlist-item-continue" style="display:none">
+    <a class="color-green icon icon-done product_link" href="#"></a>
+  </div>
+  
+  {% endif %}
+</div>

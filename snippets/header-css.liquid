@@ -1,0 +1,16 @@
+{{ 'slick.css' | asset_url | stylesheet_tag }}
+{{ 'slick-theme.css' | asset_url | stylesheet_tag }}
+{{ 'magnific-popup.css' | asset_url | stylesheet_tag }}
+{{ 'bootstrap-select.css' | asset_url | stylesheet_tag }}
+
+{{ 'settings.css' | asset_url | stylesheet_tag }}
+{{ 'colorbox.css' | asset_url | stylesheet_tag }}
+{{ 'style.css' | asset_url | stylesheet_tag }}
+{% if settings.enable_custom_fonts %}
+  	{{ 'style-override-fonts.css' | asset_url | stylesheet_tag }}
+{% endif %}
+{{ 'css-liquid.css' | asset_url | stylesheet_tag }}
+{{ 'stylefont.css' | asset_url | stylesheet_tag }}
+{% if settings.enable_rtl %}
+{{ 'style-rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}

@@ -1,0 +1,95 @@
+{% assign pagination_limit_const = settings.pagination_limit | times: 1 %}{% assign supercollection = collection.products %}
+{% capture collection_grid %}{% if settings.listing_page_design != "disable-sidebar" and settings.listing_page_design == "left-right-sidebar" %}col-md-6 col-lg-6 col-xl-8{% else %}{% if settings.listing_page_design != "disable-sidebar" and settings.listing_page_design != "closed-sidebar"  %}col-md-8 col-lg-9 col-xl-10{% else %}col-md-12 col-lg-12 col-xl-12{% endif %}{% endif %}{% endcapture %}
+{% capture product_grid %}{% case settings.products_in_column %}{% when 'two' %}col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-4{% when 'three' %}col-xs-6 col-sm-4 col-md-6 col-lg-4 col-xl-one-fifth{% when 'four' %}col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-2{% when 'six' %}col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-one-nine{% else %}{% endcase %}{% endcapture %}
+
+{% paginate collection.products by 1000 %}
+{% assign _collectionMax = collection.products %}
+{% endpaginate %}
+
+<div class="container">
+  <div class="row">
+    
+    {% if settings.listing_page_design != "disable-sidebar" %}
+    <aside class="{% if settings.listing_page_design == "left-right-sidebar" %}col-md-3{% else %}col-md-4{% endif %} col-lg-3 col-xl-2 collection-list{% if settings.listing_page_design == "closed-sidebar" %} without-left-col{% endif %}" id="leftColumn">
+      {% if settings.listing_page_design != "right-sidebar" %}<div class="move-height"></div>{% endif %}
+      {% if settings.listing_page_design == "left-sidebar" or settings.listing_page_design == "closed-sidebar" %}{% include "collection-sidebar" %}{% endif %}
+      {% if settings.listing_page_design == "left-right-sidebar" %}{% include "collection-sidebar-left" %}{% endif %}
+    </aside>
+    {% endif %}
+    
+    <aside class="{{ collection_grid }}" id="centerColumn">
+      {% if collection.handle == "all" %}
+      <div class="page-title"><h1>Shop</h1></div>
+       
+     {% else %}  
+      
+      <div class="title-box-collection"><h2 class="">{{ collection.title }}</h2></div>
+    {% endif %}
+      <div class="col-des">  
+        {% if collection.description contains '<!-- split -->' %}
+{{ collection.description | split: '<!-- split -->' | last }}
+
+        {% else %}   
+        {{ collection.description }}
+        {% endif %}
+        </div>
+      {% paginate collection.products by current_pagination_limit %}
+
+      <div id="listing-point"></div>
+      {% include "collection-tollbar" current_grid: current_pagination_limit %}
+
+      <!-- /filters row -->
+      <div id="centerCol"><div class="product-listing row">{% for product in collection.products %}<div class="{{ product_grid }}">{% include "product-grid-item" hoverzoom: "true" %}</div>{% endfor %}</div></div>
+      <div class="infinitybutton">{% if settings.enable_infinite_scroll %}{% if paginate.next %}<div class="show-more"><a href="{{ paginate.next.url }}" class="btn btn--ys btn--xl">{{ 'collections.toolbar.button_show_more' | t }}</a></div>{% else %}{% if paginate.previous %}<div class="show-more" ><a class="btn btn--ys btn--xl disable">{{ 'collections.toolbar.button_show_more_disabled' | t }}</a></div>{% endif %}{% endif %}{% endif %}</div>
+      {% if settings.enable_infinite_scroll %}<div class="divider--lg visible-xs"></div>{% endif %}
+      <div class="showpagination">
+ {% unless settings.enable_infinite_scroll %}<div class="filters-row__pagination hidden-xs product-pagintion">
+      {% include "pagination_products" %}
+    </div>{% endunless %}</div>
+      {% endpaginate %}
+    </aside>
+
+    {% if settings.listing_page_design != "disable-sidebar" %}
+    {% if settings.listing_page_design == "right-sidebar" or settings.listing_page_design == "left-right-sidebar" %}
+    <aside class="{% if settings.listing_page_design == "left-right-sidebar" %}col-md-3{% else %}col-md-4{% endif %} col-lg-3 col-xl-2 hidden-xs hidden-sm collection-list" id="rightColumn">
+      <div class="move-height"></div>
+      {% if settings.listing_page_design == "right-sidebar" %}<div class="sidebar-content">{% include "collection-sidebar" %}</div>{% endif %}
+      {% if settings.listing_page_design == "left-right-sidebar" %}<div class="sidebar-content">{% include "collection-sidebar-right" %}</div>{% endif %}
+    </aside>
+    {% endif %}{% endif %}
+
+  </div>
+</div>
+
+{% if settings.enable_scroll_sidebar %}
+<script>
+  jQuery( document ).ready(function(){
+    if(jQuery(".collection-list").length == 0 ) {
+      return false;
+    }
+
+    setTimeout(calcSidebarPosition, 300);
+    window.onscroll = function() {
+      if(window.innerWidth < 992 ) {
+        jQuery(".move-height").css('height', 0);
+        return false;
+      }
+      calcSidebarPosition();
+    }
+    jQuery(window).resize(calcSidebarPosition);
+    function calcSidebarPosition() {
+      if(window.innerWidth < 992 ) {
+        jQuery(".move-height").css('height', 0);
+        return false;
+      }
+      var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+      var start = jQuery(".collection-list").position().top;
+      var last = jQuery("#listing-point").position().top;
+      var stuckHeight = jQuery(".stuck-nav").height();
+      var delta = Math.max(scrolled - start + stuckHeight + 20, 0);
+      delta = Math.min(delta, last);
+      jQuery(".move-height").css('height', delta);
+    }
+  });
+</script>
+{% endif %}

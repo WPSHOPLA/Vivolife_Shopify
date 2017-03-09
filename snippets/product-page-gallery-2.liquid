@@ -1,0 +1,31 @@
+<!-- bigGallry -->
+<section class="content offset-top-0  fullwidth indent-col-none">
+  <div class="container">
+    <div class="row">
+      <!-- bigGallery -->
+      <div class="hidden-xs clearfix">
+        <div class="bigGallery box-baners ">
+          {% for image in product.images %}
+          <div class="col-md-3">
+            {% if settings.productpage_zoomenable %}
+            <img src="{{ image.src | product_img_url: '2048x2048' }}" data-zoom-image="{{ image.src | product_img_url: '2048x2048' }}" class="img-responsive product-zoom1" alt="">
+            {% else %}
+            <img src="{{ image.src | product_img_url: '2048x2048' }}" class="img-responsive" alt="">
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- /bigGallery -->
+      <div class="visible-xs">
+        <div class="clearfix"></div>
+        <ul id="mobileGallery">
+          {% for image in product.images %}
+          <li><a href="#" data-image="{{ image.src | product_img_url: '2048x2048' }}"><img src="{{ image.src | product_img_url: 'grande' }}" alt="" /></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /big -->

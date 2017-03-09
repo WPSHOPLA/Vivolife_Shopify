@@ -1,0 +1,145 @@
+{% assign grid2 = '' %}
+{% assign _count = 0 %}
+{% if settings.lookbookshowblock1 %}{% assign _count = _count | plus: 1 %}{% endif %}
+{% if settings.lookbookshowblock2 %}{% assign _count = _count | plus: 1 %}{% endif %}
+{% if settings.lookbookshowblock3 %}{% assign _count = _count | plus: 1 %}{% endif %}
+
+{% case _count %}
+  {% when 1 %}
+{% assign grid = "col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 col-xl-6 col-xl-offset-3" %}
+  {% when 2 %}
+{% assign grid2 = "col-md-6 col-lg-offset-0 col-lg-6 col-lg-offset-0 col-xl-4 col-xl-offset-2" %}
+{% assign grid = "col-md-6 col-lg-6 col-xl-4" %}
+  {% else %}
+{% assign grid = "col-sm-12 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-0" %}
+{% endcase %}
+
+<section class="content offset-top-0">
+  <div class="container">
+    <div class="row">
+      {% if settings.lookbookshowblock1 %}
+      <div class="{% if grid2 == '' %}{{ grid }}{% else %}{{ grid2 }}{% assign grid2 = '' %}{% endif %}">
+        <div class="lookbook-layout2">
+          <div class="lookbook__image"><img src="{{ 'lookbook-img-03.jpg' | asset_url }}" class="img-responsive1" alt=""/></div>
+          {% for i in (1..8) %}
+          {% assign _key = "lookbook_block1_pr" | append: i %}
+          {% assign _key = settings[_key] %}
+          
+          {% if _key != '' %}
+          
+          {% assign _product = all_products[_key] %}
+          {% assign _key = "lookbook_block1_coord_pr" | append: i %}
+          {% assign coord = settings[_key] %}
+          {% assign _key = "lookbook_block1_tool_pr" | append: i %}
+          {% assign tool = settings[_key] %}
+
+          {% if _product.available %}
+          {% assign variant = _product.selected_or_first_available_variant %}
+          {% if _product.variants.size > 1 %}{% assign func = "" %}{% else %}{% assign func = "Shopify.addItem(" | append: variant.id | append: ", 1)" %}{% endif %}
+          
+          <div class="hint {{ variant.id }}" style="{{ coord }}">
+            <img src="{{ _product.featured_image.src | product_img_url: 'grande' }}" class="img-responsive1" alt=""/>
+            <!--  -->
+            <div class="tool tool--{{ tool }}">							               			                	
+              <div class="hover-tool">
+                <div class="hover-tool__tip"></div>
+                <span class="hover-tool__text">
+                  <a  href="{{ _product.url | within: collection }}">
+                    <span class="hint-title product_title">{{ _product.title }}</span>					                  				
+                    <span class="hint-price">{{ _product.selected_or_first_available_variant.price | money }}</span>
+                  </a>
+                  {% if settings.product_item_show_cart %}<a {% if func == "" %}href="javascript:void(0);" onclick="quiqview('{{ product.handle | handleize }}')"{% else %}href="javascript:void(0);" onclick="{{ func }}; return false;"{% endif %}><span class="icon icon-shopping_basket"></span></a>{% endif %}
+                </span> 
+              </div>
+            </div>
+            <!-- / -->
+          </div>
+          {% endif %}
+
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+      
+
+      {% if settings.lookbookshowblock2 %}
+      {% if settings.lookbookshowblock1 %}<div class="divider divider--lg visible-sm visible-xs visible-md"></div>{% endif %}
+      
+      {% assign name_collection = settings.lookbookblock2 %}
+      {% assign _lenght = settings.lookbookblock2length %}
+      {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}
+      {% assign _lenght = _lenght | plus: 0 %}
+      <div class="{% if grid2 == '' %}{{ grid }}{% else %}{{ grid2 }}{% assign grid2 = '' %}{% endif %}">
+        <div class="lookbook-layout1">
+          <div class="lookbook__image">
+            <img src="{{ 'lookbook-img-02.jpg' | asset_url }}" class="img-responsive" alt=""/>
+            <div class="hint-content">
+              {% for _product in selected_collection limit: _lenght %}
+              <!--  -->
+              <div class="hint"> 
+                <a href="{{ _product.url | within: collection }}">
+                  <span class="hint-title">{{ _product.title }}</span>
+                  <span class="hint-price">{{ _product.selected_or_first_available_variant.price | money }}</span>
+                </a>
+              </div>	
+              <!-- / -->
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if settings.lookbookshowblock3 %}
+      {% if settings.lookbookshowblock1 or settings.lookbookshowblock2 %}<div class="divider divider--lg visible-sm visible-xs visible-md"></div>{% endif %}
+      <div class="{{ grid }}">
+        <div class="lookbook">
+          <div class="lookbook__image">
+            <img src="{{ 'lookbook-img-01.jpg' | asset_url }}" class="img-responsive" alt=""/>
+            {% assign _count = 1 %}
+            {% for i in (1..5) %}
+            {% assign _key = "lookbook_block3_pr" | append: i %}
+            {% assign _key = settings[_key] %}
+
+            {% if _key != '' %}
+
+            {% assign _product = all_products[_key] %}
+            {% assign _key = "lookbook_block3_coord_pr" | append: i %}
+            {% assign coord = settings[_key] %}
+            {% assign _key = "lookbook_block3_tool_pr" | append: i %}
+            {% assign tool = settings[_key] %}
+            {% if tool == "" and tool != "right" %}{% assign tool = "left" %}{% endif %}
+
+            {% if _product.available %}
+            <!-- item -->
+            <div class="hint" style="{{ coord }}"> 
+              <span>{{ _count }}</span> 
+              <span class="hint__dot"></span>
+              <div class="tool tool--{{ tool }}">							               			                	
+                <div class="box-wrapper">
+                  <a  href="{{ _product.url | within: collection }}">
+                    <span class="hint-title">{{ _product.title }}</span>
+                    <span class="hint-price">{{ _product.selected_or_first_available_variant.price | money }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- /item -->
+            {% assign _count = _count | plus: 1 %}
+            {% endif %}
+
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="divider divider--lg visible-sm visible-xs"></div>
+    </div>
+  </div>
+</section>
+
+{% unless settings.lookbookbreadcrumbs %}<script>if(jQuery('.breadcrumbs').length) jQuery('.breadcrumbs').remove();</script>
+{% endunless %}

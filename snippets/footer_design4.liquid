@@ -1,0 +1,82 @@
+<!-- FOOTER section -->
+<footer class="layout-4">
+  <!-- footer-data -->
+  <div class="container inset-bottom-60">
+    {% if settings.contentBlockAll_design4 %}<div class="row">{{ settings.footercontenttext_design4 }}</div><hr class="hidden-xs">{% endif %}
+
+    <div class="row" >
+      {% if settings.showfooternewsletter == false and settings.show_footer_soc_but == false %}
+      {% include "footer-column-links" %}
+      {% else %}
+      
+      {% if settings.tabBlockAll %}
+      {% assign all = false %}{% assign grid = 0 %}{% for i in (1..3) %}{% assign access = 'tabBlock' | append: forloop.index %}{% if settings[access] %}{% assign grid = grid | plus: 1 %}{% endif %}{% endfor %}
+
+      {% if grid > 0 %}
+      {% if grid == 3 %}
+      {% assign class = "col-sm-4 col-md-4  col-lg-3" %}
+      {% endif %}
+      {% if grid == 2 %}
+      {% assign class = "col-sm-6 col-md-6  col-lg-4" %}
+      {% endif %}
+      {% if grid == 1 %}
+      {% assign class = "col-sm-12 col-md-12  col-lg-6" %}
+      {% endif %}
+      {% endif %}
+      
+      {% if grid > 0 %}
+      {% for i in (1..3) %}
+      {% assign access = 'tabBlock' | append: forloop.index %}
+      {% if settings[access] %}
+      {% assign title = 'blockName' | append: forloop.index %}
+      {% assign footerLinks = 'footer-links-' | append: forloop.index %}
+      <div class="{{ class }}">{% include "footer-links" %}</div>
+      {% endif %}{% endfor %}{% endif %}
+	  {% endif %}
+      
+      {% assign grid = grid | plus: 1 %}
+      {% if settings.showfooternewsletter and grid > 1 or settings.show_footer_soc_but and grid > 1 %}<div class="divider divider--lg visible-sm visible-md"></div>{% endif %}
+      {% if settings.showfooternewsletter or settings.show_footer_soc_but %}<div class="{% if settings.tabBlockAll and grid > 1 %}col-sm-12 col-md-12 col-lg-{{ 12 | divided_by: grid }}{% else %}col-sm-12 col-md-12 col-lg-12{% endif %}">
+        {% if settings.showfooternewsletter %}<div class="subscribe-box">
+          <div class="mobile-collapse">
+            {% if settings.mailchimp_form_action != "" %}
+            <h4 class="text-left  title-under  mobile-collapse__title">{{ "newsletter.general.title" | t }}</h4>
+            <div class="mobile-collapse__content">
+              <form action="{{ settings.mailchimp_form_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank" class="form-inline">
+                <input type="text" name="EMAIL" class="subscribe-form__input">
+                <button type="submit" class="btn btn--ys btn--xl">{{ "newsletter.general.button" | t }}</button>
+              </form>
+            </div>
+            {% else %}
+            <strong><u>Add newsletter redirect link in Newsletter / MailChimp form action URL</u></strong>
+            {% endif %}
+          </div>
+        </div>{% endif %}
+      
+      {% if settings.shownewslettertext_design4 %}<div class="divider divider--md hidden-xs"></div>
+      <!-- address -->
+      <div class="subscribe-box">
+        <div class="mobile-collapse">
+          <h4 class="text-left text-uppercase visible-xs  title-under  mobile-collapse__title">{{ settings.newslettertitle_design4 }}</h4>
+          <div class="mobile-collapse__content">{{ settings.newslettertext_design4 }}</div>
+        </div>
+      </div>{% endif %}
+      
+        {% if settings.show_footer_soc_but %}<!-- social-icon --><div class="divider divider--md"></div>
+        <div class="social-links social-links--large social-links-layout-02">
+          <ul>{{ settings.footer_soc_but }}</ul>
+        </div><!-- /social-icon -->{% endif %}
+      </div>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+  
+  <!-- footer-copyright -->
+  <div class="container footer-copyright">
+    <div class="row">{{ settings.footer_address }}</div>
+  </div>
+  <!-- /footer-copyright --> 
+  <a href="#" class="btn btn--ys btn--full visible-xs" id="backToTop">Back to top <span class="icon icon-expand_less"></span></a> 
+
+</footer>
+<!-- END FOOTER section -->

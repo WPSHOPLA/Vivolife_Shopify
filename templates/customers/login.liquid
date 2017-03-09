@@ -1,0 +1,101 @@
+{% capture required %}{{ 'customer.general.required_fields' | t }}{% endcapture %}
+<div class="container">				
+  <!-- title -->
+  <div class="title-box">
+    <h1 class="text-left text-uppercase title-under1">{{ 'customer.login.title' | t }}</h1>
+  </div>
+  <!-- /title -->		
+  <div class="row">
+    {% if shop.customer_accounts_optional %}
+    <section class="col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xl-offset-2">
+      <div class="login-form-box">
+        <h3 class="color small">{{ 'customer.login.new_customer' | t }}</h3>
+        <p>{{ 'customer.login.new_customer_description' | t }}</p>
+        <br>
+        <a class="btn btn--ys btn--xl" href="/account/register"><span class="icon icon-person_add"></span>{{ 'customer.login.new_customer_continue' | t }}</a>
+      </div>
+    </section>
+    <div class="divider divider--md visible-sm visible-xs"></div>
+    {% endif %}
+    <section class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+      <div class="login-form-box">
+        <div id="login">
+          <h3 class="color small">{{ 'customer.login.title_login' | t }}</h3>
+          <p>{{ 'customer.login.description' | t }}</p>
+
+          {% form 'customer_login' %}
+          {{ form.errors | default_errors }}
+
+          <div class="form-group">
+            <label for="email">{{ 'customer.login.email' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="email" name="customer[email]" class="form-control" id="email">
+          </div>
+
+          {% if form.password_needed %}
+          <div class="form-group">
+            <label for="password">{{ 'customer.login.password' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="password" name="customer[password]" class="form-control" id="password">
+          </div>
+          {% endif %}
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button type="submit" class="btn btn--ys btn-top btn--xl"><span class="icon icon-vpn_key"></span> {{ 'customer.login.sign_in' | t }}</button>
+            </div>
+            <div class="divider divider--md visible-xs"></div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <div class="pull-right note btn-top">{{ 'customer.general.required_fields' | t }}</div>
+            </div>
+          </div>  
+          {% if form.password_needed %}
+          <p class="btn-top"><a href="#" onclick="showRecoverPasswordForm();return false;" class="link-color">{{ 'customer.login.forgot_password' | t }}</a></p>
+          {% endif %}
+          {% endform %}
+
+        </div>
+
+        <div id="recover-password" style="display:none;" class="wrap">
+          <h3>{{ 'customer.login.reset_password' | t }}</h3>
+          <p class="note">{{ 'customer.login.reset_password_subtext' | t }}</p>
+
+          {% form 'recover_customer_password' %}
+          {{ form.errors | default_errors }}
+
+          <div class="form-group">
+            <label for="email">{{ 'customer.login.email' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="email" name="customer[email]" class="form-control" id="email">
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button type="submit" class="btn btn--ys btn-top btn--xl">{{ 'customer.login.submit_recover' | t }}</button>
+              <div class="cancel-bottom">
+                &nbsp;{{ 'customer.general.or' | t }}
+                <a href="#" onclick="hideRecoverPasswordForm();return false;">{{ 'customer.login.cancel' | t }}</a>
+              </div>
+            </div>
+            <div class="divider divider--md visible-xs"></div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <div class="pull-right note btn-top">{{ 'customer.general.required_fields' | t }}</div>
+            </div>
+          </div>
+
+          {% endform %}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function showRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'block';
+    document.getElementById('login').style.display='none';
+  }
+
+  function hideRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'none';
+    document.getElementById('login').style.display = 'block';
+  }
+
+  if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+</script>

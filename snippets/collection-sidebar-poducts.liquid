@@ -1,0 +1,14 @@
+{% assign open = '' %}{% if opentabs contains index %}{% assign open = 'open' %}{% endif %}
+{% assign name_collection = settings.sidebar_collection %}
+{% assign selected_collection = collections[name_collection].products %}
+<!-- featured block -->
+<div class="collapse-block {{ open }} coll-products-js">
+  <h4 class="collapse-block__title">{{ 'collections.sidebar.product_slider_title' | t }}</h4>
+  <div class="collapse-block__content coll-gallery">
+  </div>
+  <div class="coll-gallery-clone" style="display:none">
+    <div class="vertical-carousel vertical-carousel-2 offset-top-10">
+      {% if name_collection == blank %}"select collection"{% else %}{% for product in selected_collection limit: 6 %}{% include 'product_small_item' %}{% endfor %}{% endif %}
+    </div>
+  </div>
+</div>

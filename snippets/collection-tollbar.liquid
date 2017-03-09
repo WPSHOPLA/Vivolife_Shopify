@@ -1,0 +1,32 @@
+<!-- filters row -->
+<div class="filters-row filters-panel">
+  <div class="pull-left">
+    <div class="procount">
+      SHOWING 1–{{ pagination_limit_const }} OF {{ paginate.items }} RESULTS
+    </div>
+  
+    
+  </div>
+  <div class="{% if settings.listing_page_design != "disable-sidebar" %}pull-right{% else %}pull-left{% endif %}">
+  {% comment %} <div class="filters-row__mode">
+      {% if settings.listing_page_design != "disable-sidebar" %}{% if settings.listing_page_design != "closed-sidebar" %}
+      <a href="#" class="btn btn--ys slide-column-open visible-xs visible-sm hidden-xl hidden-lg hidden-md">{{ 'collections.toolbar.filter' | t }}</a>{% else %}<a href="#" class="btn btn--ys slide-column-open">{{ 'collections.toolbar.filter' | t }}</a>{% endif %}{% endif %}
+      <a class="filters-row__view active link-grid-view btn-img btn-img-view_module view-grid"><span></span></a> 
+      <a class="filters-row__view link-row-view btn-img btn-img-view_list view-list"><span></span></a> 
+    </div> {% endcomment %}
+    <div class="filters-row__select{% if settings.listing_page_design != "disable-sidebar" %} hidden-sm hidden-xs{% endif %}">
+      
+      <div class="select-wrapper">
+        <select class="select--ys sort-position sort-select">
+          <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+          <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+          <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+          <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+          <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+        </select>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- /filters row -->

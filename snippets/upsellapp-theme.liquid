@@ -1,0 +1,124 @@
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script>
+  (function() {
+    jq310 = jQuery.noConflict(true);
+
+    var upsell_checkout_button_selectors = "[name='checkout'], [href='/checkout'], form[action='/checkout'] input[type='submit'], #checkout",
+            checkoutParams = '',
+            redirectTimeout = 20000;
+    article = document.querySelector( upsell_checkout_button_selectors ),
+            MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+    if (article && MutationObserver){
+      var observer,
+              callback,
+              options = {'attributes':true};
+
+      callback = function(){
+        if (typeof xh == "object" && xh.status == 200){
+          redirectUser = function(a){
+            if ("undefined" != typeof a ? SMAR7.util.setCookie("smar7coupon", jq310("#coupon").data("coupon"), 3600) : a = determineCoupon(), paypalTriggered)
+              checkoutParams = "goto_pp=paypal_express&discount=" + encodeURIComponent(a);
+            else  checkoutParams = "discount=" + encodeURIComponent(a);
+            jq310(upsell_checkout_button_selectors).click();
+          };
+        }
+      }
+      observer = new MutationObserver( callback );
+      observer.observe( article, options );
+    }
+    if (window.smartmarketerapps && (!smartmarketerapps.hotlistapp && (window.mixed_cart != true) )) {
+      jq310('body').on('click', upsell_checkout_button_selectors, upsellsCheckoutRedirect);
+    }
+
+    function upsellsCheckoutRedirect(event,email,first_name,last_name) {
+      if (!window.popup_upsell || (jq310('#upsellclosebtn').length > 0)) {
+        if (event) {
+          event.preventDefault();
+        }
+        if (jq310('#discount').length > 0){
+          checkoutParams = 'discount=' + jq310('#discount').first().val()
+        }
+        try {
+          var ocuCustomer = {
+            email: email,
+            first_name : first_name,
+            last_name : last_name
+          };
+          ocuSaveCart().then(ocuGetCart, ocuGetCart).then(function(data, textStatus, jqXHR) {
+            ocuVerifyCart(data, ocuCustomer);
+          }, redirectToShopifyCheckout);
+        } catch (e) {
+          redirectToShopifyCheckout();
+        }
+      }
+    }
+
+    function ocuSaveCart() {
+      $cart = jq310("form[action='/checkout'], form[action='/cart']");
+      if ($cart.length > 0) {
+        return jq310.ajax({
+          type: 'POST',
+          url: '/cart/update.js',
+          timeout: redirectTimeout,
+          dataType: 'json',
+          data: $cart.serializeArray()
+        });
+      } else {
+        return jq310.Deferred().resolve();
+      }
+    }
+
+    function ocuGetCart() {
+      var ocuGetCartAjax = jq310.ajax({
+        url: '/cart.js',
+        timeout: redirectTimeout,
+        dataType: 'json'
+      });
+
+      return ocuGetCartAjax;
+    }
+
+    function ocuVerifyCart(data, customer) {
+      var shop = Shopify.shop,
+              landing_site = getCookie('_landing_page'),
+              referring_site = getCookie('_orig_referrer');
+
+      jq310.ajax({
+        type: 'POST',
+        url: 'https://oneclickupsell.zipify.com/checkouts/check_upsells.json',
+        timeout: redirectTimeout,
+        crossDomain: true,
+        async: true,
+        data: {
+          shop: shop,
+          cart: data,
+          customer: {
+            email: customer.email,
+            first_name: customer.first_name,
+            last_name: customer.last_name
+          },
+          landing_site: landing_site,
+          referring_site: referring_site
+        }
+      }).done(function (data, textStatus, jqXHR) {
+        if (data.status) {
+          window.location = data.checkout_url + '&' + checkoutParams;
+        } else {
+          redirectToShopifyCheckout();
+        }
+      }).fail(function(){
+        redirectToShopifyCheckout();
+      });
+    }
+
+    function redirectToShopifyCheckout() {
+      window.location = '/checkout?' + checkoutParams;
+    }
+
+    function getCookie(name) {
+      var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+      return matches ? decodeURIComponent(matches[1]) : '';
+    }
+  })();
+</script>

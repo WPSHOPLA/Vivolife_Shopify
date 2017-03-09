@@ -1,0 +1,34 @@
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+{% assign custom_count = 0 %}
+<!-- blog slider -->
+<section class="content content-bg-1 fixed-bg">
+  <div class="container">
+    <h2 class="text-center text-uppercase title-under">{{ title }}</h2>
+    <div class="row">
+      <div class="slider-blog slick-arrow-bottom">
+        {% for article in selected_blog.articles %}
+        {% if article.excerpt contains "blogsliderbig" %}
+        {% if custom_count == length %}{% break %}{% endif %}
+        {% assign custom_count = custom_count | plus: 1 %}
+        {% capture _article %}{% include "get-content-with-key" content: article.excerpt key: "[blogsliderbig]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = article.title %}{% endif %}{% if author == '' %}{% assign author = article.author %}{% endif %}
+        <!-- slide-->
+        <a href="{{ article.url }}" class="link-hover-block">
+          <div class="slider-blog__item">
+            <div class="row">
+              <div class="col-xs-12 col-sm-2 col-sm-offset-3 box-foto">
+                {{ image }}
+              </div>
+              <div class="col-xs-12 col-sm-5 col-xl-4 box-data">
+                <h6>{{ _title }}</h6>
+                <p>{{ content }}</p>
+              </div>
+            </div>
+          </div>
+        </a>
+        <!-- /slide-->
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /blog slider -->

@@ -1,0 +1,35 @@
+{% if settings.layout3_show_block1 and settings.layout3_block1 != '' %}{{ settings.layout3_block1 }}{% endif %}
+{% if settings.layout3_show_block2 and settings.layout3_block2 != '' %}{{ settings.layout3_block2 }}{% endif %}
+
+{% if settings.layout3_productsliderblock0 %}
+<section class="content separator-section"><div class="container"><hr></div></section>
+<section class="content">
+  <div class="container fead-prod">
+    {% include "home-small-slider" title: settings.layout3_slidertitle0 name_collection: settings.layout3_slider0 length: settings.layout3_sliderlength0 access: true center_title: true %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.layout3_productsliderblock %}{% if settings.show_layout3_slider1 or settings.show_layout3_slider2 %}
+<section class="content separator-section"><div class="container"><hr></div></section>
+<!-- news & sale products -->
+<section class="content">
+  <div class="container">
+    <div class="row newsale-js">
+      {% if settings.show_layout3_slider1 %}
+      <div class="col-sm-12 {% if settings.show_layout3_slider2 %}col-md-6 col-xl-6{% else %}col-md-12 col-xl-12{%endif%}">
+        {% include "home-small-slider" title: settings.layout3_slidertitle1 name_collection: settings.layout3_slider1 length: settings.layout3_sliderlength1 access: settings.show_layout3_slider1 center_title: true %}
+      </div>
+      {% endif %}
+      
+      {% if settings.show_layout3_slider2 %}
+      <div class="col-sm-12 {% if settings.show_layout3_slider1 %}col-md-6 col-xl-6{% else %}col-md-12 col-xl-12{%endif%}">
+        {% include "home-small-slider" title: settings.layout3_slidertitle2 name_collection: settings.layout3_slider2 length: settings.layout3_sliderlength2 access: settings.show_layout3_slider2 center_title: true %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endif %}
+
+{% if settings.layout3_show_block3 and settings.layout3_block3 != '' %}<section class="content separator-section"><div class="container"><hr></div></section>{{ settings.layout3_block3 }}{% endif %}

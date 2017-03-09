@@ -1,0 +1,24 @@
+{% comment %} Price to show. {% endcomment %}
+{% assign sale_on = false %}
+{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+  {% assign sale_on = true %}
+{% endif %}
+
+{% comment %} Main Image URL. {% endcomment %}
+{% assign main_url_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+
+<div class="vertical-carousel__item">
+  <div class="vertical-carousel__item__image pull-left"><a href="{{ product.url | within: collection }}"><img src="{{ main_url_image | product_img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}"/></a>
+  </div>
+  <div class="vertical-carousel__item__title">
+    <h2><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h2>
+  </div>
+  <div class="price-box">
+    {% if sale_on %}
+    {{ product.selected_or_first_available_variant.price | money }} <span class="price-box__old">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+    {% else %}
+    {{ product.selected_or_first_available_variant.price | money }}
+    {% endif %}
+  </div>
+  <div class="rating">{% if settings.product_item_show_rating %}<span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>{% endif %}</div>
+</div>

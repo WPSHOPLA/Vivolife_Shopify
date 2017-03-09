@@ -1,0 +1,25 @@
+<div class="container team-zone">
+		<div class="row">
+	  <div class="col-xs-12 col-md-12 col-sm-12">
+       <h1 class="text-left text-uppercase title-under">{{ page.title }}</h1>
+   <div class="page-content-area">{{ page.content }}</div>
+  </div>
+  <ul id="teamHolder">
+ {% for article in blogs.our-team.articles limit: 20 %}
+ <li class="col-xs-6 col-md-6 col-sm-6">
+     <img src="{{ article.image.src | img_url: 'grande' }}" alt=""> 
+<span class="teamInfo"> 
+   <span class="teamT">
+     <span class="teamName">{{ article.title }}</span>
+     {{ article.excerpt }}
+  </span>
+  
+    {{ article.content}}
+ 
+   </span>
+  
+ </li>
+{% endfor %}
+          </ul>    
+  </div>
+</div>

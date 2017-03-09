@@ -1,0 +1,193 @@
+<!-- CONTENT section -->
+<div id="pageContent">
+  <div class="container">	
+    <!-- title -->
+    <div class="title-box">
+      <h1 class="text-center text-uppercase title-under">Cart</h1>
+    </div>
+    <!-- /title -->
+    <form action="/cart" method="post" novalidate>
+      <div class="row">
+        <section class="col-md-8 col-lg-8">
+          <!-- Shopping cart table -->
+          <div class="container-widget">
+            <table class="shopping-cart-table">
+              <thead>
+                <tr>
+                  <th>{{ 'cart.label.product' | t }}</th>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                  <th>{{ 'cart.label.price' | t }}</th>
+                  <th>{{ 'cart.label.quantity' | t }}</th>
+                  <th>{{ 'cart.label.total' | t }}</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <script>mixed_cart = false;</script>
+                {% for item in cart.items %}
+                {% include 'bold-ro-price-fix' %}
+                {% assign prod_index = forloop.index0 %}
+                <input type="hidden" name="product_id[{{ forloop.index0 }}]" value="{{ item.product.id }}">
+                <input type="hidden" name="variant_id[{{ forloop.index0 }}]" value="{{ item.variant.id }}">
+                <input type="hidden" name="quantity[{{ forloop.index0 }}]" value="{{ item.quantity }}">
+
+                {% assign inv_man = item.variant.inventory_management %}{% assign inv_qua = item.variant.inventory_quantity %}{% unless inv_man %}{% assign inv_qua = 100000 %}{% endunless %}{% if item.variant.available and inv_qua == 0 %}{% assign inv_qua = 100000 %}{% endif %}
+                <tr>
+                  <td>
+                    <div class="shopping-cart-table__product-image">
+                      <a href="{{ item.url }}">
+                        <img class="img-responsive" src="{{ item | img_url: 'medium' }}" alt="{{ item.alt | escape }}"/>
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <h5 class="shopping-cart-table__product-name text-left text-uppercase">
+                      <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h5>
+                    
+                    <!-- bold-ro-liquid -->
+                    {% if item.properties.frequency_num %}
+                    <script>mixed_cart = true;</script>
+                    <br>
+                    <span class="bold_ro_every">Every</span>
+                    <input type="hidden" name="{{ prod_index }}[number]" value="{{ item.properties.frequency_num }}" />
+                    <span class="bold_ro_frequency_num">{{ item.properties.frequency_num }}</span>
+                    {% endif %}
+                    {% if item.properties.frequency_type %}
+                    <input type="hidden" name="{{ prod_index }}[type_id]" value="{{ item.properties.frequency_type }}" />
+                    {% endif %}
+                    {% if item.properties.frequency_type_text %}
+                    <span class="bold_ro_frequency_type_text">{{ item.properties.frequency_type_text }}</span>
+                    {% endif %}
+                    {% if item.properties.group_id %}
+                    <input type="hidden" name="{{ prod_index }}[group_id]" value="{{ item.properties.group_id }}" />
+                    {% endif %}
+                    {% if item.properties._ro_unformatted_price %}
+                    <br><span class="bold_ro_discounted_price">Discounted Price</span>
+                    <span class="discounted_price_in_cart">{{ item.properties._ro_unformatted_price | money }}</span> <span class="bold_ro_each">each</span>
+                    {% endif %}
+                    <!-- bold-ro-liquid -->
+
+                    <ul class="shopping-cart-table__list-parameters">
+                      <li class="visible-xs">
+                        <span>{{ 'cart.label.price' | t }}</span>
+                        <span class="price-mobile">{{ ro_item_price | money}}</span>
+                      </li>
+                      <li class="visible-xs">
+                        <span>{{ 'cart.label.quantity' | t }}</span>
+                        <span class="shopping-cart-table__input">
+                          <input type="text" name="updates[]" id="updates_{{ item.id }}" class="form-control input-mobile" value="{{ item.quantity }}" min="1" max="{{ inv_qua }}">
+                        </span>
+                      </li>
+                      <li class="visible-xs">
+                        <span>{{ 'cart.general.subtotal' | t }}</span>
+                        <span class="price-mobile">{{ ro_line_item_price | money}}</span>
+                      </li>
+                    </ul>																				
+                  </td>
+                  <td>
+                    <a class="shopping-cart-table__delete icon icon-delete visible-xs bold-ro-remove" href="/cart/change?line={{ forloop.index }}&quantity=0"></a>
+                  </td>
+                  <td>
+                    <div class="shopping-cart-table__product-price unit-price">
+                      {{ ro_item_price | money}}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="shopping-cart-table__input">
+                      <input type="number" name="updates[]" id="updates_{{ item.id }}" class="form-control input-desktop" value="{{ item.quantity }}" min="1" max="{{ inv_qua }}" title="{% if inv_qua < 100000 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}">
+                    </div>								
+                  </td>
+                  <td>
+                    <div class="shopping-cart-table__product-price subtotal">
+                      {{ ro_line_item_price | money }}
+                    </div>
+                  </td>
+                  <td>
+                    <a class="shopping-cart-table__delete icon icon-clear bold-ro-remove" href="/cart/change?line={{ forloop.index }}&quantity=0"></a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+          <!-- /Shopping cart table -->
+
+          <div class="divider divider--xs"></div>
+          <div class="clearfix shopping-cart-btns">
+            <button type="submit" class="btn btn--ys btn--light pull-right" id="update-cart" name="update"><span class="icon icon-autorenew"></span>{{ 'cart.general.update' | t }}</button>
+            <div class="divider divider--xs visible-xs"></div>
+            <a class="btn btn--ys btn--light" href="/cart/clear"><span class="icon icon-delete"></span>{{ 'cart.general.clear_cart' | t }}</a>
+            <div class="divider divider--xs visible-xs"></div>
+            <a class="btn btn--ys btn--light pull-left btn-right" href="/"><span class="icon icon-keyboard_arrow_left"></span>{{ 'cart.general.continue_shopping' | t }}</a>
+            <div class="divider divider--xs visible-xs"></div>   	
+          </div>
+
+
+          <div class="divider visible-sm visible-xs"></div>
+        </section>
+        <aside class="col-md-4 col-lg-4 shopping_cart-aside">
+
+          {% if settings.shipping_calculator %}
+          <div class="collapse-block open card card--padding fill-bg">
+            {% include 'shipping-calculator-design2' %}
+          </div>
+          <div class="divider--md"></div>
+          {% endif %}
+
+          <!-- DISCOUNT CODES -->
+          <div class="collapse-block card card--padding fill-bg">
+            <h4 class="collapse-block__title">{{ 'cart.label.note' | t }}</h4>
+            <div class="collapse-block__content">
+              <p>{{ 'cart.label.note_text' | t }}</p>
+              <textarea id="note" name="note" class="form-control" rows="4">{{ cart.note }}</textarea>
+            </div>
+          </div>				
+          <!-- /DISCOUNT CODES -->
+
+          <div class="divider--md"></div>
+          <div class="card card--padding fill-bg">
+            <table class="table-total">
+              <tbody>
+                <tr id="subtotal">
+                  <th class="text-left">{{ 'cart.general.subtotal' | t }}</th>
+                  <td class="text-right">{{ ro_cart_total | money }}</td>
+                </tr>
+                <tr id="tax" style="display:none">
+                  <th class="text-left">{{ 'cart.general.shipping_total' | t }}</th>
+                  <td class="text-right">{{ 0 | money }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr id="grandtotal">
+                  <th>{{ 'cart.general.total' | t }}</th>
+                  <td>{{ ro_cart_total | money }}</td>
+                </tr>
+              </tfoot>
+            </table>
+            
+            <input name="shopify_customer_id" type="hidden" value="{{ customer.id }}" > 
+            <input name="email" type="hidden" value="{{ customer.email }}" > 
+            <input name="address1" type="hidden" value="{{ customer.default_address.address1 }}" > 
+            <input name="address2" type="hidden" value="{{ customer.default_address.address2 }}" > 
+            <input name="city" type="hidden" value="{{ customer.default_address.city }}" > 
+            <input name="company" type="hidden" value="{{ customer.default_address.company }}" > 
+            <input name="country" type="hidden" value="{{ customer.default_address.country }}" > 
+            <input name="first_name" type="hidden" value="{{ customer.default_address.first_name }}" > 
+            <input name="last_name" type="hidden" value="{{ customer.default_address.last_name }}" > 
+            <input name="phone" type="hidden" value="{{ customer.default_address.phone }}" > 
+            <input name="province" type="hidden" value="{{ customer.default_address.province }}" > 
+            <input name="zip" type="hidden" value="{{ customer.default_address.zip }}" >
+            {% include 'bold-ro-cart' %}
+            
+            <a href="/checkout" class="btn btn--ys btn--full btn--xl">{{ 'cart.general.checkout' | t }}<span class="icon icon--flippedX icon-reply"></span></a>
+          </div>
+
+        </aside>
+      </div>
+    </form>
+  </div>
+</div>

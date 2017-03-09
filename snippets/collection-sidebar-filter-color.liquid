@@ -1,0 +1,96 @@
+{% assign images_color = '' %}{% for i in (1..10) %}{% assign key = 'filter_color' | append: forloop.index %}{% assign value = '__' | append: settings[key] | handle | downcase | strip | append: '__' | append: forloop.index %}{% assign images_color = images_color | append: value | append: ';' %}{% endfor %}
+
+{% assign open = '' %}{% if opentabs contains index %}{% assign open = 'open' %}{% endif %}
+<div class="collapse-block {{ open }} color-filter-block">
+  <h4 class="collapse-block__title">{{ 'collections.sidebar.filter_color_title' | t }}</h4>
+  <div class="collapse-block__content">
+    <ul class="options-swatch options-swatch--color options-swatch--lg color-filter filter-popup">
+        {% assign tags = settings.shopby_color_filter | split: ',' %}
+        {% assign tag_size = 0 %}
+        {% for t in tags %}
+          {% assign tag = t | strip | downcase %}
+          {% assign all_tags = collection.all_tags | downcase %}
+          {% assign checktag = '"' | append: tag | append: '"' %}
+          {% if all_tags contains checktag %}
+            {% assign size = 0 %}
+            {% for product in _collectionMax %}
+              {% assign prod_tags = product.tags | downcase %}
+              {% if prod_tags contains checktag %}
+      			  {% if prod_tags contains type_active_tag or type_active_tag == "" %}
+      			  {% if prod_tags contains price_active_tag or price_active_tag == "" %}
+      			  {% if prod_tags contains size_active_tag or size_active_tag == "" %}
+      			  {% if prod_tags contains tags_active_tag or tags_active_tag == "" %}
+      			  {% if prod_tags contains vendor_active_tag or vendor_active_tag == "" %}
+                  {% assign size = size | plus: 1 %}
+      			  {% endif %}{% endif %}{% endif %}{% endif %}{% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if size > 0 %}
+              {% assign tag_size = tag_size | plus: 1 %}
+              {% assign cur_tags = current_tags | downcase %}
+              {% capture class %}{% if cur_tags contains checktag %}active{% endif %}{% endcapture %}
+              <li{% if class != '' %} class="{{ class }}"{% endif %}>
+                <span class="filter-title">{{ tag | handle | camelcase }}</span>
+                <a href="{{ tag | handle }}" class="color-border-{{ tag | handle }}{% if class != '' %} clear-tag{% endif %}">
+                {% assign _tag_ = tag | handle | downcase %}
+                {% assign _tag_ = "__" | append: _tag_ | append: '__' %}
+                {% if images_color contains _tag_ %}
+                {% assign imagescr = images_color | split: _tag_ | last %}
+                {% assign imagescr = imagescr | split: ';' | first %}
+                {% assign imagescr = 'filter_color' | append: imagescr | append: '.png' %}
+                <img src="{{ imagescr | asset_url }}" alt="">
+                {% else %}<span class="swatch-label color-{{ tag | handle }}"></span>
+                {% endif %}
+                </a>
+              </li>      
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+          <script class='color-filter-js-2'>
+            jQuery(function ($) {
+              if($( ".color-filter-block .active" ).length > 0) {
+                $(".color-filter-block").addClass('open');
+                $(".color-filter-block").find(".collapse-block__content").show();
+                
+              } else {
+              	$('.color-filter-js-2').remove();
+                return false;
+              }
+              
+              $( document ).ready(function(){
+                $(window).on("resize", placeTextColor);
+                placeTextColor();
+              });
+              function placeTextColor() {
+                var $block = $(".color-filter-block").find(".active");
+                var $filter =  $block.find(".filter-title");
+                var x = $block.position().left;
+
+                $filter.css('position', 'relative');
+                var textWidth = $filter.innerWidth();
+                $filter.css('position', 'absolute');
+                if(textWidth > $( ".color-filter-block .active a").width()) {
+                  var w = x + textWidth;
+                  w > $( ".color-filter-block").width() ? $filter.css('left', 'auto') : $filter.css('left', '0');
+                }
+              }
+            });
+          </script>
+        {% if tag_size == 0 %}
+          <script class='color-filter-js'>
+            jQuery(function ($) {
+              $('.color-filter-block').hide();
+              $('.color-filter-js').remove();
+            });
+          </script>
+        {% else %}
+          <script class='color-filter-js'>
+            jQuery(function ($) {
+              $('.color-filter-block').show();
+              $('.color-filter-js').remove();
+            });
+          </script>
+        {% endif %}
+    </ul>
+  </div>
+</div>

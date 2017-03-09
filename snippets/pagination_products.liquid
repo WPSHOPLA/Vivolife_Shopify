@@ -1,0 +1,35 @@
+{% if paginate.pages > 1 %}
+{% if paginate.current_page > 1 %}{% assign url = paginate.previous.url %}{% else %}{% assign url = paginate.next.url %}{% endif %}
+{% assign checkSearch = url | split: '&' | first %}{% assign checkSearch = url | split: checkSearch | last %}{% assign url = url | split: '?page' | first %}
+
+  <ul class="pagination">
+    {% if paginate.previous.is_link and paginate.pages > 3 %}
+    	<li><a href="{{ paginate.previous.url }}"><span class="icon icon-chevron_left"></span></a></li>
+    {% endif %}
+
+    {% if paginate.pages > 3 %}
+      {% if paginate.current_page > 1 and paginate.pages > 3 %}
+          <li><a href="{{ url }}?page=1">1</a></li>
+       
+      {% endif %}
+
+      <li class="active"><a>{{ paginate.current_page }}</a></li>
+    {% else %}
+      {% for part in paginate.parts %}
+          {% if part.is_link %}
+    		<li>{{ part.title | link_to: part.url}}</li>
+    	  {% else %}
+    		<li class="active"><a>{{ part.title }}</a></li>
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if paginate.next.is_link and paginate.pages > 3 %}
+    	<li><a href="{{ url }}?page={{ paginate.pages }}">{{ paginate.pages }}</a></li>
+    {% endif %}
+    
+    {% if paginate.next.is_link and paginate.pages > 3 %}
+    <li><a href="{{ paginate.next.url }}"><span class="icon icon-chevron_right"></span></a></li>
+    {% endif %}
+  </ul>
+{% endif %}

@@ -1,0 +1,28 @@
+{% if settings.enable_custom_fonts %}
+  {% if settings.font_family_1 == 'google_font' or settings.font_family_2 == 'google_font' %}
+
+    WebFontConfig = {
+      google: { families: [ 
+        {% if settings.font_family_1 == 'google_font' and settings.font_name_1 != '' %}
+          "{{ settings.font_name_1 }}:100,200,300,400,500,600,700,800,900"
+        {% endif %}
+        {% if settings.font_family_2 == 'google_font' and settings.font_name_2 != '' %}
+          {% if settings.font_family_1 == 'google_font' and settings.font_name_1 != '' %}
+              ,
+          {% endif %}
+          "{{ settings.font_name_2 }}:100,200,300,400,500,600,700,800,900"
+        {% endif %}
+      ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+        '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); 
+
+  {% endif %}
+{% endif %}

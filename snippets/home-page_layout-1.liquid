@@ -1,0 +1,64 @@
+{% if settings.defaulthome_sliderhandle %}<section class="content offset-top-0" id="slider">{{ settings.defaulthome_sliderhandle }}</section>{% endif %}
+
+{% if settings.show_defaulthome_pagehandle_1 %}{{ settings.defaulthome_pagehandle_1 }}{% endif %}
+
+<!-- featured products -->
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-xl-8">
+        <!-- title -->
+        {% include "home-product-grid" title: settings.defaulthome_productgridtitle name_collection: settings.defaulthome_productgrid length: settings.defaulthome_productgridlength access: settings.show_defaulthome_productgrid %}
+      </div>
+      {% if settings.layout1_show_block2 %}
+        <!-- lookbook -->
+        <div class="col-xl-4 visible-xl">
+          {{ settings.layout1_block2 }}
+        </div>
+        <!-- /lookbook -->
+      {% endif %}
+    </div>
+  </div>
+</section>
+<!-- end featured products -->
+
+{% if settings.show_defaulthome_pagehandle_2 %}{{ settings.defaulthome_pagehandle_2 }}{% endif %}
+
+{% if settings.defaulthome_productsliderblock %}
+<!-- news & sale products -->
+<section class="content">
+  <div class="container">
+    <div class="row newsale-js">
+      {% if settings.show_defaulthome_slider1 %}
+      <div class="col-sm-12 {% if settings.show_defaulthome_slider2 %}col-md-6 col-xl-{% if settings.layout1_show_block3 %}4{% else %}6{% endif %}{% else %}col-md-12 col-xl-{% if settings.layout1_show_block3 %}8{% else %}12{% endif %}{%endif%}">
+        {% include "home-small-slider" title: settings.defaulthome_slidertitle1 name_collection: settings.defaulthome_slider1 length: settings.defaulthome_sliderlength1 access: settings.show_defaulthome_slider1 %}
+      </div>
+      {% endif %}
+      
+      {% if settings.layout1_show_block3 %}
+      <div class="col-xl-4 visible-xl">
+        {{ settings.layout1_block3 }}
+      </div>
+      {% endif %}
+      
+      {% if settings.show_defaulthome_slider2 %}
+      <div class="col-sm-12 {% if settings.show_defaulthome_slider1 %}col-md-6 col-xl-{% if settings.layout1_show_block3 %}4{% else %}6{% endif %}{% else %}col-md-12 col-xl-{% if settings.layout1_show_block3 %}8{% else %}12{% endif %}{%endif%}">
+        {% include "home-small-slider" title: settings.defaulthome_slidertitle2 name_collection: settings.defaulthome_slider2 length: settings.defaulthome_sliderlength2 access: settings.show_defaulthome_slider2 %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if settings.show_defaulthome_blogslider1 %}{% include "home-blog-bigslider" title: settings.defaulthome_blogslidertitle1 name_collection: settings.defaulthome_blogslider1 length: settings.defaulthome_blogsliderlength1 %}
+{% endif %}
+
+{% if settings.show_defaulthome_blogslider2 %}{% include "home-blog-slider" title: settings.defaulthome_blogslidertitle2 name_collection: settings.defaulthome_blogslider2 length: settings.defaulthome_blogsliderlength2 %}
+{% endif %}
+
+
+{% if settings.show_defaulthome_pagehandle_3 %}{{ settings.defaulthome_pagehandle_3 }}{% endif %}
+
+{% if settings.show_defaulthome_instagram %}{% include "home-instagram" %}
+{% endif %}

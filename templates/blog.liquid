@@ -1,0 +1,216 @@
+ {% assign count = settings.blog_post_count | plus: 0 %}
+{% capture grid %}{% case settings.blog_grid %}{% when 'blog2' %}col-xl-6 col-lg-6 col-md-6 col-sm-12{% when 'blog3' %}col-xl-4 col-lg-4 col-md-4 col-sm-6{% else %}{% endcase %}{% endcapture %}
+
+<div class="container">
+  <div class="row">
+
+    {% if settings.show_blog_sidebar %}<div class="col-xl-8 col-lg-8 col-md-12" id="centerColumn">{% endif %}
+    
+    <div class="blog-layout">
+       <div class="title-box">
+        {% unless current_tags %}<h1 class="text-center text-uppercase title-under1">{{ 'blogs.general.title_main' | t }}</h1>{% else %}<h1 class="text-center text-uppercase title-under">{{ 'blogs.general.title_result' | t }} {{ current_tags.first | replace: '-', ' ' }}</h1>{% endunless %}
+      </div>
+      <div class="blog-tab-area">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">All</a></li>
+    <li role="presentation"><a href="#beauty" aria-controls="beauty" role="tab" data-toggle="tab">beauty</a></li>
+    <li role="presentation"><a href="#fitness" aria-controls="fitness" role="tab" data-toggle="tab">fitness</a></li>
+    <li role="presentation"><a href="#health" aria-controls="health" role="tab" data-toggle="tab">Health</a></li>
+ <li role="presentation"><a href="#Recipes" aria-controls="Recipes" role="tab" data-toggle="tab">Recipes</a></li>
+ 
+        </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="all">
+     <div class="title-box">
+          {% for article in blog.articles %}
+        {% if article.comments.size > 0 %}
+        {% assign comment_url = article.url | append: '#comments' %}
+        {% else %}
+        {% assign comment_url = article.url | append: '#addcomment' %}
+        {% endif %}
+        <div class="{{ grid }}">
+          <div class="post">
+            <div class="post__title_block">
+              <figure>
+                <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt=""></a>
+              </figure>
+              <div class="pull-left">
+                <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+              </div>
+              <div class="pull-left">
+                <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ _title }}</a></h2>
+                <div class="post__meta">
+                  <span class="post__meta__item">
+                    <span class="autor"><b>{{ article.title }}</b></span>
+                  </span>
+                </div>
+              </div>							
+            </div>
+            <p>{{ article.content | strip_html |  truncatewords: 15 }}</p>
+            {% if article.comments_enabled? %}<div class="post__meta"><span class="post__meta__item"><span class="icon icon-message"></span><a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a></span></div>{% endif %}
+          </div></div>
+        {% case settings.blog_grid %}{% when 'blog2' %}{% cycle '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% when 'blog3' %}{% cycle '', '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% else %}{% endcase %}
+       {% endfor %}
+      </div>
+    
+    </div>
+    <div role="tabpanel" class="tab-pane" id="beauty">
+      <div class="title-box">
+         {% for article in blogs.news.articles %}
+        
+       {% if article.tags contains 'Beauty' %}
+        
+        <div class="{{ grid }}">
+          <div class="post">
+            <div class="post__title_block">
+              <figure>
+                <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt=""></a>
+              </figure>
+              <div class="pull-left">
+                <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+              </div>
+              <div class="pull-left">
+                <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ _title }}</a></h2>
+                <div class="post__meta">
+                  <span class="post__meta__item">
+                    <span class="autor">by <b>{{ article.author }}</b></span>
+                  </span>
+                </div>
+              </div>							
+            </div>
+            <p>{{ article.content | strip_html |  truncatewords: 15 }}</p>
+            {% if article.comments_enabled? %}<div class="post__meta"><span class="post__meta__item"><span class="icon icon-message"></span><a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a></span></div>{% endif %}
+          </div></div>
+        {% case settings.blog_grid %}{% when 'blog2' %}{% cycle '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% when 'blog3' %}{% cycle '', '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% else %}{% endcase %}
+       {% endif %}
+        {% endfor %}
+      </div>
+    
+    </div>
+    <div role="tabpanel" class="tab-pane" id="fitness">
+     <div class="title-box">
+         {% for article in blogs.news.articles %}
+        
+       {% if article.tags contains 'Fitness' %}
+        
+        <div class="{{ grid }}">
+          <div class="post">
+            <div class="post__title_block">
+              <figure>
+                <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt=""></a>
+              </figure>
+              <div class="pull-left">
+                <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+              </div>
+              <div class="pull-left">
+                <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ _title }}</a></h2>
+                <div class="post__meta">
+                  <span class="post__meta__item">
+                    <span class="autor">by <b>{{ article.author }}</b></span>
+                  </span>
+                </div>
+              </div>							
+            </div>
+            <p>{{ article.content | strip_html |  truncatewords: 15 }}</p>
+            {% if article.comments_enabled? %}<div class="post__meta"><span class="post__meta__item"><span class="icon icon-message"></span><a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a></span></div>{% endif %}
+          </div></div>
+        {% case settings.blog_grid %}{% when 'blog2' %}{% cycle '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% when 'blog3' %}{% cycle '', '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% else %}{% endcase %}
+       {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="health">  
+      <div class="title-box">
+         {% for article in blogs.news.articles %}
+        
+       {% if article.tags contains 'Health' %}
+        
+        <div class="{{ grid }}">
+          <div class="post">
+            <div class="post__title_block">
+              <figure>
+                <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt=""></a>
+              </figure>
+              <div class="pull-left">
+                <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+              </div>
+              <div class="pull-left">
+                <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ _title }}</a></h2>
+                <div class="post__meta">
+                  <span class="post__meta__item">
+                    <span class="autor">by <b>{{ article.author }}</b></span>
+                  </span>
+                </div>
+              </div>							
+            </div>
+            <p>{{ article.content | strip_html |  truncatewords: 15 }}</p>
+            {% if article.comments_enabled? %}<div class="post__meta"><span class="post__meta__item"><span class="icon icon-message"></span><a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a></span></div>{% endif %}
+          </div></div>
+        {% case settings.blog_grid %}{% when 'blog2' %}{% cycle '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% when 'blog3' %}{% cycle '', '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% else %}{% endcase %}
+       {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+     <div role="tabpanel" class="tab-pane" id="Recipes">
+    
+     <div class="title-box">
+         {% for article in blogs.news.articles %}
+        
+       {% if article.tags contains 'Recipes' %}
+        
+        <div class="{{ grid }}">
+          <div class="post">
+            <div class="post__title_block">
+              <figure>
+                <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt=""></a>
+              </figure>
+              <div class="pull-left">
+                <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+              </div>
+              <div class="pull-left">
+                <h2 class="post__title text-uppercase"><a href="{{ article.url }}">{{ _title }}</a></h2>
+                <div class="post__meta">
+                  <span class="post__meta__item">
+                    <span class="autor">by <b>{{ article.author }}</b></span>
+                  </span>
+                </div>
+              </div>							
+            </div>
+            <p>{{ article.content | strip_html |  truncatewords: 15 }}</p>
+            {% if article.comments_enabled? %}<div class="post__meta"><span class="post__meta__item"><span class="icon icon-message"></span><a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a></span></div>{% endif %}
+          </div></div>
+        {% case settings.blog_grid %}{% when 'blog2' %}{% cycle '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% when 'blog3' %}{% cycle '', '', '<div class="divider--xxs clear hidden-sm hidden-xs"></div>' %}{% else %}{% endcase %}
+       {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <!-- title -->
+     
+    
+    </div>
+    
+    {% if settings.show_blog_sidebar %}</div>
+    <div class="divider divider--lg visible-md visible-sm visible-xs"></div>
+    <aside class="col-xl-4 col-lg-4  col-md-12" id="rightColumn">
+      {% include "blog-page-sidebar" %}
+    </aside>
+    {% endif %}
+    
+  </div>
+</div>

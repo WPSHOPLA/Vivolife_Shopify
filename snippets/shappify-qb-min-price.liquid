@@ -1,0 +1,9 @@
+{% assign shappify_min = shappify-qb-min-price.price_max %}
+{% for variant in shappify-qb-min-price.variants %}
+    {% if variant.metafields.shappify_qb.qb_hide == "1" %}{% else %}
+        {% if variant.price < shappify_min %}
+            {% assign shappify_min = variant.price %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{{ shappify_min | money }}

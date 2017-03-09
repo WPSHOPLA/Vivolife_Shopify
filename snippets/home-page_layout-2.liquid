@@ -1,0 +1,380 @@
+<div id="pageContent">
+<div class="content-container">
+
+  <!-- two columns -->
+  
+{% if settings.layout2_asidetitle != "" %}<h4 class="vertical-menu title-aside-wrapper text-uppercase  mobile-menu-off">{{ settings.layout2_asidetitle }}</h4>{% endif %}
+ {% if settings.layout2_banners_block_html %}{{ settings.layout2_banners_block_html }}{% endif %}
+  <div class="white-bck">     
+  <div class="container">
+    <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 latest-home-post">
+	  {% if settings.show_layout2_blogslider2 %}
+        {% assign name_collection = settings.layout2_blogslider2 %}
+        {% assign length = settings.layout2_blogsliderlength2 %}
+      	{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+        <div class="divider divider--lg"></div>
+         <div class="carousel-products row layout-none-xl simple-posts" id="postsCarousel">
+		{% for f_article in selected_blog.articles limit: length %}   <div class="col-xs-12 col-sm-12 col-md-12">
+            {% include "blog-slider-item2" %}
+          </div>
+           {% endfor %}
+       </div>
+	 {% endif %}
+      <div class="divider divider--lg visible-xs"></div>
+	  </div>
+	 <div class="col-xs-12 col-sm-12 col-md-4 testimonial-home-post">
+      <div id="Feature-blog" class="carousel slide" data-ride="carousel">
+   <div class="carousel-inner" role="listbox">
+     {% for article in blogs.beautyproducts.articles limit: 2 %}
+ <div class="item">
+ <div class="post-img">
+
+ <a href="{{ article.url }}" class="zoom-in">
+   <span class="figure"> 
+   <img src="{{ article.image.src | img_url: 'grande' }}" alt="">
+   </span>
+     </a>
+ </div>
+  <div class="post-title">
+    <a href="{{ article.url }}">{{ article.title }}</a>
+  </div>
+</div>
+{% endfor %}
+   </div>
+  </div>
+</div>
+    </div>
+	 </div>
+         </div>
+  </div>
+   {% if settings.layout2_banners_block_html2 %}{{ settings.layout2_banners_block_html2 }}{% endif %}
+  <section class="team-area">
+    <div class="container">
+		<div class="row">
+	 <div class="col-xs-12 col-md-12 col-sm-12"> 
+       
+	  <div class="col-xs-12 col-sm-12 col-md-6" style="padding-left:0px;">
+        <div class="teamheading">OUR TEAM</div>
+          <div id="our-team" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+                {% for article in blogs.our-team.articles limit: 6 %}
+              <div class="item">
+                 <div class="col-xs-12 col-sm-12 col-md-6" style="padding-left:0px;">
+ 
+ 				<a href="#" class="zoom-in">
+ 				<span class="figure">  
+ 				<img src="{{ article.image.src | img_url: 'medium' }}" alt="">
+  				 </span>
+  				 </a>	
+ 				</div>
+                <div class="col-xs-12 col-sm-12 col-md-6" style="padding-left:0px;">
+  				 <div class="post-content">
+                   " {{ article.content | strip_html | truncatewords: 20 }} "
+                  </div>
+                 <div class="post-title">
+    			 <a href="#">{{ article.title }}</a>
+  			     </div>
+				<div class="sub-title">
+                 {{ article.excerpt }}
+                  </div>
+              </div>
+                </div>
+   				{% endfor %}
+  			</div>
+        </div>
+      
+       </div>
+     
+	  <div class="col-xs-12 col-sm-12 col-md-6" style="padding-right:0px;">
+	  <div class="teamheading">WHAT OUR CUSTOMERS ARE SAYING</div>
+      <div id="customer-saying" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+    <div class="item active">
+     <img src="//cdn.shopify.com/s/files/1/1374/7199/files/socialmedia1.png">
+    </div>
+    <div class="item">
+     <img src="//cdn.shopify.com/s/files/1/1374/7199/files/socialmedia2.png">
+      </div>
+     <div class="item">
+     <img src="//cdn.shopify.com/s/files/1/1374/7199/files/socialmedia4.png">
+      </div>
+     <div class="item">
+     <img src="//cdn.shopify.com/s/files/1/1374/7199/files/socialmedia4.png">
+      </div>
+     <div class="item">
+     <img src="//cdn.shopify.com/s/files/1/1374/7199/files/socialmedia5.png">
+      </div>
+    </div>
+  
+  </div>
+
+</div>
+	  </div>
+      </div>
+    </div>
+   </section>
+	<section class="search" id="search-area">
+	<div class="container">
+      <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+     <div class="search-dropdown2">
+    <form action="/search" method="get">
+      <div class="input-outer">
+        <input type="hidden" name="type" value="product" />
+        <input type="text" name="q" class="search_field icon icon-search" value="" maxlength="128" placeholder="WHAT PRODUCT ARE YOU SEARCHING FOR?">
+        <button type="submit" title="" class="search-title">Search</button>
+      </div>
+     								
+    </form>
+  </div>
+	</div>
+	</div>
+      </div>
+	</section>
+	<section class="protein">
+	<div class="container">
+      <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 divi-box">
+		<div class="col-xs-12 col-sm-12 col-md-8 yellow-box">
+	    {{ pages.home-protein-section.content }}
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4">
+		 {{ pages.home-health-section.content }}
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 divi-box">
+		<div class="col-xs-12 col-sm-12 col-md-4 red-box">
+		{{ pages.home-sale-section.content }}
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-8">
+		{{ pages.home-beauty-section.content }}
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 divi-box">
+		
+      {{ pages.home-vivoclub-section.content }}
+	</div>
+        <!-- shop group-->
+        <div class="col-xs-12 col-sm-12 col-md-12 shop-values">
+  <header>
+    <h2>Shop by Your Values</h2>
+  </header>
+  <ul>
+    <li><a href="/collections/vegan"> <img alt="Vegan" src="//cdn.shopify.com/s/files/1/1374/7199/files/vegan_902a8e17-a519-4b9a-a08c-9f98693537a0.png">
+      <h4>Vegan</h4>
+      <p>Shop Now</p>
+      </a></li>
+    <li><a href="/collections/raw-food"> <img alt="Raw Foods" src="//cdn.shopify.com/s/files/1/1374/7199/files/raw_bad0fbff-b429-47d5-8be2-e2a039ae1d13.png">
+      <h4>Raw</h4>
+      <p>Shop Now</p>
+      </a></li>
+    <li><a href="/collections/paleo"> <img alt="Paleo" src="//cdn.shopify.com/s/files/1/1374/7199/files/paleo_ab8a2051-a8dd-4c0b-b92a-e0dc5238d44b.png">
+      <h4>Paleo</h4>
+      <p>Shop Now</p>
+      </a></li>
+    <li><a href="/collections/gluten-free"> <img alt="Gluten Free" src="//cdn.shopify.com/s/files/1/1374/7199/files/gluten-free_a503168e-885b-4a67-a861-bff16685d21a.png">
+      <h4>Gluten Free</h4>
+      <p>Shop Now</p>
+      </a></li>
+    <li><a href="/collections/dairy-free"> <img alt="Dairy Free" src="//cdn.shopify.com/s/files/1/1374/7199/files/dairy-free_ff1e0bbb-948d-4118-82e2-a9544d52b5bb.png">
+      <h4>Dairy Free</h4>
+      <p>Shop Now</p>
+      </a></li>
+    <li><a href="/collections/organic"> <img alt="Organic" src="https://www.vivolife.co.uk/wp-content/themes/vivo/images/product-icons/organic.png">
+      <h4>Organic</h4>
+      <p>Shop Now</p>
+      </a></li>
+  </ul>
+</div>
+
+        
+        <!-- Shop group end-->
+        
+      </div>
+	</div>
+	</section>
+  <!--section class="midGrey">
+  <div class="container">
+     <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="homeCol">
+      {{ pages.home-our-approach.content }}
+       </div>
+    </div>
+    
+  </div>
+   
+    </div>
+</section-->
+  <section data-stellar-background-ratio="0.2" class="parallaxBox" style="background-position: 20% 83.7367px;"> 
+ <span class="overlay"></span>
+    <div class="container">
+     <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+   
+  <div class="container">
+    <div class="textBox">
+     {{ pages.home-team-section.content }}
+    </div>
+    <!-- #textBox -->
+    
+    <div class="clear"></div>
+  </div>
+  <!-- #container --> 
+      </div>
+   </div>
+    </div>
+</section>
+   <section class="insta-section"> 
+    <div class="container">
+     <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="instaheading" id="latest-post-heading"> WHAT OUR CUSTOMERS ARE DOING</div>
+       </div>
+      </div>
+    </div>
+       </section>
+  <section class="insta-area">
+   <div class="container">
+     <div class="row">
+     <div class="col-xs-12 col-sm-12 col-md-12">
+      <div id="sb_instagram" class="sbi sbi_col_4" data-options="{"showcaption": "1", "captionlength": "50", "captioncolor": "", "captionsize": "13", "showlikes": "1", "likescolor": "", "likessize": "13", "sortby": "none", "hashtag": "vivolifeuk, gopeform", "type": "hashtag", "hovercolor": "0,0,0", "hovertextcolor": "0,0,0", "hoverdisplay": "username,icon,date,instagram,", "hovereffect": "fade", "headercolor": "", "headerprimarycolor": "517fa4", "headersecondarycolor": "eeeeee", "disablelightbox": "false", "disablecache": "false", "location": "", "coordinates": "", "maxrequests": "5", "headerstyle": "circle", "showfollowers": "true", "showbio": "true", "carousel": "[false, false, true, false, 5000]", "imagepadding": "5", "imagepaddingunit": "px", "media": "all", "includewords": "", "excludewords": "", "sbiCacheExists": "true", "sbiHeaderCache": "false"}" data-cols="4" data-res="auto" data-num="10" data-id="1531380795" style="width:100%; padding-bottom: 10px; "> <div style="padding: 5px 10px; margin-bottom: 10px;" class="sb_instagram_header sbi_feed_type_hashtag sbi_header_type_generic"><a class="sbi_header_link" target="_blank" href="https://instagram.com/explore/tags/vivolifeuk"></a><div class="sbi_header_text"><a class="sbi_header_link" target="_blank" href="https://instagram.com/explore/tags/vivolifeuk"></a><h3 class="sbi_no_bio"><a class="sbi_header_link" target="_blank" href="https://instagram.com/explore/tags/vivolifeuk"></a><a target="_blank" href="https://instagram.com/explore/tags/vivolifeuk">#vivolifeuk&nbsp;</a><a target="_blank" href="https://instagram.com/explore/tags/gopeform">#gopeform&nbsp;</a></h3></div><div class="sbi_header_img"><div class="sbi_header_hashtag_icon"><i class="sbi_new_logo"></i></div></div>
+        </div> </div>
+  <!-- SnapWidget -->
+<script src="https://snapwidget.com/js/snapwidget.js"></script>
+<iframe src="https://snapwidget.com/embed/219018" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%; "></iframe>   
+       </div>
+     </div>
+    </div>
+  </section>
+       
+       <section class="heading-section"> 
+    <div class="container">
+     <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="teamheading" id="latest-post-heading"> LATEST NEWS & EVENTS</div>
+       </div>
+      </div>
+    </div>
+       </section>
+<section class="latest-post-area">
+   <div class="container">
+     <div class="row">
+       
+       <div class="col-xs-12 col-sm-12 col-md-8">
+          {% for article in blogs.news.articles limit: 1 %}
+ <div class="post-area">
+   <span class="figcaption label-top-left"><span><b>{{ article.published_at | date: "%d" }} {{ article.published_at | date: "%b" }} {{ article.published_at | date: "%y" }}</b></span></span>
+     
+ <div class="post-img">
+
+ <a href="{{ article.url }}" class="zoom-in">
+   <span class="figure"> 
+   <img src="{{ article.image.src | img_url: 'grande' }}" alt="">
+   </span>
+     </a>
+
+  </div>
+  <div class="post-title">
+    <a href="{{ article.url }}">{{ article.title }}</a>
+  </div>
+   <div class="post-content">
+     {{ article.content | strip_html | truncatewords: 30 }}
+  	 <div class="post-link">
+   		<a href="{{ article.url }}" class="rm-button">Read More</a>
+  	 </div>
+   </div>
+</div>
+    
+{% endfor %}
+       </div>
+       <div class="col-xs-12 col-sm-12 col-md-4 rightTabs">
+         <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+    <a href="#popular" aria-controls="home" role="tab" data-toggle="tab">Popular</a>
+    </li>
+    <li role="presentation">
+   <a href="#recent" aria-controls="profile" role="tab" data-toggle="tab">Recent</a>
+           
+   </li>
+   </ul>
+         <div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="popular">
+     {% for article in blogs.news.articles limit: 5 %}
+ <div class="post-area-tab">
+  <div class="col-xs-12 col-sm-12 col-md-6" style="padding-left:0;"> 
+  <div class="post-img-tab">
+<a href="{{ article.url }}">
+   <span class="figure"> 
+   <img src="{{ article.image.src | img_url: 'grande' }}" alt="">
+   </span>
+  <span class="date"><span><b>{{ article.published_at | date: "%d" }} {{ article.published_at | date: "%b" }} {{ article.published_at | date: "%y" }}</b></span></span>
+     </a>
+ </div>
+   </div>
+   <div class="col-xs-12 col-sm-12 col-md-6 tab-right-area" style="padding-right:0;"> 
+  <div class="post-title-tab">
+    <a href="{{ article.url }}">{{ article.title }}</a>
+  </div>
+   <div class="post-content-tab">
+     {{ article.content | strip_html |  truncatewords: 12 }}
+   </div>
+   </div>
+</div>
+    
+{% endfor %}      
+           
+           
+           
+  </div>
+  <div role="tabpanel" class="tab-pane fade" id="recent">
+    {% for article in blogs.beautyproducts.articles limit: 5 %}
+ <div class="post-area-tab">
+  <div class="col-xs-12 col-sm-12 col-md-6" style="padding-left:0;"> 
+  <div class="post-img-tab">
+<a href="{{ article.url }}">
+   <span class="figure"> 
+   <img src="{{ article.image.src | img_url: 'grande' }}" alt="">
+   </span>
+  <span class="date"><span><b>{{ article.published_at | date: "%d" }} {{ article.published_at | date: "%b" }} {{ article.published_at | date: "%y" }}</b></span></span>
+     </a>
+ </div>
+   </div>
+   <div class="col-xs-12 col-sm-12 col-md-6 tab-right-area" style="padding-right:0;"> 
+  <div class="post-title-tab">
+    <a href="{{ article.url }}">{{ article.title }}</a>
+  </div>
+   <div class="post-content-tab">
+     {{ article.content | strip_html |  truncatewords: 12 }}
+   </div>
+   </div>
+</div>
+    
+{% endfor %}
+           </div>
+  
+</div>
+       
+       </div>
+     </div>
+  </div>
+  </section>
+   </div>
+
+
+
+{% include settings.footer_design %}
+
+{% include 'popup_cart' %}
+{% include 'popup_wishlist' %}
+{% include 'popup-newsletter' %}
+{% if template != "page.wishlist" %}{% include 'popup-quickview' %}{% endif %}
+
+{% include 'preloader-ajax' %}
+<script>
+$(document).ready(function () {
+  $('#our-team').find('.item').first().addClass('active');
+  $('#Feature-blog').find('.item').first().addClass('active');
+});
+  </script>

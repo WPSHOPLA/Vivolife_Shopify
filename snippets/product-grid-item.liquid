@@ -1,0 +1,89 @@
+{% comment %}If no value is passed to the snippet, we will set the snippet variable to a sensible default.{% endcomment %}
+{% if product-grid-item == '' %}{% assign product-grid-item = 'three-per-row' %}{% endif %}
+
+{% comment %}Is this product on sale?{% endcomment %}
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+<li class="{{ product-grid-item }}{% unless product.available %} sold-out{% endunless %}{% if on_sale %} on-sale{% endif %}{% if product-grid-item == 'four-per-row' %}{% cycle 'last': '', '', '', ' last-in-row' %}{% elsif product-grid-item == 'three-per-row' %}{% cycle 'last': '', '', ' last-in-row' %}{% endif %} centered">
+
+  <div class="prod-image-wrap">  
+    <a href="{{ product.url | within: collection }}">
+      <img src="{{ product | img_url: 'medium' }}" alt="{{ product.featured_image.alt | escape }}" />
+    </a>
+  </div><!-- .prod-image-wrap -->
+  
+  <div class="prod-caption">
+    <div class="pro-title">
+      <a href="{{ product.url | within: collection }}">
+        {{ product.title }}
+      </a>
+    </div>
+      <div class="prod-price">
+        {% if product.price_varies %}From{% endif %}
+        {{ product.price | money }}
+        {% if on_sale %}
+        <s class="compare-at-price">{{ product.compare_at_price | money }}</s>
+        {% endif %}
+      </div>
+    <form id="add-item-form" action="/cart/add" method="post">
+  {% if product.available %}
+      {% if product.variants.size > 0 %}
+    <div style="display:none;">
+      {% if product.options.size == 1 %}{% endif %}
+      <select id="product-select" name="id">
+        {% for variant in product.variants %}
+        {% if variant.available %}
+        <option value="{{ variant.id }}"{% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}>{{ variant.title }} - {{ variant.price | money }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+      {% if settings.variant_combobox == false and product.options.size < 3 %}{% for option in product.options %}{% include 'swatch' with option productdesingcenter: false %}{% endfor %}{% endif %}
+    </div>
+  {% else %}
+  	<input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+  {% endif %}
+<div class="wrapper">
+    <div class="pull-left"><input type="text" name="quantity" class="input--ys qty-input pull-left" value="1"></div>
+  <div class="pull-left atcShadow"><button type="submit" class="btn btn--ys btn--xxl addtocart">Add To Basket</button></div>
+  <div class="pull-left more"> <a href="{{ product.url | within: collection }}">More Info</a></div>
+   </div>
+  
+  {% else %}
+  <br>
+  <div class="pull-left"><button disabled class="btn btn--ys btn--xxl">{{ 'products.product.unavailable' | t }}</button></div>
+  <br>
+  <br>
+  <br>
+  {% endif %}
+</form>
+      
+      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+  </div><!-- .prod-caption -->
+  
+</li>
+
+{% comment %}
+You don't need to use a clearing div. Use whatever it is you use to clear
+floated elements. The code that follows just just shows you how to use a cycle element.
+Notice that we named it ( 'clear' ). We need to name it because there's another cycle
+element in this file ( we called that other one 'last' ). If you have more than one
+cycle element in a rendered view, you'll need to name all of them.
+The cycle element is documented here: http://docs.shopify.com/themes/liquid-basics/logic#cycle
+{% endcomment %}
+
+{% if product-grid-item == 'six-per-row' %}
+{% cycle 'clear': '', '', '', '', '', '<div style="clear:both"></div>' %}
+{% elsif product-grid-item == 'five-per-row' %}
+{% cycle 'clear': '', '', '', '', '<div style="clear:both"></div>' %}
+{% elsif product-grid-item == 'four-per-row' %}
+{% cycle 'clear': '', '', '', '<div style="clear:both"></div>' %}
+{% elsif product-grid-item == 'three-per-row' %}
+{% cycle 'clear': '', '', '<div style="clear:both"></div>' %}
+{% elsif product-grid-item == 'two-per-row' %}
+{% cycle 'clear': '', '<div style="clear:both"></div>' %}
+{% endif %}
+
+   

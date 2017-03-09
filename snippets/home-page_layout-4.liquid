@@ -1,0 +1,47 @@
+<div class="header-wrapper">{% include "header_design3" class: "header-layout-04" %}</div>
+
+<!-- Slider section -->
+<section class="content offset-top-0 intro tp-banner-button1" id="slider">
+  <!--
+#################################
+- THEMEPUNCH BANNER -
+#################################
+--> 
+  <!-- START REVOLUTION SLIDER 3.1 rev5 fullwidth mode -->
+  <h2 class="hidden">Slider Section</h2>
+  <div class="tp-banner-container">
+    <div class="tp-banner">
+      <ul>{{ settings.layout4_slidercode }}</ul>
+    </div>
+  </div>
+</section>
+<!-- END REVOLUTION SLIDER -->
+
+<footer  class="layout-2 footer-layout-04">			
+  <!-- social-icon -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="social-links social-links-border social-links--large ">
+          <ul>{{ settings.footer_soc_but }}</ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /social-icon --> 
+  <!-- footer-copyright -->
+  <div class="container footer-copyright">
+    <div class="row">
+      <div class="col-lg-12 text-center">{{ settings.footer_address }}</div>
+    </div>
+  </div>
+  <!-- /footer-copyright -->			
+</footer>
+
+<script>
+  jQuery("#header").removeAttr("class");
+  jQuery("#header").addClass("header-layout-04");
+  jQuery("#header").find(".logo").hide();
+  jQuery("#header").find(".logo").attr("src", '{{ "logo2.png" | asset_url }}')
+  setTimeout(function(){jQuery("#header").find(".logo").show()}, 500);
+</script>

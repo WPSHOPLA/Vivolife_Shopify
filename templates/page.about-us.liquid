@@ -1,0 +1,43 @@
+ <section class="siteBox approachPage">	
+	<section class="ourVision">
+		<div class="container">
+			 {{ pages.who-we-are.content }}
+			<div class="clear"></div>		
+		</div> <!-- #container -->
+	</section> <!-- #ourVision -->
+</section>
+<section class="ourMission">
+	{{ pages.our-mission.content }}
+</section>
+<section data-stellar-background-ratio="0.2" class="coreValues" style="background-position: 50% -34.67px;">
+	<h2><span>Core Values</span></h2>
+
+	<div class="container">
+		<div class="blurBg"></div>
+		{{ pages.core-values.content }}
+      <!-- #blurBox -->
+	</div> <!-- #container -->
+</section>
+<section class="ourMission getStarted">
+	<div class="container">
+      {{ pages.get-start.content }}
+  </div>
+</section>
+<section class="search" id="search-area">
+	<div class="container">
+      <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+     <div class="search-dropdown2">
+    <form action="/search" method="get">
+      <div class="input-outer">
+        <input type="hidden" name="type" value="product" />
+        <input type="text" name="q" class="search_field icon icon-search" value="" maxlength="128" placeholder="WHAT PRODUCT ARE YOU SEARCHING FOR?">
+        <button type="submit" title="" class="search-title">Search</button>
+      </div>
+     								
+    </form>
+  </div>
+	</div>
+	</div>
+      </div>
+	</section>

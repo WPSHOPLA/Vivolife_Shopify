@@ -1,0 +1,89 @@
+<!-- HEADER section this -->
+<header id="header" class="{% if class == "header-layout-04" %}class{% else %}header-layout-05{% endif %}">
+  <!-- top-header -->
+  
+      <!-- col-left -->
+      <div class="col-sm-12 text-left header-top" id="topHead">
+        <!-- slogan start -->
+		<div class="container">
+		<div class="row">
+        <div class="slogan"><!---{{ settings.header_slogan }}--->
+			<ul class="social">
+					<li><a href="https://twitter.com/vivolifeuk" target="_blank" class="twitter-blue-hover">
+							<i class="fa fa-twitter"></i></a>
+					</li>
+					<li><a href="https://www.facebook.com/vivolifeuk" target="_blank" class="facebook-blue-hover">
+							<i class="fa fa-facebook"></i></a>
+					</li>
+					<li><a href="https://uk.pinterest.com/vivolifeuk" target="_blank" class="pinterest-red-hover">
+							<i class="fa fa-pinterest"></i></a>
+					</li>
+					<li><a href="http://instagram.com/vivolifeuk" target="_blank" class="instagram-blue-hover">
+							<i class="fa fa-instagram"></i></a>
+					</li>
+					<li class="telLink" id="telLink">
+						<a href="tel:+448455191942"><i class="fa fa-phone"></i></a>
+					</li>
+					<li class="contactTel">
+						Tel: 0845 519 1942
+					</li>
+				</ul>
+			<ul class="topNav">
+					<li><a href="/tools/">Tools</a></li>
+					<li><a href="/our-approach/">About Us</a></li>
+					<li><a href="/our-team/">Vivo Team</a></li>
+					<li><a href="/get-in-touch/">Get In Touch</a></li>
+                    <li><a href="https://www.vivolife.co.uk/login-signup/" class="tn-my-account">My Account</a></li>
+            </ul>
+		</div>
+		</div>
+  </div>
+        <!-- slogan end --> 	
+      </div>
+      <!-- /top-header -->
+  
+  <!-- nav --><div class="col-sm-12 text-left header-middle" id="topHead">
+         {% if class != "header-layout-04" %}<div class="stuck-nav">{% endif %}
+    <div class="container">
+	 <div class="row">
+			  <div class="col-sm-5 text-left">
+			  <div class="col-stuck-menu">
+				<div class="row text-center">
+				  {% include "main-menu" %}
+				</div>
+			  </div>
+			  <div class="pull-right col-stuck-cart text-right">
+				{% include "menu-cart" %}
+		 </div>
+			</div>
+	<!---<div class="container">-->
+	<div class="col-sm-2 text-center">
+		<div class="row text-center">
+		  <!--  -->
+		  
+		  <!-- / -->
+		  <!-- logo start -->
+		  <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+		  <!-- logo end --> 
+		</div>
+	</div>
+	<div class="col-sm-5 text-right">
+	
+	<div class="text-right">
+	<div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" showTitle: true %}
+          {% include "header-language" align: 'text-right' showTitle: true %}
+        </div>
+			{% include "menu-search" %}
+			{% include "menu-customer" %}
+			{% include "menu-cart" %}
+		  </div>
+		
+	</div>
+	</div>
+  </div>
+  {% if class != "header-layout-04" %}</div>{% endif %}
+  </div>
+  <!-- /nav -->
+</header>
+<!-- End HEADER section -->

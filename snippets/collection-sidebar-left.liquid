@@ -1,0 +1,43 @@
+<a href="#" class="slide-column-close visible-sm visible-xs"><span class="icon icon-chevron_left"></span>back</a>
+<div class="filters-block visible-xs">
+  <div class="filters-row__select">
+    <label>{{ 'collections.toolbar.sort_by_title' | t }}</label>
+    <div class="select-wrapper">
+      <select class="select--ys sort-position sort-select">
+        <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+        <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+        <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+        <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+        <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+        <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+        <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+        <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="filters-row__select">
+    <label>{{ 'collections.toolbar.grid_amount_title' | t }}</label>
+    <div class="select-wrapper">
+      <select class="select--ys">
+        <option>{{ pagination_limit_const }}</option>
+        <option {% if current_grid == 16 %}selected{% endif %}>16</option>
+        <option {% if current_grid == 32 %}selected{% endif %}>32</option>
+        <option {% if current_grid == 50 %}selected{% endif %}>{{ 'collections.toolbar.all' | t }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+{% assign opentabs = settings.sidebar_opened_tabs %}
+{% assign tags = settings.shopby_type_filter | split: ',' %}{% capture type_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+{% assign tags = settings.shopby_price_filter | split: ',' %}{% capture price_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+{% assign tags = settings.shopby_size_filter | split: ',' %}{% capture size_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+{% assign tags = settings.shopby_color_filter | split: ',' %}{% capture color_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+{% assign tags = settings.shopby_tags_filter | split: ',' %}{% capture tags_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+{% assign tags = settings.shopby_vendor_filter | split: ',' %}{% capture vendor_active_tag %}{% include "get-active-product-tag" %}{% endcapture %}
+
+{% if settings.show_shopby_type_filter %}{% include "collection-sidebar-filter-category" with index:'1' %}{% endif %}
+{% if settings.show_shopby_price_filter %}{% include "collection-sidebar-filter-price" with index:'2' %}{% endif %}
+{% if settings.show_shopby_size_filter %}{% include "collection-sidebar-filter-size" with index:'3' %}{% endif %}
+{% if settings.show_shopby_color_filter %}{% include "collection-sidebar-filter-color" with index:'4' %}{% endif %}
+{% if settings.show_shopby_vendor_filter %}{% include "collection-sidebar-filter-vendor" with index:'5' %}{% endif %}

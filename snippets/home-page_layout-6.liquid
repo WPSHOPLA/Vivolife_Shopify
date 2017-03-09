@@ -1,0 +1,68 @@
+{% if settings.layout6_show_block1 and settings.layout6_block1 != '' %}{{ settings.layout6_block1 }}{% endif %}
+
+{% if settings.show_layout6_slider1 %}
+<section class="content">
+  <div class="container">
+    {% if settings.layout6_collection_banner1 != '' %}
+    {% include "home-small-slider-2" title: settings.layout6_slidertitle1 name_collection: settings.layout6_slider1 length: settings.layout6_sliderlength1 access: true collection_banner: settings.layout6_collection_banner1 %}
+    {% else %}
+    <div class="fead-prod">{% include "home-small-slider" title: settings.layout6_slidertitle1 name_collection: settings.layout6_slider1 length: settings.layout6_sliderlength1 access: true %}</div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.show_layout6_slider2 %}
+<section class="content">
+  <div class="container">
+    {% if settings.layout6_collection_banner2 != '' %}
+    {% include "home-small-slider-2" title: settings.layout6_slidertitle2 name_collection: settings.layout6_slider2 length: settings.layout6_sliderlength2 access: true collection_banner: settings.layout6_collection_banner2 %}
+    {% else %}
+    <div class="fead-prod">{% include "home-small-slider" title: settings.layout6_slidertitle2 name_collection: settings.layout6_slider2 length: settings.layout6_sliderlength2 access: true %}</div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if settings.layout6_show_block2 and settings.layout6_block2 != '' %}{{ settings.layout6_block2 }}{% endif %}
+
+{% if settings.show_layout6_blogslider1 %}
+{% assign name_collection = settings.layout6_blogslider1 %}
+{% assign length = settings.layout6_blogsliderlength1 %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+{% assign custom_count = 0 %}
+<!-- blog slider -->
+<section class="content">
+  <div class="container">
+    <h2 class="text-center text-uppercase title-under">{{ settings.layout6_blogslidertitle1 }}</h2>
+    <div class="row">
+      <div class="slider-blog-layout1 ">
+        {% for article in selected_blog.articles %}
+        {% if article.excerpt contains "[blogsliderbig]" %}
+        {% if custom_count == length %}{% break %}{% endif %}
+        {% assign custom_count = custom_count | plus: 1 %}
+        {% capture _article %}{% include "get-content-with-key" content: article.excerpt key: "[blogsliderbig]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = article.title %}{% endif %}
+        <!-- slide-->
+        <a href="{{ _article.url }}" class="link-hover-block">
+          <div class="slider-blog__item">
+            <div class="col-md-12">
+              <div class="box-foto">
+                {{ image }}
+              </div>
+              <div class="box-data">
+                <p>{{ content }}</p>
+                <h6>{{ _title }}</h6>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endif %}
+        <!-- /slide-->
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if settings.layout6_show_block3 and settings.layout6_block3 != '' %}{{ settings.layout6_block3 }}{% endif %}

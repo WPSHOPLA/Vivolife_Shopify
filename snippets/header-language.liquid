@@ -1,0 +1,14 @@
+{% if settings.show_menu_language %}
+<!-- language start -->
+<div class="language dropdown {{ align }}">
+  {% if showTitle %}<div class="dropdown-label hidden-sm hidden-xs">{{ settings.title_language }}</div>{% endif %}
+  <a class="dropdown-toggle" data-toggle="dropdown">{{ settings.default_language }}<span class="caret"></span></a>
+  <ul class="dropdown-menu dropdown-menu--xs-full">
+    {% for link in linklists[settings.linklist_language].links %}
+    	<li><a href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+    <li class="dropdown-menu__close"><a href="#"><span class="icon icon-close"></span>{{ 'general.menu.button_close' | t }}</a></li>
+  </ul>
+</div>
+<!-- language end -->
+{% endif %}

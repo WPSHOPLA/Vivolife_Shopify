@@ -1,0 +1,188 @@
+
+<div class="container">				
+  <!-- title -->
+  <div class="title-box">
+    <h1 class="text-center text-uppercase title-under">{{ 'customer.account.title_main' | t }}</h1>
+  </div>
+  <!-- /title -->
+  <!--  -->
+  <h4 class="text-uppercase">{{ 'customer.addresses.title' | t }}</h4>
+  <hr>
+  <p><a href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;" class="btn btn--ys text-uppercase">{{ 'customer.addresses.add_new' | t }}</a></p>
+  <p><a class="link-icon" href="/account"><span class="icon icon-chevron_left"></span>{{ 'customer.general.return' | t }}</a></p>
+  
+  
+          <!--Add Address Form -->
+          <div id="add_address" style="display:none;">
+          	<div class="divider-xs"></div>
+            {% form 'customer_address', customer.new_address %}
+            <h4>{{ 'customer.addresses.add_new' | t }}</h4>
+
+            <div class="form-group">
+              <label for="address_first_name_new">{{ 'customer.addresses.first_name' | t }}</label>
+              <input type="text" class="form-control" name="address[first_name]" value="{{form.first_name}}">
+            </div>
+            <div class="form-group">
+              <label for="address_last_name_new">{{ 'customer.addresses.last_name' | t }}</label>
+              <input type="text" class="form-control" name="address[last_name]" value="{{form.last_name}}">
+            </div>
+            <div class="form-group">
+              <label for="address_company_new">{{ 'customer.addresses.company' | t }}</label>
+              <input type="text" class="form-control" name="address[company]" value="{{form.company}}">
+            </div>
+            <div class="form-group">
+              <label for="address_address1_new">{{ 'customer.addresses.address1' | t }}</label>
+              <input type="text" class="form-control" name="address[address1]" value="{{form.address1}}">
+            </div>
+            <div class="form-group">
+              <label for="address_address2_new">{{ 'customer.addresses.address2' | t }}</label>
+              <input type="text" class="form-control" name="address[address2]" value="{{form.address2}}">
+            </div>
+            <div class="form-group">
+              <label for="address_city_new">{{ 'customer.addresses.city' | t }}</label>
+              <input type="text" class="form-control" name="address[city]" value="{{form.city}}">
+            </div>
+            <div class="form-group">
+              <label for="address_country_new">{{ 'customer.addresses.country' | t }}</label>
+              <select id="address_country_new" class="form-control" name="address[country]" data-default="{{ form.country }}">{{ country_option_tags }}</select>
+            </div>
+            <div id="address_province_container_new" style="display:none" class="form-group">
+              <label for="address_province_new">{{ 'customer.addresses.province' | t }}</label>
+              <select id="address_province_new" class="form-control" name="address[province]" data-default="{{ form.province }}"></select>
+            </div>
+
+            <div class="form-group">
+              <label for="address_zip_new">{{ 'customer.addresses.zip' | t }}</label>
+              <input type="text" class="form-control" name="address[zip]" value="{{form.zip}}">
+            </div>
+            <div class="form-group">
+              <label for="address_phone_new">{{ 'customer.addresses.phone' | t }}</label>
+              <input type="text" class="form-control" name="address[phone]" value="{{form.phone}}">
+            </div>
+            <div class="form-group">
+              {{ form.set_as_default_checkbox }} {{ 'customer.addresses.set_default' | t }}
+            </div>
+            <button type="submit" class="btn btn--ys">{{ 'customer.addresses.add' | t }}</button>
+            {{ 'customer.general.or' | t }}
+            <a href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;" class="cancel_button">{{ 'customer.addresses.cancel' | t }}</a>
+            {% endform %}
+          	<div class="divider-xs"></div>
+          </div>
+          <!-- End Add Address Form -->
+  
+  
+  {% if customer.addresses.size > 0 %}<hr>{% paginate customer.addresses by 5 %}{% for address in customer.addresses %}
+  <div id="view_address_{{address.id}}">
+    <h4 class="text-uppercase">{{ address.street }}{% if address == customer.default_address %}<span>{{ 'customer.addresses.default' | t }}</span>{% endif %}</h4>
+    <div class="row">
+      <div class="col-xs-12 col-sm-7 col-md-5">
+        <table class="table table-params">
+          <tbody>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.name' | t }}</b></td>
+              <td>{{ address.first_name }} {{address.last_name }}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.email' | t }}</b></td>
+              <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.company' | t }}</b></td>
+              <td>{{ address.company }}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.address' | t }}</b></td>
+              <td>{{ address.street }}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.country' | t }}</b></td>
+              <td>{{ address.country }}, {{ address.city }} {% if address.province_code %}, {{ address.province_code }}{% endif %}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.zip' | t }}</b></td>
+              <td>{{ address.zip }}</td>
+            </tr>
+            <tr>
+              <td class="text-right"><b>{{ 'customer.account.phone' | t }}</b></td>
+              <td>{{ address.phone }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <a href="#" onclick="Shopify.CustomerAddress.toggleForm({{ address.id }});return false" class="btn btn--ys"><span class="icon icon-create"></span> {{ 'customer.addresses.edit' | t }}</a>&nbsp;&nbsp;&nbsp;
+        <a href="#" onclick="Shopify.CustomerAddress.destroy({{ address.id }}, 'Are you sure you wish to delete this address?');return false" class="btn btn--ys btn--light"><span class="icon icon-delete"></span> {{ 'customer.addresses.delete' | t }}</a>
+      </div>
+    </div>
+  </div>
+  
+  <div id="edit_address_{{address.id}}" style="display:none;">
+    <!-- Edit Address Form -->
+    {% form 'customer_address', address %}
+    <div class="form-group">
+      <label for="address_first_name_{{form.id}}">{{ 'customer.addresses.first_name' | t }}</label>
+      <input type="text" class="form-control" name="address[first_name]" value="{{form.first_name}}">
+    </div>
+    <div class="form-group">
+      <label for="address_last_name_{{form.id}}">{{ 'customer.addresses.last_name' | t }}</label>
+      <input type="text" class="form-control" name="address[last_name]" value="{{form.last_name}}">
+    </div>
+    <div class="form-group">
+      <label for="address_company_{{form.id}}">{{ 'customer.addresses.company' | t }}</label>
+      <input type="text" class="form-control" name="address[company]" value="{{form.company}}">
+    </div>
+    <div class="form-group">
+      <label for="address_address1_{{form.id}}">{{ 'customer.addresses.address1' | t }}</label>
+      <input type="text" class="form-control" name="address[address1]" value="{{form.address1}}">
+    </div>
+    <div class="form-group">
+      <label for="address_address2_{{form.id}}">{{ 'customer.addresses.address2' | t }}</label>
+      <input type="text" class="form-control" name="address[address2]" value="{{form.address2}}">
+    </div>
+    <div class="form-group">
+      <label for="address_city_{{form.id}}">{{ 'customer.addresses.city' | t }}</label>
+      <input type="text" class="form-control" name="address[city]" value="{{form.city}}">
+    </div>
+    <div class="form-group">
+      <label for="address_country_{{form.id}}">{{ 'customer.addresses.country' | t }}</label>
+      <select id="address_country_{{form.id}}" class="form-control" name="address[country]" data-default="{{ form.country }}">{{ country_option_tags }}</select>
+    </div>
+    <div id="address_province_container_{{form.id}}" style="display:none" class="form-group">
+      <label for="address_province_{{form.id}}">{{ 'customer.addresses.province' | t }}</label>
+      <select id="address_province_{{form.id}}" class="form-control" name="address[province]" data-default="{{ form.province }}"></select>
+    </div>
+    <div class="form-group">
+      <label for="address_zip_{{form.id}}">{{ 'customer.addresses.zip' | t }}</label>
+      <input type="text" class="form-control" name="address[zip]" value="{{form.zip}}">
+    </div>
+    <div class="form-group">
+      <label for="address_phone_{{form.id}}">{{ 'customer.addresses.phone' | t }}</label>
+      <input type="text" class="form-control" name="address[phone]" value="{{form.phone}}">
+    </div>
+    <div class="form-group">
+      {{ form.set_as_default_checkbox }} {{ 'customer.addresses.set_default' | t }}
+    </div>
+    <button type="submit" class="btn btn--ys"><span class="icon icon-autorenew"></span>{{ 'customer.addresses.update' | t }}</button>
+    {{ 'customer.general.or' | t }}
+    <a href="#" onclick="Shopify.CustomerAddress.toggleForm({{form.id}}); return false;" class="cancel_button">{{ 'customer.addresses.cancel' | t }}</a>
+    {% endform %}
+    <!-- End Edit Address Form -->
+    <br>
+  </div>
+  
+  {% if forloop.index < customer.addresses.size %}
+  <br>
+  <br>
+  {% endif %}
+
+  {% endfor %}{% endpaginate %}{% endif %}
+</div>
+
+<script>
+	// initialize observers on address selectors
+  	new Shopify.CountryProvinceSelector('address_country_new', 'address_province_new', {hideElement: 'address_province_container_new'});  
+  	{% for address in customer.addresses %}
+  		var el = document.getElementById("address_country_{{address.id}}");
+		if (el){
+    		new Shopify.CountryProvinceSelector('address_country_{{address.id}}', 'address_province_{{address.id}}', {hideElement: 'address_province_container_{{address.id}}'});
+		}
+	{% endfor %}
+</script>

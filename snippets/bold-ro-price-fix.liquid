@@ -1,0 +1,15 @@
+{% assign ro_price = 0 %}
+{% assign ro_item_price = 0 %}
+{% assign ro_line_item_price = 0 %}
+{% if ro_cart_total == blank %}{% assign ro_cart_total = 0 %}{% endif %}
+
+{% if item.properties._ro_unformatted_price != blank %}
+  {% assign ro_price = item.properties._ro_unformatted_price %}
+  {% assign ro_item_price = ro_price %}
+  {% assign ro_line_item_price = ro_item_price | times: item.quantity %}
+  {% assign ro_cart_total = ro_cart_total | plus: ro_line_item_price %}
+{% else %}
+  {% assign ro_item_price = item.price %}
+  {% assign ro_line_item_price = item.line_price %}
+  {% assign ro_cart_total = ro_cart_total | plus: item.line_price %}
+{% endif %}

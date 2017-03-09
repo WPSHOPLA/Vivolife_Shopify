@@ -1,0 +1,107 @@
+<!-- start BKPlatform -->
+<script type="text/javascript">
+{% if customer %}
+var BKCustomer = {
+    id: {{ customer.id }}
+};
+{% endif %}
+
+// Fast way to parsing query strings
+var BKInjectUrlParams = function() {
+    // Remove certain param from url
+    function removeParam(key, sourceURL) {
+        var rtn = sourceURL.split("?")[0],
+                param,
+                params_arr = [],
+                queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
+            }
+            rtn = rtn + "?" + params_arr.join("&");
+        }
+        return rtn;
+    }
+
+    // Try to detect a contact visit store url by anon
+    var trackingParams = null,
+        query = window.location.search.substring(1),
+        vars = query.split('&'), i,
+        keyName = 'bkp';
+
+    for (i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        var key = decodeURIComponent(pair[0]);
+
+        if (key == keyName || key == 'bk_et') {
+            try {
+                if (key == 'bk_et') {
+                    // -> Bas64 -> Json decode
+                    trackingParams = JSON.parse(atob(decodeURIComponent(pair[1])));
+                } else {
+                    trackingParams = {
+                        email_id: null,
+                        contact_track_type: '',
+                        contact_ref_id: '',
+                        campaign_type: '',
+                        campaign_id: null
+                    };
+                    var draftTrackingParams = decodeURIComponent(pair[1]);
+                    draftTrackingParams = draftTrackingParams.split(';');
+                    for (var j = 0; j < draftTrackingParams.length; j++) {
+                        var param = draftTrackingParams[j].split(':');
+                        switch (param[0]) {
+                            case 'e':
+                                trackingParams.email_id = param[1];
+                                break;
+
+                            case 'ctt':
+                                trackingParams.contact_track_type = param[1];
+                                break;
+
+                            case 'cri':
+                                trackingParams.contact_ref_id = param[1];
+                                break;
+
+                            case 'ct':
+                                trackingParams.campaign_type = param[1];
+                                break;
+
+                            case 'cid':
+                                trackingParams.campaign_id = param[1];
+                                break;
+                        }
+                    }
+                }
+
+                // Remove tracking param from url
+                if (trackingParams && window.history && typeof window.history.pushState == 'function') {
+                    var urlAfterRemove = removeParam(key, window.location.href);
+                    window.history.pushState('', '', urlAfterRemove);
+                }
+            } catch (e) {
+                // Could not parse query
+            }
+        }
+    }
+
+    // Return tracking params
+    return trackingParams;
+}();
+
+(function (doc, scriptPath) {
+    var sc, node, today=new Date(),dd=today.getDate(),mm=today.getMonth()+1,yyyy=today.getFullYear();if(dd<10)dd='0'+dd;if(mm<10)mm='0'+mm;today=yyyy+mm+dd;
+    // Load base script tag
+    sc = doc.createElement("script");
+    sc.type = "text/javascript";
+    sc.async = !0;
+    sc.src = scriptPath + '?' + today;
+    node = doc.getElementsByTagName("script")[0];
+    node.parentNode.insertBefore(sc, node);
+})(document, 'https://cdn.beeketing.com/dist/js/front/loader/shopify.js');
+</script>
+<!-- end BKPlatform -->

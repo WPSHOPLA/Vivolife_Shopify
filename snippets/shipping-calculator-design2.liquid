@@ -1,0 +1,83 @@
+{% comment %}
+https://docs.shopify.com/manual/configuration/store-customization/page-specific/cart-page/add-shipping-rates-calculator
+{% endcomment %}
+
+{% if settings.shipping_calculator %}
+  {% assign def_text = 'Zip/Postal Code' %}
+  {% capture all_text %}value="{{ def_text }}" onblur="if (this.value == '') {this.value = '{{ def_text }}';}" onfocus="if(this.value == '{{ def_text }}') {this.value = '';}"{% endcapture %}
+
+  {% if shop.customer_accounts_enabled and customer %} 
+      {% if customer.default_address.zip %}
+          {% assign customer_zip = 'value="' | append: customer.default_address.zip | append: '"' %}
+      {% else %}
+          {% assign customer_zip = all_text %}
+      {% endif %}
+  {% endif %}
+
+<h4 class="collapse-block__title">{{ settings.shipping_calculator_heading }}</h4>
+<div class="collapse-block__content">
+  <p>{{ settings.shipping_calculator_heading_desc }}</p>
+  <form action="#">
+    <div class="form-group">
+      <label for="address_country">{{ 'cart.general.shipping_country' | t }} <sup>*</sup></label>
+      <select id="address_country" name="address[country]" class="form-control"  data-style="select--ys"  data-width="100%" data-default="{% if shop.customer_accounts_enabled and customer %}{{ customer.default_address.country }}{% elsif settings.shipping_calculator_default_country != '' %}{{ settings.shipping_calculator_default_country }}{% endif %}">{{ country_option_tags }}</select>
+    </div>
+
+    <div class="form-group" id="address_province_container" style="display:none;">
+      <label  for="address_province">{{ 'cart.general.shipping_state' | t }} <sup>*</sup></label>      
+      <select  id="address_province" name="address[province]" class="form-control "  data-style="select--ys"  data-width="100%" data-default="{% if shop.customer_accounts_enabled and customer and customer.default_address.province != '' %}{{ customer.default_address.province }}{% endif %}"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="address_zip">{{ 'cart.general.shipping_zip' | t }}</label>
+      <input type="text" name="address[zip]" class="form-control" id="address_zip" {% if shop.customer_accounts_enabled and customer %} {{ customer_zip }}{% else %} {{ all_text }}{%endif%}/>
+    </div>
+    <div class="divider divider--xs"></div>
+    <a class="get-rates btn btn--wd text-uppercase wave waves-effect">{{ settings.shipping_calculator_submit_button_label }}</a>
+    <div class="divider divider--xs"></div>
+    <div id="wrapper-response" style="display:none"></div>
+  </form>
+</div>
+  {% comment %} INFORMATION BLOK {% endcomment %}
+
+<script id="shipping-calculator-response-template" type="text/template">
+  <p id="shipping-rates-feedback" <% if (success) { %> class="success" <% } else { %> class="error" <% } %>>
+  <% if (success) { %>
+    <% if (rates.length > 1) { %> 
+    There are <%= rates.length %> shipping rates available for <%= address %>, starting at <%= rates[0].price %>.
+    <% } else if (rates.length == 1) { %>
+    There is one shipping rate available for <%= address %>.
+    <% } else { %>
+    We do not ship to this destination.
+    <% } %>
+  <% } else { %>
+    <%= errorFeedback %>
+  <% } %>
+  </p>
+  <ul id="shipping-rates">
+    <% for (var i=0; i<rates.length; i++) { %>
+    <li><%= rates[i].name %> at <%= rates[i].price %></li>
+    <% } %>
+  </ul> 
+</script>
+
+<!--[if lte IE 8]> 
+<style> #shipping-calculator { display: none; } </style> 
+<![endif]--> 
+
+{{ '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js' | script_tag }}
+{{ '/services/javascripts/countries.js' | script_tag }}
+{{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+{{ 'jquery.cart.min.js' | asset_url | script_tag }}
+
+<script>
+
+Shopify.Cart.ShippingCalculator.show( {
+  submitButton: {{ settings.shipping_calculator_submit_button_label | default: 'Calculate shipping' | json }}, 
+  submitButtonDisabled: {{ settings.shipping_calculator_submit_button_label_disabled | default: 'Calculating...' | json }}{% if customer %},
+  customerIsLoggedIn: true{% endif %},
+  moneyFormat: {{ shop.money_with_currency_format | json }}
+} );
+
+</script>
+{% endif %}

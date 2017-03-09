@@ -1,0 +1,102 @@
+<div id="bold-loyalties-shipping-modal">
+  <form action="//loy.boldapps.net/front_end/redeem" method="POST">
+    <input type="hidden" name="domain" value="{{shop.permanent_domain}}" />
+    <input type="hidden" name="uuid" value="{{customer.metafields.bold_loyalties.uuid}}" />
+    <input type="hidden" name="variant_id" id="bold_loyalties_redeem_variant" value="" />
+    <input type="hidden" name="product_id" value="{{product.id}}" />
+
+    <div class="section__header">
+      <h3>{{shop.metafields.bold_loyalties.modal_heading}}</h3>
+      <p class="bold-success">{{shop.metafields.bold_loyalties.modal_thank_you_message}}</p>
+    </div>
+
+    <div class="section__body">
+      <h4>{{shop.metafields.bold_loyalties.modal_shipping_message}}</h4>
+      <div class="fieldset" id="shipping-address">
+        <div class="field field--required field--error shipping-address-errors" style="display:none;"><span class="field__error-message shipping-address-errors-text" style="padding: 20px 10px 20px 0;"></span></div>
+        <div class="field field--optional">
+          <label for="checkout_shipping_address_first_name">First name</label>
+          <input required autocomplete="shipping given-name" id="checkout_shipping_address_first_name" name="first_name_shipping" size="30" type="text" class="address_info" value="{{customer.default_address.first_name}}">
+        </div>
+        <div class="field field--required">
+          <label for="checkout_shipping_address_last_name">Last name</label>
+          <input required autocomplete="shipping family-name" id="checkout_shipping_address_last_name" name="last_name_shipping" size="30" type="text" class="address_info" value="{{customer.default_address.last_name}}">
+        </div>
+        <div class="field field--required">
+          <label for="checkout_shipping_address_address1">Address</label>
+          <input required autocomplete="shipping address-line1" id="checkout_shipping_address_address1" name="address1_shipping" size="30" type="text" class="address_info" value="{{customer.default_address.address1}}">
+        </div>
+        <div class="field field--optional">
+          <label for="checkout_shipping_address_address2">Apt, suite, etc.</label>
+          <input autocomplete="shipping address-line2" id="checkout_shipping_address_address2" name="address2_shipping" size="30" type="text" value="{{customer.default_address.address2}}">
+        </div>
+        <div class="field field--required">
+          <label for="checkout_shipping_address_city">City</label>
+          <input required autocomplete="shipping locality" id="checkout_shipping_address_city" name="city_shipping" size="30" type="text" class="address_info" value="{{customer.default_address.city}}">
+        </div>
+        <div class="field field--required">
+          <label for="checkout_shipping_address_country">Country</label>
+          <select required autocomplete="shipping country" data-country-field="1" id="checkout_shipping_address_country" name="country_shipping" size="1" class="address_info country">
+                {{country_option_tags}}
+          </select>
+        </div>
+        <div class="field field--required">
+          <label>Province</label>
+          <select name="province_shipping" class="address_info province">
+            <option value="" selected=""> -- Please Select -- </option>
+          </select>
+        </div>
+        <div class="field field--required">
+          <label data-zip-label="1" for="checkout_shipping_address_zip">ZIP/Postal Code</label>
+          <input required autocomplete="shipping postal-code" class="postal-code address_info" data-zip-field="1" id="checkout_shipping_address_zip" name="zip_shipping" size="30" type="text" value="{{customer.default_address.zip}}">
+        </div>
+        <div class="field field--optional">
+          <label for="checkout_shipping_address_phone">Phone</label>
+          <input autocomplete="shipping tel" id="checkout_shipping_address_phone" name="phone_shipping" size="30" type="tel" value="{{customer.default_address.phone}}">
+        </div>
+      </div>
+      <div class="call-to-action">
+        <a href="#" class="btn btn--secondary bold-modal-close-btn">Cancel</a>
+        <input class="btn continue_btn" type="submit" name="submit" value="Buy">
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="//loy.boldapps.net/app_assets/js/client/countries.js"></script>
+<script>
+(function($){
+  $('#checkout_shipping_address_country').change(function () {
+    var country = $(this).val();
+    var country = window.Countries[country];
+
+    var provinceDropdown = $('.address_info.province');
+    provinceDropdown.empty();
+
+    if(!country || !country.provinces || country.provinces.length === 0) {
+      provinceDropdown.parent().hide();
+      return;
+    } else {
+      provinceDropdown.parent().show();
+    }
+
+    $.each(country.provinces, function (index, province) {
+      var selected = '';
+
+      if (province === '{{customer.default_address.province}}') {
+        selected = " selected";
+      }
+
+      provinceDropdown.append("<option" + selected + ">" + province + "</option>");
+    });
+  });
+
+  {% if customer.default_address.country %}
+
+  $('#checkout_shipping_address_country').val('{{customer.default_address.country}}');
+
+  {% endif %}
+
+  $('#checkout_shipping_address_country').trigger('change');
+})(jQuery);
+</script>

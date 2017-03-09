@@ -1,0 +1,52 @@
+{% if shop.metafields.bold_loyalties.active == 1 %}
+<style>
+  @import url('//loy.boldapps.net/app_assets/css/client/product.css');
+</style>
+
+{% if customer %}
+	{% include 'bold-loyalties-modal' %}
+{% endif %}
+
+<script>
+  var BoldApps = BoldApps||{};
+  BoldApps.Loyalties =BoldApps.Loyalties ||{};
+  BoldApps.Loyalties.ProductDisplaySettings={
+    title:{
+    	show:true
+  	},
+    body:{
+      'text' : '{{ shop.metafields.bold_loyalties.product_earn_callout_text}}'
+    },
+    redeem:{
+      'buttonText' : '{{ shop.metafields.bold_loyalties.product_redeem_button_text}}'
+    }
+  };
+  BoldApps.Loyalties.shop = {
+    domain:'{{ shop.domain}}',
+    permanent_domain: '{{shop.permanent_domain}}',
+    url:'{{shop.url}}',
+    metafields: {{ shop.metafields.bold_loyalties | json }}
+  };
+  BoldApps.Loyalties.product = {{ product | json }}
+  {% if product.metafields.bold_loyalties.has_special_rewards %}
+  BoldApps.Loyalties.product_has_special_rewards = ({{ product.metafields.bold_loyalties.has_special_rewards}} == 1)? true:false;
+  {% endif %}
+  
+  BoldApps.Loyalties.product.metafields = {{ product.metafields.bold_loyalties | json }}
+    
+  BoldApps.Loyalties.customer = null;
+  {% if shop.customer_accounts_enabled %}
+    {% if customer %}
+    BoldApps.Loyalties.customer ={
+      email:'{{ customer.email}}',
+      id:{{ customer.id}},
+     uuid: '{{ customer.metafields.bold_loyalties.uuid }}'
+    } ;
+    BoldApps.Loyalties.customer.metafields = {{ customer.metafields.bold_loyalties | json }}
+      
+    {% endif %}
+  {% endif %}
+</script>
+
+<script src="//loy.boldapps.net/front_end/product_js"></script>
+{% endif %}

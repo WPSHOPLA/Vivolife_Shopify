@@ -1,0 +1,14 @@
+<li class="cart__item">
+  <div class="cart__item__image pull-left"><a href="{{item.url}}"><img src="{{ item.image | product_img_url: 'small' }}" alt=""/></a></div>
+  <div class="cart__item__control">
+    <div class="cart__item__delete"><a href="javascript:void(0);" onclick="Shopify.removeItem({{ item.variant.id }})" class="icon icon-delete"><span>{{ 'cart.header.button_delete' | t }}</span></a></div>
+    <div class="cart__item__edit"><a href="{{item.url}}" class="icon icon-edit"><span>{{ 'cart.header.button_edit' | t }}</span></a></div>
+  </div>
+  <div class="cart__item__info">
+    <div class="cart__item__info__title">
+      <h2 class="title-center"><a href="{{item.url}}">{{item.title}}</a></h2>
+    </div>
+    <div class="cart__item__info__price"><span class="info-label">{{ 'cart.header.price' | t }}</span><span>{{item.price | money}}</span></div>
+    <div class="cart__item__info__price" style="right: 35%;"><span class="info-label">{{ 'cart.header.quantity' | t }}</span><span>{{ item.quantity }}</span></div>
+  </div>
+</li>

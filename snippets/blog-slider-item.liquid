@@ -1,0 +1,18 @@
+<!--  -->
+<div class="recent-post-box">
+  <div class="col-lg-12 col-xl-6">
+    <a href="{{ f_article.url }}"><span class="figure">
+      <img src="{{ f_article.image.src | img_url: '1024x1024' }}" alt="">
+      <span class="figcaption label-top-left"><span><b>{{ f_article.published_at | date: "%d" }}</b><em>{{ f_article.published_at | date: "%b" }}</em></span></span></span>
+    </a>
+  </div>
+  <div class="col-lg-12 col-xl-6">
+    <div class="recent-post-box__text">
+      <h4><a href="{{ f_article.url }}">{{ _title }}</a></h4>
+      <div class="author">{{ "blogs.general.author_by_html" | t: author: author }}</div>
+      <p>{{ content }}</p>
+      {% if selected_blog.comments_enabled? %}<a class="link-commet" href="{{ comment_url }}"><span class="icon icon-message "></span><span class="number">{{ f_article.comments.size }}</span> {{ "blogs.general.comment" | t }}</a>{% endif %}
+    </div>
+  </div>
+</div>
+<!-- / -->

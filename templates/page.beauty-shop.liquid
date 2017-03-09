@@ -1,0 +1,95 @@
+
+<div class="overview-page beauty">
+		<section class="container-full">
+			<div class="container">
+				<div class="container-inner">
+											<h1>{{ page_title }}</h1>
+						{{ page.content }}
+									</div>
+			<section class="search" id="search-area">
+	<div class="container">
+      <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+     <div class="search-dropdown2">
+    <form action="/search" method="get">
+      <div class="input-outer">
+        <input type="hidden" name="type" value="product" />
+        <input type="text" name="q" class="search_field icon icon-search" value="" maxlength="128" placeholder="WHAT PRODUCT ARE YOU SEARCHING FOR?">
+        <button type="submit" title="" class="search-title">Search</button>
+      </div>
+     								
+    </form>
+  </div>
+	</div>
+	</div>
+      </div>
+	</section>		
+          </div>
+		</section>
+
+		<section class="container-full shop-by-category">
+			<div class="container">
+				<div class="container-inner">
+					<h2>Shop by Category</h2>
+
+					<div class="dotted-line"></div>
+
+					<p>Shop easily by your chosen category and discover the right products for you!</p>
+				</div>
+														<ul>
+						{% for link in linklists.Shop-by-category.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+					</ul>
+							</div>
+			<!-- container -->
+										<img alt="" class="image-left" src="//cdn.shopify.com/s/files/1/1374/7199/files/beauty-left-2c.png">
+			
+										<img alt="" class="image-right" src="//cdn.shopify.com/s/files/1/1374/7199/files/beauty-right.png">
+					</section>
+		<!-- .shop-by-goal -->
+
+		<section class="container-full shop-by-concern">
+			<div class="container">
+				<div class="container-inner">
+					<h2>Shop by Concern</h2>
+
+					<div class="dotted-line"></div>
+
+					<p>Whatever your skin concern, we're here to help.</p>
+				</div>
+														<ul>
+                                                          
+						{% for link in linklists.Shop-by-concern.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+					</ul>
+							</div>
+			<!-- container -->
+						
+								</section>
+		<!-- .shop-by-concern -->
+
+		<section class="container-full top-picks">
+			<div class="container">
+				<div class="container-inner">
+					<h2>Top Picks</h2>
+
+					<div class="dotted-line"></div>
+
+					<p></p>
+				</div>
+				<div class="picks-container">
+                  <ul>
+                  
+                   {% for link in linklists.top-pick.links %}
+   <li>{{ link.title | link_to: link.url }}</li>
+{% endfor %}
+                  </ul>
+				</div>
+			</div>
+						
+								</section>
+		<!-- .top-picks -->
+
+	</div>

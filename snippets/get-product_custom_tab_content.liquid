@@ -1,0 +1,1 @@
+{% case key %}{% when 'name' %}{% if content contains 'title="' %}{% assign _content = content | split: '"]' | first %}{{ _content | split: 'title="' | last }}{% else %}empty{% endif %}{% else %}{% assign _content = content | split: '"]' | last %}{{ _content | split: '[/tab]' | first }}{% endcase %}

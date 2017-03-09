@@ -1,0 +1,24 @@
+<!-- account menu start -->
+<div class="account link-inline {{ customer_class }}">
+  <div class="dropdown text-right">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      <span class="icon icon-person "></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu--xs-full">
+      {% if shop.customer_accounts_enabled %}<li><a href="/account"><span class="icon icon-person"></span>{{ "layout.customer.account" | t }}</a></li>{% endif %}
+      {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li><a href="/pages/wishlist"><span class="icon icon-favorite"></span>{{ "layout.customer.wishlist" | t }}</a></li>{% endif %}{% endif %}
+      
+      <li><a href="/checkout"><span class="icon icon-done_all"></span>{{ "layout.customer.checkout" | t }}</a></li>
+
+      {% if shop.customer_accounts_enabled %}
+      {% if customer %}<li><a href="/account/logout"><span class="icon icon-lock"></span>{{ "layout.customer.log_out" | t }}</a></li>
+      {% else %}<li><a href="/account/login"><span class="icon icon-lock"></span>{{ "layout.customer.sign_in" | t }}</a></li>
+      {% if shop.customer_accounts_optional %}<li><a href="/account/register"><span class="icon icon-person_add"></span>{{ "layout.customer.register" | t }}</a></li>{% endif %}
+      {% endif %}
+      {% endif %}
+
+      <li class="dropdown-menu__close"><a href="#"><span class="icon icon-close"></span>{{ 'general.menu.button_close' | t }}</a></li>
+    </ul>
+  </div>
+</div>
+<!-- account menu end -->

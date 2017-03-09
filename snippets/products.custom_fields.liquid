@@ -1,0 +1,62 @@
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. YOU CAN COPY AND PASTE INTO A NEW SNIPPET.
+  THIS FILE WILL BE OVERWRITTEN.
+{% endcomment %}
+<div class="custom-fields-wrapper">
+
+            {% if product.metafields.custom_fields.product_short_description != blank %}
+            <div class="custom-field custom-field__product_short_description">
+                <h3 class="custom-field--title">Product Short Description</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.product_short_description }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.bullet_item != blank %}
+            <div class="custom-field custom-field__bullet_item">
+                <h3 class="custom-field--title">Bullet Item</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.bullet_item }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.product_icons != blank %}
+            <div class="custom-field custom-field__product_icons">
+                <h3 class="custom-field--title">Product icons</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.product_icons }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.brand_product_tab != blank %}
+            <div class="custom-field custom-field__brand_product_tab">
+                <h3 class="custom-field--title">Brand Product Tab</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.brand_product_tab }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.ingredients != blank %}
+            <div class="custom-field custom-field__ingredients">
+                <h3 class="custom-field--title">Ingredients product tab</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.ingredients }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.how_to_use_product_tab != blank %}
+            <div class="custom-field custom-field__how_to_use_product_tab">
+                <h3 class="custom-field--title">how to use </h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.how_to_use_product_tab }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.delivery_product_tab != blank %}
+            <div class="custom-field custom-field__delivery_product_tab">
+                <h3 class="custom-field--title">Amino Acid</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.delivery_product_tab }}</div>
+              </div>
+            {% endif %}
+
+            {% if product.metafields.custom_fields.additional_info_product_tab != blank %}
+            <div class="custom-field custom-field__additional_info_product_tab">
+                <h3 class="custom-field--title">Additional info product tab</h3>
+                <div class="custom-field--value">{{ product.metafields.custom_fields.additional_info_product_tab }}</div>
+              </div>
+            {% endif %}
+</div>

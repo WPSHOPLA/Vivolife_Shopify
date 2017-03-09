@@ -1,0 +1,167 @@
+{% if article.comments.size > 0 %}{% assign comment_url = article.url | append: '#comments' %}{% else %}{% assign comment_url = article.url | append: '#addcomment' %}{% endif %}
+{% capture author %}{% include "get-content-with-key" content: article.content key: "[author]" %}{% endcapture %}{% if author == '' %}{% assign author = article.author %}{% endif %}
+
+{% assign content = article.content %}
+{% if content contains '[author]' %}
+{% assign content = content | split: '[/author]' | last %}
+{% endif %}
+
+<div class="container">
+  <!-- two columns -->
+  <div class="row">	
+    {% if settings.show_blog_sidebar_article %}
+    <div class="divider divider--lg visible-md visible-sm visible-xs"></div>
+    <!-- right column -->
+    <aside class="col-xl-3 col-lg-3  col-md-12 article-sidebar">{% include "blog-page-sidebar" %}</aside>
+    {% endif %}
+    <!-- center column -->
+    <div class="{% if settings.show_blog_sidebar_article %}col-xl-9 col-lg-9 col-md-12{% else %}col-xl-12 col-lg-12 col-md-12{% endif %}" id="centerColumn">
+
+      <div class="title-box">
+        <h1 class="text-left text-uppercase article-title">{{ article.title }}</h1>
+      </div>
+
+      <div {% if blog.comments_enabled? %}class="post"{% endif %}>
+        <!-- title post -->
+        <div class="post__title_block">
+          <div class="pull-left">
+            <time><span>{{ article.published_at | date: "%d" }}</span>{{ article.published_at | date: "%b" }}</time>
+          </div>										
+          <div class="pull-left">
+          
+            <div class="post__meta">
+              <span class="post__meta__item">
+                <span class="autor">{{ "blogs.general.author_by_html" | t: author: author }}</span>
+              </span>
+              {% if blog.comments_enabled? %}<span class="post__meta__item">
+                <span class="icon icon-message"></span>
+                <a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a>
+              </span>{% endif %}									
+              <span class="post__meta__item">
+                <span class="icon icon-folder"></span>
+                <a href="{{ blog.url }}">{{ blog.title }}</a> 
+              </span>
+            </div>
+          </div>									
+        </div>
+        <!-- /title post -->
+        <div class="post-img zoom">
+        <figure>
+                <img src="{{ article.image.src | img_url: '1024x1024' }}" alt="">
+         </figure>
+    </div>
+        <!-- content post -->
+		{{ content }}
+        <!-- /content post -->
+      </div>
+      
+      {% if blog.comments_enabled? %}
+      <div style="position: relative;"><div id="{% if article.comments.size > 0 %}comments{% else %}addcomment{% endif %}" style="position: absolute; top: -190px;"></div></div>
+      {% if article.comments.size > 0 or comment and comment.created_at and comment.status != 'unapproved' %}
+      {% paginate article.comments by 100 %}
+      <h3 class="title-aside text-uppercase">{{ 'blogs.article.comments_title' | t: article_title: article.title, comments_count: article.comments.size }}</h3>
+      {% if comment and comment.created_at and comment.status != 'unapproved' %}
+      <div id="comment-{{ comment.id }}" class="comments__comment">
+        <!-- comments -->
+        <div class="media comments">
+          <!-- avatar -->
+          <div class="pull-left"></div>
+          <!-- /avatar -->
+          <!-- content -->
+          <div class="media-body">
+            <div class="media-title">
+              <span class="username">{{ "blogs.general.author_by_html" | t: author: comment.author }}</span>
+              <time><span class="icon icon-access_time"></span>{{ comment.created_at | date: '%B %d, %Y' }} at {{ comment.created_at | date: '%R' }}</time>
+            </div>
+            <div class="media-content">
+              <p>{{ comment.content }}</p>
+            </div>
+          </div>
+          <!-- /content -->
+        </div>
+        <!-- /comments -->
+      </div>
+      <div class="social-share">  {% include 'addthis' %}</div>
+      {% assign new_comment_id = comment.id %}
+      {% endif %}
+
+      {% for comment in article.comments %}
+      {% if new_comment_id != comment.id %}
+      <div id="comment-{{ comment.id }}" class="comments__comment">
+        <!-- comments -->
+        <div class="media comments">
+          <!-- avatar -->
+          <div class="pull-left"></div>
+          <!-- /avatar -->
+          <!-- content -->
+          <div class="media-body">
+            <div class="media-title">
+              <span class="username">{{ "blogs.general.author_by_html" | t: author: comment.author }}</span>
+             </div>
+            <div class="media-content">
+              <p>{{ comment.content }}</p>
+            </div>
+          </div>
+          <!-- /content -->
+        </div>
+        <!-- /comments -->
+      </div>
+      {% endif %}{% endfor %}{% endpaginate %}<hr>{% endif %}
+      <div class="blog_author">
+        {% assign author_of_curr_blog = article.author %}
+		
+        
+        {% for article in blogs.our-team.articles limit: 20 %}
+          {% if author_of_curr_blog == article.title %}
+            <div class="blog_author_container">
+              <div class="authorT">
+                  <span class="authorName">{{ article.title }}</span><span class="its_author">Author</span>
+              	  {{ article.excerpt }}
+              </div>
+              <img class="authorPic" src="{{ article.image.src | img_url: 'small' }}" alt=""> 
+              <div class="authorInfo"> 
+                {{ article.content}}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>					
+      <!-- form -->
+      {% form "new_comment", article %}
+      
+        {% if form.posted_successfully? %}
+        {% if blog.moderated? %}
+        <p class="success">{{ 'blogs.comments.success_moderated' | t }}</p>
+        {% else %}
+        <p class="success">{{ 'blogs.comments.success' | t }}</p>
+        {% endif %}
+        {% endif %}
+
+        {% if form.errors %}
+        <p class="error">{{ 'blogs.comments.error' | t }}</p>
+        {% endif %}
+      
+        <div class="form-group">
+          <label for="InputName">{{ 'blogs.comments.name' | t }}</label>
+          <input name="comment[author]" type="text" class="form-control" id="InputName">
+        </div>
+        <div class="form-group">
+          <label for="InputEmail">{{ 'blogs.comments.email' | t }}</label>
+          <input name="comment[email]" type="email" class="form-control" id="InputEmail">
+        </div>
+        <div class="form-group">
+          <label for="InputComment">{{ 'blogs.comments.message' | t }}</label>
+          <textarea name="comment[body]" class="form-control"  id="InputComment" rows="8"></textarea>
+        </div>
+        <button class="btn btn-top btn--ys">{{ 'blogs.comments.post' | t }}</button>
+      {% endform %}
+      <!-- /form -->
+      {% endif %}
+
+
+    </div>
+    
+    
+
+  </div>
+</div>

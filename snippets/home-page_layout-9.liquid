@@ -1,0 +1,89 @@
+{% if settings.layout9_product %}
+{% assign _product = all_products[settings.layout9_product] %}
+<!-- banner-one-product -->
+<section class="banner-one-product container-fluid content offset-top-0 l9-one-product-js">
+  <div class="row">
+    <div class="col-sm-12 col-md-7">
+      <!-- bannerOneProduct -->
+      <div class="bannerOneProduct slick-arrow-bottom-wrapper">
+        {% for image in _product.images %}
+        <div>
+          <img class="img-responsive" src="{{ image.src | product_img_url: '1024x1024' }}" alt="{{ image.alt }}">
+        </div>
+        {% endfor %}
+      </div>
+      <!-- /bannerOneProduct -->
+    </div>
+    <div class="col-sm-12 col-md-5">
+      <div class="product-content product-info__title">
+        <h2 class="title text-uppercase"><a href="{{ _product.url | within: collection }}">{{ _product.title }}</a></h2>
+        <div class="price">{{ _product.selected_or_first_available_variant.price | money }}</div>
+        <!-- product button -->
+        <div class="clearfix ">
+          <form id="add-item-form" action="/cart/add" method="post">
+            {% if _product.available %}
+            {% assign inv_man = _product.variants[0].inventory_management %}{% assign inv_qua = _product.variants[0].inventory_quantity %}{% unless inv_man %}{% assign inv_qua = 100000 %}{% endunless %}{% if _product.variants[0].available and inv_qua == 0 %}{% assign inv_qua = 100000 %}{% endif %}
+            <input type="hidden" name="id" value="{{ _product.variants[0].id }}" />
+            <div class="pull-left">
+              <div class="number input-counter">
+                <span class="minus-btn">-</span>
+                <input type="text" name="quantity" value="1" max="{{ inv_qua }}"/>
+                <span class="plus-btn">+</span>
+              </div>
+            </div>
+            <div class="pull-left">
+              <!-- product button -->
+              <a href="#" class="btn btn-left btn--ys btn--l addtocart">{{ 'products.product.add_to_cart_html' | t }}</a>
+              <!-- /product button -->
+            </div>
+            <script>
+              jQuery('.addtocart').click(function(e) {
+                e.preventDefault();
+                Shopify.addItemFromFormStart('add-item-form', {{ _product.id }});
+			  });
+                
+                jQuery(".product-content #add-item-form input").change(function(){
+                  var current = Number(jQuery(this).val());
+                  var max = jQuery(this).attr("max");      
+                  if(current > max) {
+                    jQuery(this).val(max);
+                  }
+                })
+            </script>
+            {% else %}
+            <div class="pull-left">
+              <button disabled class="btn btn--ys btn--xxl">{{ 'products.product.unavailable' | t }}</button>
+            </div>
+            {% endif %}
+          </form>
+        </div>							
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /banner-one-product -->
+{% endif %}
+
+{% if settings.layout9_show_block1 and settings.layout9_block1 != '' %}{{ settings.layout9_block1 }}{% endif %}
+{% if settings.layout9_show_image1 %}<section class="content-big-indent content--parallax" data-image="{{ 'layout9_image1.jpg' | asset_url }}"></section>{% endif %}
+{% if settings.layout9_show_block2 and settings.layout9_block2 != '' %}{{ settings.layout9_block2 }}{% endif %}
+{% if settings.layout9_show_image2 %}<section class="content-big-indent content--parallax" data-image="{{ 'layout9_image2.jpg' | asset_url }}"></section>{% endif %}
+{% if settings.layout9_show_block3 and settings.layout9_block3 != '' %}{{ settings.layout9_block3 }}{% endif %}
+{% if settings.layout9_show_image3 %}<section class="content-big-indent content--parallax" data-image="{{ 'layout9_image3.jpg' | asset_url }}"></section>{% endif %}
+<!-- INSTAGRAM -->
+<section class="content-big-indent fullwidth inst-hide-title">
+  <div class="container">
+    <div class="row">
+      <div class="instafeed-wrapper instafeed-center">
+        <h3 class="text-uppercase text-center  font22 title-bottom-sm">{{ "general.feed.instagram_title" | t }}</h3>
+        <div id="instafeed" class="instafeed"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /INSTAGRAM -->
+{% if settings.layout9_show_image4 %}<section class="content-big-indent content--parallax" data-image="{{ 'layout9_image4.jpg' | asset_url }}"></section>{% endif %}
+
+<script>
+  jQuery("header").addClass("fill-bg-lighter");
+</script>

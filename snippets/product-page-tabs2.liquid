@@ -1,0 +1,94 @@
+<!-- tab section -->
+<section class="content">
+  <!-- Nav tabs -->
+  <div class="container">
+    <ul class="nav nav-tabs nav-tabs--ys-center1 text-center" role="tablist">
+      {% assign active = true %}
+      {% for i in (1..5) %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+          <li {% if active %}class="active" {% assign active = false %} {% endif %}>
+            <a href="#Tab{{ forloop.index }}" role="tab" data-toggle="tab" class="text-uppercase">{{ settings[product_tab_title] }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if product.description contains '[tabs]' %}
+        {% capture tabs %}{% include 'get-content-with-key' content: product.description key: '[tabs]' %}{% endcapture %}
+        {% assign tabs = tabs | strip | split: '[/tab]' %}
+        {% if tabs.size > 0 %}{% for _tab in tabs %}
+          <li {% if active %}class="active" {% assign active = false %} {% endif %}>
+            <a href="#productTab{{ forloop.index }}" role="tab" data-toggle="tab" class="text-uppercase">{% include 'get-product_custom_tab_content' content: _tab key: 'name' %}</a>
+          </li>
+        {% endfor %}{% endif %}
+      {% endif %}
+    </ul>
+  </div>
+  <!-- /Nav tabs -->
+  {% assign active = true %}
+  <!-- Tab panes -->
+  <div class="tab-content tab-content--ys-fullwidth">
+      {% for i in (1..5) %}
+        {% capture current_class %}{% cycle 'product-description', 'html1', 'html2', 'tags', 'product-reviews' %}{% endcapture %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% assign product_tab_desc	= "product_tab_desc_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+          <div role="tabpanel" class="tab-pane {% if active %}active{% assign active = false %}{% endif %}" id="Tab{{ forloop.index }}">
+            {% comment %}tabs pages{% endcomment %}
+            {% case current_class %}
+              {% when 'product-description' %}
+                {% assign content = product.description | remove: "[disable-icon-new]" %}
+            	{% assign content = content | remove: "[item-gallery]" %}
+                {% assign content = content | remove: "[disable-icon-sale]" %}
+                {% assign content = content | remove: "[icon-new-always]" %}
+                {% if content contains '[countdown]' %}
+                    {% assign content = content | split: '[/countdown]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[video]' %}
+                    {% assign content = content | split: '[/video]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[smallDescription]' %}
+                    {% assign content = content | split: '[/smallDescription]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[custom_html]' %}
+                    {% assign content = content | split: '[/custom_html]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[tabs]' %}
+                    {% assign content = content | split: '[/tabs]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+            	{{ content }}
+              {% when 'html1' %}
+            	<div class="container">{{ settings[product_tab_desc] }}</div>
+              {% when 'html2' %}
+            	<div class="container">{{ settings[product_tab_desc] }}</div>
+              {% when 'tags' %}
+                {% assign collection = collections.all %}
+                {% assign custom_url = '/collections/all/' %}
+                {% assign disableTitle = true %}
+                <div class="container">{% include 'product-filter-tags' %}</div>
+              {% when 'product-reviews' %}
+            	<div class="container"><div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div></div>
+              {% else %}
+            {% endcase %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if product.description contains '[tabs]' %}
+        {% capture tabs %}{% include 'get-content-with-key' content: product.description key: '[tabs]' %}{% endcapture %}
+        {% assign tabs = tabs | strip | split: '[/tab]' %}
+        {% if tabs.size > 0 %}{% for _tab in tabs %}
+          <div role="tabpanel" class="tab-pane {% if active %}active{% assign active = false %}{% endif %}" id="productTab{{ forloop.index }}">
+            <div class="container">{% include 'get-product_custom_tab_content' content: _tab %}</div>
+          </div>
+        {% endfor %}{% endif %}
+      {% endif %}
+  </div>
+  <!-- /Tab panes -->
+</section>
+<!-- /tab section -->

@@ -1,0 +1,37 @@
+<header id="header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 col-md-4 col-lg-6 col-xl-7">
+        <!-- logo start --> 
+        <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a> 
+        <!-- logo end --> 
+      </div>
+      <div class="col-sm-8 col-md-8 col-lg-6 col-xl-5 text-right">
+        <!-- slogan start -->
+        <div class="slogan">{{ settings.header_slogan }}</div>
+        <!-- slogan end --> 						
+        <div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" showTitle:true %}
+          {% include "header-language" align: 'text-right' showTitle: true %}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stuck-nav">
+    <div class="container offset-top-5">
+      <div class="row">
+        <div class="pull-left col-sm-9 col-md-9 col-lg-10">
+          {% include "main-menu" %}
+        </div>
+        <div class="pull-right col-sm-3 col-md-3 col-lg-2">
+          <div class="text-right">
+            {% include "menu-search" %}
+            {% include "menu-customer" %}
+            {% include "menu-cart" %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,12 @@
+{% if settings.product_item_show_wishlist %}<!-- modalWishlist --><div class="modal  fade"  id="modalAddToWishlist" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog white-modal modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">{{ "wishlist.popup_product_added.message" | t }}</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /modalWishlist -->{% endif %}

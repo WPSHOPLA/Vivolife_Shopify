@@ -1,0 +1,20 @@
+{% if access %}
+
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection].products %}
+{% assign _lenght = length | plus: 0 %}
+
+<h2 class="text-left text-uppercase title-under">{{ title }}</h2>
+<div class="row">
+  <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8 col-xs-12">{{ collection_banner }}</div>
+  <div class="divider divider--lg visible-xs"></div>
+  <div class="col-xl-8 col-lg-6 col-md-6 col-sm-4 col-xs-12">
+    <div class="carousel-products row slick-arrow-top carousel-small-2">
+      {% for product in selected_collection limit: _lenght %}
+      <div class="col-lg-3">
+        {% include "product-grid-item" %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}

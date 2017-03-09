@@ -1,0 +1,64 @@
+<!-- FOOTER section -->
+<footer class="layout-0">
+  <!-- footer-data -->
+  <div class="container inset-bottom-60">
+    <div class="row" >
+      {% if settings.contentBlockAll_design2 %}
+        <div class="{% if settings.tabBlockAll or settings.showfooternewsletter %}col-sm-12 col-md-5 col-lg-6 border-sep-right{% else %}col-sm-12{% endif %}">
+          {% if settings.showfooterlogo_design2 %}
+          <div class="footer-logo hidden-xs">
+            <!--  Logo  --> 
+            <a class="logo" href="{{ shop.url }}"> <img src="{{ "footerlogo.png" | asset_url }}" alt="{{ shop.name }}"> </a> 
+            <!-- /Logo --> 
+          </div>
+          {% endif %}
+
+          {% if settings.showfootercontenttext_design2 or settings.show_footer_soc_but %}
+          <div class="box-about">
+            <div class="mobile-collapse">
+              <h4 class="mobile-collapse__title visible-xs">{{ settings.footercontenttexttitle_design2 }}</h4>
+              <div class="mobile-collapse__content">
+                {% if settings.showfootercontenttext_design2 %}{{ settings.footercontenttext_design2 }}{% endif %}
+                {% if settings.show_footer_soc_but %}
+                <div class="social-links social-links--large social-links-layout-02">
+                  <ul>
+                    {{ settings.footer_soc_but }}
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+    
+        </div>
+      {% endif %}
+      {% if settings.tabBlockAll or settings.showfooternewsletter %}
+        <div class="{% if settings.contentBlockAll_design2 %}col-sm-12 col-md-7 col-lg-6 border-sep-left{% else %}col-sm-12{% endif %}">
+          {% if settings.showfooternewsletter %}
+          <!-- subscribe-box -->
+          <div class="subscribe-box offset-top-20"{% unless settings.contentBlockAll_design2 %}style="text-align: center;"{% endunless %}>
+            <div class="mobile-collapse">
+              {% include "newsletter_widget" %}
+            </div>
+          </div>
+          <!-- /subscribe-box -->
+          {% endif %} 
+          {% if settings.tabBlockAll %}<div class="row">
+            {% include "footer-column-links" %}
+          </div>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="divider divider-md visible-sm"></div>
+  <!-- footer-copyright -->
+  <div class="container footer-copyright">
+    <div class="row">{{ settings.footer_address }}</div>
+  </div>
+  <!-- /footer-copyright --> 
+  <a href="#" class="btn btn--ys btn--full visible-xs" id="backToTop">Back to top <span class="icon icon-expand_less"></span></a> 
+
+</footer>
+<!-- END FOOTER section -->

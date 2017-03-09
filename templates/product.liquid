@@ -1,0 +1,109 @@
+{% assign sale_on = false %}
+{% if product.compare_at_price_min > product.price_min %}
+  {% assign sale_on = true %}
+{% endif %}
+
+{% comment %} Main Image URL. {% endcomment %}
+{% assign main_url_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+
+{% assign PAGE_CONST = "product_custom_page" %}
+{% assign current_product = product %}
+
+{% assign images_color = '' %}{% for i in (1..10) %}{% assign key = 'filter_color' | append: forloop.index %}{% assign value = '__' | append: settings[key] | handle | downcase | strip | append: '__' | append: forloop.index %}{% assign images_color = images_color | append: value | append: ';' %}{% endfor %}
+
+{% if settings.product_page_design == "default" %}
+<section class="content offset-top-0">
+  <div class="container">
+    <div class="row product-info-outer">
+
+      
+      
+      <div class="col-sm-12 col-md-12 col-lg-12 {% if settings.show_productpage_htmlblock %}col-xl-8{% endif %}">
+        <div class="row">
+          <div class="{% if settings.product_header_type == "default" %}col-sm-6 col-md-6 col-lg-5 col-xl-5{%else%}col-sm-4 col-md-4 col-lg-4 col-xl-4{% endif %} hidden-xs">
+            {% include "product-page-gallery" type: "default" %}
+          </div>
+          <div class="product-info {% if settings.product_header_type == "default" %}col-sm-6 col-md-6 col-lg-7 col-xl-7{%else%}col-sm-8 col-md-8 col-lg-8 col-xl-8{% endif %}">
+            {% include "product-page-description" %}
+          </div>
+        </div>
+         </div>
+
+      {% if settings.show_productpage_htmlblock %}<div class="custom-product-block col-xl-4 visible-xl">{{ settings.productpage_htmlblock }}</div>{% endif %}
+
+    </div>
+
+  </div>
+</section>
+<section id="prodBottom">
+  <div class="container">
+    
+{% if settings.product_tabs_work != "design3full" %}<div class="row {% if settings.product_tabs_work == "design3" %} tabdesign3{% endif %}">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    {% include "product-page-tabs" %}</div>
+    </div>
+    {% endif %}
+  </div>
+    </section>     
+{% endif %}
+
+{% if settings.product_page_design == "design2" %}
+{% include "product-page-gallery-2" %}
+<section class="content">
+  <div class="container">
+    <div class="product-info product-info-big text-center product-info-outer">
+
+      {% include "product-page-description-2" %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+
+{% if settings.product_tabs_work == "design3full" or settings.product_page_design == "design2" %}{% include "product-page-tabs2" %}{% endif %}
+
+
+{% if settings.show_upsell_collection %}
+{% assign name_collection = settings.product_upsell_collection %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_collection = collections[name_collection] %}
+{% assign _lenght = settings.product_upsell_collection_count | plus: 0 %}
+<!-- related products -->
+<section class="relatedpro">
+  
+  <div class="container">
+    <!-- title -->
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="title-with-button">
+      <h2> Related Products </h2>
+    </div>
+    <!-- /title --> 
+    
+    <!-- carousel -->
+    <div class="carousel-products row" id="carouselRelated">
+      {% assign _product_id = product.id %}
+      {% for product in selected_collection.products limit: 4 %}{% if _product_id != product.id %}
+      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 col-xl-one-six">
+        {% include "product-grid-item" collection: selected_collection %}
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <!-- /carousel --> 
+  </div>
+  </div>
+  </div>
+</section>
+<!-- /related products -->
+{% endif %}
+
+{% if collection.title == 'Send a Gift' %}
+<style> 
+  button[value="Send as a gift"] {display:inline-block!important;} 
+  section[class="relatedpro"]{display:none!important;}
+</style>
+{% else %}
+<style> button[value="Send as a gift"] {display:none!important;} </style>
+
+{% endif %}

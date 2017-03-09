@@ -1,0 +1,26 @@
+ 	{% assign has_drop_down = false %}
+    {% assign child_list_handle = link.title | handle %}
+
+    {% comment %}If the link uses the arabic, hebrew or cyrillic alphabet, or is in Chinese or Japanese, the handle will be empty.{% endcomment %}
+    {% if child_list_handle == '' %}
+      {% for i in (0..8) %}
+        {% unless has_drop_down %}
+          {% if forloop.first %}
+            {% assign temp = 'link-list' %}
+          {% else %}
+            {% capture temp %}link-list-{{ i }}{% endcapture %}
+          {% endif %}
+          {% if linklists[temp] and linklists[temp].links.size > 0 and linklists[temp].title == link.title %}
+            {% assign has_drop_down = true %}
+            {% assign child_list_handle = temp %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}  
+    {% else %}
+      {% if linklists[child_list_handle] and linklists[child_list_handle].links.size > 0 %}
+        {% assign has_drop_down = true %}
+      {% endif %}
+    {% endif %}
+
+	{% assign return = has_drop_down | append: "%%" | append: child_list_handle %}
+	{{ return }}

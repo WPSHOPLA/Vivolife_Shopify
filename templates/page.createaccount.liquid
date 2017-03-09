@@ -1,0 +1,54 @@
+
+
+{% layout 'theme.blank' %}
+
+
+
+
+{% capture required %}{{ 'customer.general.required_fields' | t }}{% endcapture %}
+<div class="container">				
+  <!-- title -->
+  <div class="title-box">
+    <h1 class="text-left text-uppercase title-under1">{{ 'customer.register.title_main' | t }}</h1>
+  </div>
+  <!-- /title -->		
+  <div class="row">
+    <section class="col-sm-12 col-md-6 col-lg-6col-sm-12 col-sm-offset-0  col-md-offset-3  col-lg-offset-3 col-xl-4 col-xl-offset-4">
+      <div class="login-form-box">
+        <div id="login">
+          <h3 class="color small">{{ 'customer.register.title_form' | t }}</h3>
+          {% form 'create_customer' %}{{ form.errors | default_errors }}
+          <div class="form-group">
+            <label for="fname">{{ 'customer.register.first_name' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="text" name="customer[first_name]" class="form-control" id="fname">
+          </div>
+          <div class="form-group">
+            <label for="lname">{{ 'customer.register.last_name' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="text" name="customer[last_name]" class="form-control" id="lname">
+          </div>
+          <div class="form-group">
+            <label for="email">{{ 'customer.register.email' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="email" name="customer[email]" class="form-control" id="email">
+          </div>
+          <div class="form-group">
+            <label for="pass">{{ 'customer.register.password' | t }} {% if required != "" %}<sup>*</sup>{% endif %}</label>
+            <input type="password" name="customer[password]" class="form-control" id="pass">
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button type="submit" class="btn btn--ys btn-top btn--xl">{{ 'customer.register.submit' | t }}</button>
+              <div class="cancel-bottom">
+                &nbsp;{{ 'customer.general.or' | t }}
+                <a href="{{ shop.url }}">{{ 'customer.register.cancel' | t }}</a>
+              </div>
+            </div>
+            <div class="divider divider--md visible-xs"></div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <div class="pull-right note btn-top">{{ 'customer.general.required_fields' | t }}</div>
+            </div>
+          </div>{% endform %}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

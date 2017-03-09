@@ -1,0 +1,13 @@
+{% if shop.metafields.bold_loyalties.active == 1 and shop.metafields.bold_loyalties.callout_type == 'simple' %}
+<span class="bold-loyalties-callout-nav">
+{% if customer  %}{% else %}
+  
+{% if shop.metafields.bold_loyalties.points_can_be_earned == 1 %}
+  {{ shop.metafields.bold_loyalties.callout_loggedout_text }}
+  
+{% endif %}  
+  
+{% endif %}
+
+</span>
+{% endif %}

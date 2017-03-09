@@ -1,0 +1,194 @@
+{% comment %}	<ul class="nav nav-tabs pro-tabs {% case settings.product_tabs_work %}{% when 'design2' %}nav-tabs--ys{% when 'design3' %}nav-tabs--ys-center1 text-center{% else %}nav-tabs--ys1{% endcase %}" role="tablist">
+      {% assign active = true %}
+      {% for i in (1..5) %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+          <li {% if active %}class="active" {% assign active = false %} {% endif %}>
+            <a href="#Tab{{ forloop.index }}" role="tab" data-toggle="tab" class="text-uppercase">{{ settings[product_tab_title] }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if product.description contains '[tabs]' %}
+        {% capture tabs %}{% include 'get-content-with-key' content: product.description key: '[tabs]' %}{% endcapture %}
+        {% assign tabs = tabs | strip | split: '[/tab]' %}
+        {% if tabs.size > 0 %}{% for _tab in tabs %}
+          <li {% if active %}class="active" {% assign active = false %} {% endif %}>
+            <a href="#productTab{{ forloop.index }}" role="tab" data-toggle="tab" class="text-uppercase">{% include 'get-product_custom_tab_content' content: _tab key: 'name' %}</a>
+          </li>
+        {% endfor %}{% endif %}
+      {% endif %}
+    </ul>
+	{% assign active = true %}
+    <div class="tab-content tab-content--ys">
+      {% for i in (1..5) %}
+        {% capture current_class %}{% cycle 'product-description', 'html1', 'html2', 'tags', 'product-reviews' %}{% endcapture %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% assign product_tab_desc	= "product_tab_desc_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+          <div role="tabpanel" class="tab-pane {% if active %}active{% assign active = false %}{% endif %}" id="Tab{{ forloop.index }}">
+            {% comment %}tabs pages{% endcomment %}
+            {% case current_class %}
+              {% when 'product-description' %}
+                {% assign content = product.description | remove: "[disable-icon-new]" %}
+	            {% assign content = content | remove: "[item-gallery]" %}
+                {% assign content = content | remove: "[disable-icon-sale]" %}
+                {% assign content = content | remove: "[icon-new-always]" %}
+                {% if content contains '[countdown]' %}
+                    {% assign content = content | split: '[/countdown]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[video]' %}
+                    {% assign content = content | split: '[/video]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[smallDescription]' %}
+                    {% assign content = content | split: '[/smallDescription]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[custom_html]' %}
+                    {% assign content = content | split: '[/custom_html]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+                {% if content contains '[tabs]' %}
+                    {% assign content = content | split: '[/tabs]' %}
+            		{% capture content %}{% if content.size > 1 %}{{ content | last }}{% endif %}{% endcapture %}
+                {% endif %}
+            	{{ product.description }}
+              {% when 'html1' %}
+            	{{ settings[product_tab_desc] }}
+              {% when 'html2' %}
+            	{{ settings[product_tab_desc] }}
+              {% when 'tags' %}
+                {% assign collection = collections.all %}
+                {% assign custom_url = '/collections/all/' %}
+                {% assign disableTitle = true %}
+                {% include 'product-filter-tags' %}
+              {% when 'product-reviews' %}
+            <div class="yotpo yotpo-main-widget"
+    data-product-id="{{ product.id }}"
+    data-name="{{ product.title | escape }}"
+    data-url="{{ shop.url }}{{ product.url }}"
+    data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}"
+    data-description="{{ product.description | escape }}">
+</div>
+          {% else %}
+            {% endcase %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if product.description contains '[tabs]' %}
+        {% capture tabs %}{% include 'get-content-with-key' content: product.description key: '[tabs]' %}{% endcapture %}
+        {% assign tabs = tabs | strip | split: '[/tab]' %}
+        {% if tabs.size > 0 %}{% for _tab in tabs %}
+          <div role="tabpanel" class="tab-pane {% if active %}active{% assign active = false %}{% endif %}" id="productTab{{ forloop.index }}">
+            {% include 'get-product_custom_tab_content' content: _tab %}
+          </div>
+        {% endfor %}{% endif %}
+      {% endif %}
+    </div>{% endcomment %}	
+
+<div class="protabs-here">
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">description</a></li>
+    <li role="presentation">
+      {% if product.vendor != blank %}
+      <a href="#brand" aria-controls="brand" role="tab" data-toggle="tab">Brand</a>
+  {% endif %}
+  </li>
+    <li role="presentation">
+    {% if product.metafields.custom_fields.ingredients != blank %}
+   <a href="#Ingredients" aria-controls="Ingredients" role="tab" data-toggle="tab">Ingredients</a></li>
+    {% endif %}
+    <li role="presentation">
+   {% if product.metafields.custom_fields.delivery_product_tab != blank %}
+   <a href="#amino" aria-controls="amino" role="tab" data-toggle="tab">Amino Acid</a></li>
+    {% endif %}
+
+  <li role="presentation">
+    {% if product.metafields.custom_fields.how_to_use_product_tab != blank %}
+    <a href="#howtouse" aria-controls="howtouse" role="tab" data-toggle="tab">how to use</a>
+   {% endif %}
+  </li>
+   <li role="presentation">
+      
+     <a href="#delivery" aria-controls="delivery" role="tab" data-toggle="tab">Delivery</a>
+  
+  </li>
+  <li role="presentation"><a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a></li>
+  <li role="presentation">
+    {% if product.metafields.custom_fields.additional_info_product_tab != blank %} 
+    <a href="#addinfo" aria-controls="addinfo" role="tab" data-toggle="tab">Additional Information</a>
+   {% endif %}
+  </li>
+  
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="description">
+    {{ product.description }}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="brand">
+		{% if product.vendor != blank %}
+			<div class="custom-field custom-field__brand_product_tab">
+				<div class="custom-field--value probrand">
+					{% assign coll_handle = product.vendor | handleize %}
+					<a href="{{ collections[coll_handle].url }}">
+					{{ collections[coll_handle].image | collection_img_url: 'large' | img_tag }}
+					</a>
+					<a href="{{ collections[coll_handle].url }}">
+						<h2 class="vendor_name">{{ product.vendor }}</h2>
+					</a>
+					<div class="vendor_desc">{{ collections[coll_handle].description }}</div>
+				</div>
+			</div>
+		{% endif %} 
+    </div>
+    <div role="tabpanel" class="tab-pane" id="Ingredients">
+      {% if product.metafields.custom_fields.ingredients != blank %}
+<div class="custom-field custom-field__ingredients">
+
+<div class="custom-field--value">{{ product.metafields.custom_fields.ingredients }}</div>
+</div>
+{% endif %}
+    </div>
+     <div role="tabpanel" class="tab-pane" id="amino">
+     {% if product.metafields.custom_fields.delivery_product_tab != blank %}
+<div class="custom-field custom-field__delivery_product_tab">
+
+<div class="custom-field--value">{{ product.metafields.custom_fields.delivery_product_tab }}</div>
+</div>
+{% endif %}
+    </div>
+  <div role="tabpanel" class="tab-pane" id="howtouse">
+      {% if product.metafields.custom_fields.how_to_use_product_tab != blank %}
+<div class="custom-field custom-field__how_to_use_product_tab">
+<div class="custom-field--value">{{ product.metafields.custom_fields.how_to_use_product_tab }}</div>
+</div>
+{% endif %}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="delivery">
+    {{ pages.delivery.content }}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="reviews">   
+      <div class="yotpo yotpo-main-widget"
+    data-product-id="{{ product.id }}"
+    data-name="{{ product.title | escape }}"
+    data-url="{{ shop.url }}{{ product.url }}"
+    data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}"
+    data-description="{{ product.description | escape }}">
+</div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="addinfo">
+    {% if product.metafields.custom_fields.additional_info_product_tab != blank %}
+<div class="custom-field custom-field__additional_info_product_tab">
+<h3 class="custom-field--title">Additional info product tab</h3>
+<div class="custom-field--value">{{ product.metafields.custom_fields.additional_info_product_tab }}</div>
+</div>
+{% endif %}
+    </div>
+  </div>
+
+</div>

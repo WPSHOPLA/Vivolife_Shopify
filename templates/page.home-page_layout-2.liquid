@@ -1,0 +1,203 @@
+<!-- HEADER section -->
+<div class="header-wrapper"><header id="header" class="header-layout-02">
+  <div class="container">
+    <div class="row">					
+      <!-- col-left -->
+      <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">						
+        <div class="settings"{% unless settings.show_multiple_currencies %} style="display: none;"{% endunless %}>
+          {% include "header-currency" disable_align_right: true %}
+        </div>
+      </div>
+      <!-- /col-left -->
+      <!-- col-right -->
+      <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 text-right">						
+        {% include "menu-search" search_class: "pull-right mobile-menu-off" %}
+        {% include "menu-customer" customer_class: "hidden mobile-menu-on" %}
+        <!-- account menu start -->
+        <div class="account-row-list pull-right mobile-menu-off">
+          <ul>
+            {% if shop.customer_accounts_enabled %}<li><a href="/account"><span class="icon icon-person"></span>{{ "layout.customer.account" | t }}</a></li>{% endif %}
+            {% if settings.product_item_show_wishlist %}{% if shop.customer_accounts_enabled or settings.product_item_show_wishlist_temporary %}<li><a href="/pages/wishlist"><span class="icon icon-favorite_border"></span>{{ "layout.customer.wishlist" | t }}</a></li>{% endif %}{% endif %}
+            <li><a href="/checkout"><span class="icon icon-done_all"></span>{{ "layout.customer.checkout" | t }}</a></li>
+            {% if shop.customer_accounts_enabled %}
+            {% if customer %}<li><a href="/account/logout"><span class="icon icon-lock"></span>{{ "layout.customer.log_out" | t }}</a></li>
+            {% else %}<li><a href="/account/login"><span class="icon icon-lock"></span>{{ "layout.customer.sign_in" | t }}</a></li>
+            {% if shop.customer_accounts_optional %}<li><a href="/account/register"><span class="icon icon-person_add"></span>{{ "layout.customer.register" | t }}</a></li>{% endif %}
+            {% endif %}
+            {% endif %}
+          </ul>
+        </div>
+        <!-- /account menu end -->
+
+      </div>
+    </div>
+    <hr class="mobile-menu-off">
+  </div>
+  <div class="container offset-top-5">
+    <div class="row">
+      <!-- col-left -->
+      <div class="col-xs-12 col-md-3 col-lg-3 col-xl-3 col-sm-3">
+        <!-- logo start --> 
+        <a href="/"><img class="logo img-responsive" src="{{ "logo.png" | asset_url }}" alt=""/></a>
+        <!-- logo end --> 
+      </div>
+      <!-- /col-left -->						
+      <!-- col-right -->										
+      <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 pull-right text-right">
+        <div class="row-functional-link">								
+          {% include "menu-cart-design2" %}
+          <!-- address -->
+          <div class="h-address pull-right hidden-sm hidden-xs">
+            <span class="icon icon-call"></span> <b>+777 2345 7885;</b> <br>
+            <b>+777 5887 5432</b> <br>
+            Mon-Fri: 8:30am-7:30pm;  Sat-Sun: 9:30am-4:30pm
+          </div>
+          <!-- /address -->										
+        </div>
+      </div>					
+      <!-- /col-right -->
+    </div>
+  </div>
+  <div class="stuck-nav ">
+    <div class="container">
+      <div class="row">
+        <div class="pull-left col-sm-10 col-md-10 col-lg-10 col-xl-11">
+          {% include "main-menu" %}
+        </div>
+        <div class="pull-right col-sm-2 col-md-2 col-lg-2 col-xl-1 text-right">
+          {% include "menu-search" %}
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>			
+  </div>
+</header>
+</div>
+<!-- End HEADER section -->
+
+<div id="pageContent">
+<div class="container">
+  <!-- two columns -->
+  <div class="row">
+    <aside class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 ">
+      {% if settings.layout2_asidetitle != "" %}<h4 class="title-aside-wrapper text-uppercase  mobile-menu-off">{{ settings.layout2_asidetitle }}</h4>{% endif %}
+      {% include "main-menu-vertical" %}
+      
+      {% if settings.layout2_banners_block_html %}{{ settings.layout2_banners_block_html }}{% endif %}
+      {% if settings.layout2_banners_block_html2 %}<div class="divider divider--lg"></div>{{ settings.layout2_banners_block_html2 }}{% endif %}
+      
+      {% if settings.show_layout2_blogslider1 %}
+        {% assign name_collection = settings.layout2_blogslider1 %}
+        {% assign length = settings.layout2_blogsliderlength1 %}
+        {% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+        <div class="divider divider--lg hidden-sm hidden-xs"></div>
+        <!--======= testimonials =======-->
+        <div class="fill-bg-custom aside-inner color-white testimonial-color-l2">
+          <h4 class="text-center text-uppercase color-white mega">{{ settings.layout2_blogslidertitle1 }}</h4>
+          <div class="testimonialsAsid nav-dot nav-dot-invert">
+            {% assign custom_count = 0 %}
+            {% for article in news.articles %}
+            {% if article.excerpt contains "blogsliderbig" %}
+            {% if custom_count == length %}{% break %}{% endif %}
+            {% assign custom_count = custom_count | plus: 1 %}
+            {% capture _article %}{% include "get-content-with-key" content: article.excerpt key: "[blogsliderbig]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = article.title %}{% endif %}{% if author == '' %}{% assign author = article.author %}{% endif %}
+             <a href="{{ article.url }}" class="link-hover-block">
+            <!-- slide-->
+            <div class="text-center">
+              {{ image }}
+              <p><span class="icon"></span>{{ content }}</p>
+              <p>{{ _title }}</p>
+            </div>
+            <!-- /slide-->
+            </a>
+            {% endif %}{% endfor %}
+          </div>
+        </div>
+        <!--======= /testimonials =======-->
+      {% endif %}
+      
+      {% if settings.show_layout2_blogslider2 %}
+        {% assign name_collection = settings.layout2_blogslider2 %}
+        {% assign length = settings.layout2_blogsliderlength2 %}
+        <div class="divider divider--lg"></div>
+        <!--======= carousel-new =======-->
+        <!-- title -->
+        <h4 class="text-uppercase mega">{{ settings.layout2_blogslidertitle2 }}</h4>
+        <!-- /title -->
+        <div class="carousel-products row layout-none-xl" id="postsCarousel">
+          {% for f_article in selected_blog.articles limit: length %}{% if f_article.excerpt contains "blogslidersmall" %}{% capture _article %}{% include "get-content-with-key" content: f_article.excerpt key: "[blogslidersmall]" %}{% endcapture %}{% capture _title %}{% include "get-content-with-key" content: _article key: "[title]" %}{% endcapture %}{% capture author %}{% include "get-content-with-key" content: _article key: "[author]" %}{% endcapture %}{% capture image %}{% include "get-content-with-key" content: _article key: "[image]" %}{% endcapture %}{% capture content %}{% include "get-content-with-key" content: _article key: "[content]" %}{% endcapture %}{% if _title == '' %}{% assign _title = f_article.title %}{% endif %}{% if author == '' %}{% assign author = f_article.author %}{% endif %}
+          {% if f_article.comments.size > 0 %}{% assign comment_url = f_article.url | append: '#comments' %}{% else %}{% assign comment_url = f_article.url | append: '#addcomment' %}{% endif %}
+          <!-- slide-->
+          <div class="col-sm-3 col-xl-6">
+            {% include "blog-slider-item2" %}
+          </div>
+          <!-- /slide -->
+          {% endif %}{% endfor %}
+        </div>
+        <div class="carousel-products__button button-bottom carousel-products__button_aside">
+          <span class="btn-prev"></span>
+          <span class="btn-next"></span>
+        </div>
+        <!--======= /carousel-new =======-->
+      {% endif %}
+      <div class="divider divider--lg visible-xs"></div>
+      
+    </aside>
+    
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-10" id="centerColumn">
+
+      {% if settings.layout2_show_block1 %}
+      <div class="divider divider--lg visible-sm visible-xs"></div>
+      <section class="offset-top-0" id="slider">{{ settings.layout2_block1 }}</section>
+      {% endif %}
+      
+      {% if settings.layout2_show_block2 %}
+      <div class="divider divider--sm visible-sm visible-xs"></div>
+      <div class="content-md">
+        <div class="row">{{ settings.layout2_block2 }}</div>
+      </div>
+      {% endif %}
+      
+      {% if settings.layout2_productsliderblock1 %}
+      <div class="content-sm fead-prod-l2">
+      {% include "home-small-slider" title: settings.layout2_slidertitle1 name_collection: settings.layout2_slider1 length: settings.layout2_sliderlength1 access: true disable_title_underline: true %}
+      </div>
+      {% endif %}
+
+      {% if settings.layout2_productsliderblock2 %}
+      <hr class="hr-md">
+      <div class="content-sm">
+        <div class="row prods-l2-js">
+          {% if settings.show_layout2_slider2 %}
+          <div class="{% if settings.show_layout2_slider3 %}col-sm-12 col-md-8 col-xl-7{% else %}col-sm-12 col-md-12 col-xl-12{% endif %}">
+            {% include "home-small-slider" title: settings.layout2_slidertitle2 name_collection: settings.layout2_slider2 length: settings.layout2_sliderlength2 access: settings.show_layout2_slider2 disable_title_underline: true %}
+          </div>
+          {% endif %}
+          {% if settings.show_layout2_slider3 %}
+          <div class="{% if settings.show_layout2_slider2 %}col-sm-12 col-md-4 col-xl-5{% else %}col-sm-12 col-md-12 col-xl-12{% endif %}">
+            {% include "home-small-slider" title: settings.layout2_slidertitle3 name_collection: settings.layout2_slider3 length: settings.layout2_sliderlength3 access: settings.show_layout2_slider3 disable_title_underline: true %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if settings.layout2_show_block3 %}
+      {% if settings.layout2_show_block1 or settings.layout2_show_block2 %}<hr>{% endif %}
+      <div class="content section-indent-bottom{% unless settings.layout2_show_block1 and settings.layout2_show_block2 %} offset-top-0{% endunless %}"><div class="row">{{ settings.layout2_block3 }}</div></div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
+</div>
+
+{% include "footer_design2" %}
+
+{% include 'popup_cart' %}
+{% include 'popup_wishlist' %}
+{% include 'popup-newsletter' %}
+{% if template != "page.wishlist" %}{% include 'popup-quickview' %}{% endif %}
+
+{% include 'preloader-ajax' %}
